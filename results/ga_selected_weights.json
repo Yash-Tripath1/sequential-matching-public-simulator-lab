@@ -1,0 +1,59 @@
+{
+  "weights": {
+    "relationship_goal": 0.25,
+    "relationship_pace": 0.25,
+    "lifestyle": 0.25,
+    "conversations": 0.25
+  },
+  "training_cases": [
+    [
+      23,
+      "development"
+    ],
+    [
+      47,
+      "development"
+    ],
+    [
+      23,
+      "sparse"
+    ],
+    [
+      47,
+      "sparse"
+    ],
+    [
+      23,
+      "drift"
+    ],
+    [
+      47,
+      "drift"
+    ]
+  ],
+  "ga_history": [
+    {
+      "generation": 0,
+      "best_train_mean": 0.5,
+      "mean_train_mean": 0.41666666666666663,
+      "best_weights": {
+        "relationship_goal": 0.25,
+        "relationship_pace": 0.25,
+        "lifestyle": 0.25,
+        "conversations": 0.25
+      }
+    },
+    {
+      "generation": 1,
+      "best_train_mean": 0.5,
+      "mean_train_mean": 0.41666666666666663,
+      "best_weights": {
+        "relationship_goal": 0.25,
+        "relationship_pace": 0.25,
+        "lifestyle": 0.25,
+        "conversations": 0.25
+      }
+    }
+  ],
+  "holdout_mean_msmi_per_100": 0.2222222222222222
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "generation": 0,
+    "best_train_mean": 0.5,
+    "mean_train_mean": 0.41666666666666663,
+    "best_weights": {
+      "relationship_goal": 0.25,
+      "relationship_pace": 0.25,
+      "lifestyle": 0.25,
+      "conversations": 0.25
+    }
+  },
+  {
+    "generation": 1,
+    "best_train_mean": 0.5,
+    "mean_train_mean": 0.41666666666666663,
+    "best_weights": {
+      "relationship_goal": 0.25,
+      "relationship_pace": 0.25,
+      "lifestyle": 0.25,
+      "conversations": 0.25
+    }
+  }
+]
