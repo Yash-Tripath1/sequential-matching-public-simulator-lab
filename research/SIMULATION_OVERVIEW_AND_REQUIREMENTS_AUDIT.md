@@ -71,7 +71,7 @@ Mean episode ask cost of about 194 is cumulative clarification units: the simula
 
 **Interpretation:** the proposed 4-phase mixture is a reasonable hypothesis to carry forward, not a winner to claim. The 6-phase schedule did not help in this small screen. The static Thompson and GP variants did not beat the existing potential-ask controls. More complexity did not automatically help.
 
-![Exploratory scenario heatmap and overall pilot scores](results/phase_screen_heatmap.png)
+![Exploratory scenario heatmap and overall pilot scores; superseded by the Round 1 figure set](research/figures/fig3_family_heatmap.png)
 
 ## Scaled follow-up: 10 public seeds per family
 
@@ -113,7 +113,7 @@ A held-out seven-seed follow-up for hard-plus-soft max-weight was run as 42 new 
 
 For bootstrap intervals, the primary score and paired contrasts resample ten seed blocks (10,000 draws; analysis RNG seed 20261009); the exact sign-flip tests use the ten seed-block differences. Primary score equally weights the six family means. Full methods, all scenario means, paired contrasts, and limitations are in `SCALED_FACTORIAL_RESULTS.md`; machine-readable artifacts are `results/scaled_factorial_10seeds.json`, `results/scaled_factorial_summary.csv`, and `results/scaled_factorial_contrasts.csv`.
 
-![Scaled ten-seed scenario heatmap and primary-score intervals](results/scaled_factorial_heatmap.png)
+![Scaled ten-seed scenario heatmap and primary-score intervals; superseded by the Round 1 figure set](research/figures/fig3_family_heatmap.png)
 
 ## Important code audit: MSMI training-label cutoff
 
@@ -194,7 +194,7 @@ The note should cover hypothesis, reciprocal feasibility, allocation, clarificat
 - `results/scaled_factorial_extra_7seeds.json` — 252 new rollouts.
 - `results/scaled_factorial_10seeds.json` — combined 360 rows, summaries, paired contrasts, factorial effects, CIs, and tests.
 - `results/scaled_factorial_summary.csv` and `results/scaled_factorial_contrasts.csv` — readable tables.
-- `results/scaled_factorial_heatmap.png` — scaled scenario heatmap and primary-score intervals.
+- scaled scenario heatmap and primary-score intervals: superseded by `research/figures/fig3_family_heatmap.png`.
 - `phase_screen.py` — new in-process screen; `python phase_screen.py` reproduces the 90 exploratory episodes.
 - `phase_hybrid_policy.py` — four-phase version using the official JSON protocol; locally smoke-tested through `evaluate.py` for all six variants at seed 101.
 - `checkpoint_diagnostics.py` — follow-up for mature label counts, adaptive switch timing, and daily ask-budget use.
@@ -203,7 +203,7 @@ The note should cover hypothesis, reciprocal feasibility, allocation, clarificat
 - `results/checkpoint_diagnostics.json` — 36 checkpoint/ask-budget diagnostic rows.
 - `results/corrected_learning_rerun_3seeds.json` — 54 corrected-label learned-policy episodes and paired comparison.
 - `results/phase_screen_summary.csv` — policy and scenario summary.
-- `results/phase_screen_heatmap.png` — visual overview.
+- visual overview: superseded by `research/figures/fig3_family_heatmap.png`.
 - `results/public_pilot_results.json` and `experiment_log.md` — prior pilot artifacts; learned-policy results need the date-cutoff audit above.
 
 The in-process runtime column is not official per-invocation timing. The four-phase subprocess run passed the local evaluator's protocol and time checks, but Docker validation has not yet been done.

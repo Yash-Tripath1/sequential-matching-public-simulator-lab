@@ -99,6 +99,33 @@ published rows in `results/scaled_factorial_10seeds.json`. See
 [`VERIFICATION_2026_10_09.md`](VERIFICATION_2026_10_09.md) and
 `results/reference_verification_3seeds.json`.
 
+## rev2 PDF (9 October 2026)
+
+`research/RESEARCH_NOTE_ROUND1_rev2.pdf` (26 pp) rebuilds this note from the patched
+`RESEARCH_NOTE_FINAL.md` with the title-page team block, declaration, scope statement,
+headers/footers, bookmarks and natively rendered mathematics (90 spans; manifest in
+`rev2_math_manifest.json`). Acceptance evidence: `rev2_numeric_diff.txt` (T1, all deltas
+categorised as extraction artifacts), builder `build_pdf_rev2.py`. The original
+`RESEARCH_NOTE_ROUND1.pdf` is untouched. Known source-table quirk handled structurally at
+build time only: the §6.8 delimiter row lists six cells for a seven-column header; the
+builder pads the delimiter row so pandoc keeps the "Ask cost A vs B" column (source md
+left byte-identical).
+
+## rev3 compact revision (9 October 2026)
+
+`research/RESEARCH_NOTE_ROUND1_rev3.pdf` is the figure-driven compact revision
+(9 body pages + appendix) requested after rev2: five body figures plus fig8 in §3
+and fig7 in the appendix, bold takeaway openers, body tables of six columns or
+fewer, code names moved to Appendix A, calibration/spec-search/coefficients and
+full tables moved to appendices, §9 moved to the repository README. It carries
+the twelve slip corrections listed in `CHECKLIST.md`; every number is verbatim
+from `RESEARCH_NOTE_FINAL.md` or derived from checked-in JSON (fresh-seed split
+from `results/scaled_factorial_10seeds.json`, soft-ask screens from
+`results/scaled_factorial_extra_7seeds.json` and
+`research/SCALED_FACTORIAL_RESULTS.md`). Figure derivations spot-checked:
+fig8 partition equals the §7.7 table with overlap counted once; fig5 event
+counts equal mean MSMI/100 times 30 divided by 0.5.
+
 ## Honesty labels (apply to everything in this repository)
 
 Exploratory public-simulator evidence · public seeds only · unadjusted p-values ·

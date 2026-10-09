@@ -5,11 +5,24 @@
 **Round 1 research note · Vouchsafe Sequential Matching Hackathon**
 Starter release 1.0.0 · Prepared 9 October 2026
 
+> **Team:** Bipartite Bard
+> **Team leader:** Anadi Tripathi
+> **Members:** Anadi Tripathi
+> **Institution:** IIT Madras
+> **Repository:** https://github.com/Yash-Tripath1/sequential-matching-public-simulator-lab
+>
+> **Declaration.** We confirm that this submission represents our team's work and that
+> all external papers, datasets, code, AI tools and other resources used are
+> acknowledged in §8.3 (AI tools and resources) and §8.5 (references). AI tools used:
+> Arena.ai Agent Mode and additional large-language-model chat assistants (ideation,
+> code debugging, drafting and pre-submission review); see §8.3.
+
 > **Scope statement.** Every person, preference, conversation and outcome in this
 > work is synthetic content from the organisers' public development kit. Nothing
 > here estimates relationship compatibility for real people, and no result below
 > is evidence of product effectiveness. All experiments run against the public
-> simulator on public seeds; no private world, private seed or organiser file was
+> simulator on public seeds; no private world, private seed or private organiser
+> file was
 > used. Analysis marked *analysis-only* reads simulator ground truth and is never
 > imported by, or available to, any policy at inference time.
 
@@ -58,6 +71,11 @@ baseline, a paired difference of **+0.175 MSMI/100, 95% seed-block CI [+0.092,
 +0.258], p = 0.016, 23 wins / 29 ties / 8 losses** over ten seeds × six families.
 Everything else in §6 is screening, and is labelled as such.
 
+**Caveat:** the ten evaluation seeds are the same ten used by the earlier screen
+that selected this incumbent, and seeds 101/202/303 were also the three-seed
+pilot on which it was first chosen. This comparison is therefore a recomputation
+on selection data, not an independent confirmation.
+
 > **Thesis.** With reciprocal hard feasibility enforced, MSMI is determined first
 > by *whether a policy makes the feasible graph usable at all* — a step function
 > that any clarification rule, however naive, saturates; second by *how much of
@@ -68,8 +86,10 @@ Everything else in §6 is screening, and is labelled as such.
 > fitting a calibrated pair-outcome model, adapting online on dense feedback and
 > spending the residual budget on soft answers are all third-order interventions,
 > and we report that none of them beat the incumbent — one of them, a correctly
-> calibrated probability used as an edge weight, is measurably *worse* than a
-> hand-coded similarity score, for a reason worth understanding (§6.2c). The two
+> calibrated probability used as an edge weight, scores below a hand-coded
+> similarity score in all three ask cells (suggestive only: 3 of the 78 pairwise
+> intervals exclude zero, about what chance alone gives), with a candidate
+> explanation in §6.2c. The two
 > changes that did move the score are not models: correcting the *coding* of the
 > pair weight so that a known disagreement counts as negative and every feasible
 > edge keeps a positive weight, and replacing greedy ordering with global
@@ -80,11 +100,11 @@ Stated as falsifiable hypotheses and resolved against our own runs:
 
 | # | Claim | Verdict |
 |---|---|---|
-| H1 | Unlock-value ask targeting beats count-based and unranked asking at a fixed matcher | **Not supported** — differences −0.083 to +0.008, all CIs straddling zero |
+| H1 | Unlock-value ask targeting beats count-based and unranked asking at a fixed matcher | **Not supported** — differences −0.000 to +0.008 at a fixed matcher, all CIs straddling zero |
 | H2 | Any asking policy beats no clarification | **Supported** — +0.183 MSMI/100, CI [+0.042, +0.325] |
-| H3 | Online adaptation on dense directional responses helps in `drift`/`shift` | **Falsified as implemented** — 0 wins / 60 ties / 0 losses, decisions bit-identical |
+| H3 | Online adaptation on dense directional responses helps in `drift`/`shift` | **Falsified as implemented** — 0 wins / 60 ties / 0 losses, MSMI outcomes identical to its static version |
 | H4 | Waiting/batching helps in supply-rich families and not in sparse | **Untested** — planned (§8.1) |
-| H5 | Residual soft-field clarification does *not* help, because the matching is near-forced | **Supported** — +0.017, CI [−0.083, +0.158], p = 0.961 |
+| H5 | Residual soft-field clarification does *not* help, because the matching is near-forced | **Not rejected** — +0.017, CI [−0.083, +0.158], p = 0.961 (interval too wide to establish equivalence) |
 | H6 | Coverage of any valid policy converges to the structural ceiling | **Supported** — every asking policy at 97–98% of it, and an oracle with free perfect clarification reaches only 0.1 pp more |
 
 The most consequential of these is H6, because it is confirmed from two
@@ -123,8 +143,10 @@ survives at ten seeds against the starter greedy baseline but its interval
 against the stronger default-ask control at a fixed matcher includes zero, its
 sign-flip test is unadjusted for the dozen contrasts we ran, and it **reverses in
 cold start**. Our fitted outcome prior does not beat a hand-coded signed
-similarity score. Our online adaptive learner produced bit-identical decisions to
-its own static version in all 60 episodes. The phase hybrids screened earlier are
+similarity score. Our online adaptive learner produced MSMI outcomes identical to
+its own static version in all 60 episodes (0/60/0), while its assignments
+differed slightly (4,658 vs 4,652 in total) — so its *decisions* were not
+bit-identical, only its outcomes were. The phase hybrids screened earlier are
 exploratory and subject to winner's curse. And a zero MSMI count in a low-supply
 family is not evidence that two policies are equivalent.
 
@@ -501,7 +523,10 @@ The shipped prior is therefore deliberately small:
 define its target and observation window and then be shown calibrated out of
 sample. Target: mutual acceptance given both members responded within the 7-day
 window. Fitted on 12 seeds (3,054 both-responded pairs), evaluated on the six
-disjoint held-out seeds (1,462 pairs, base rate 0.2538):
+disjoint held-out seeds (1,462 pairs, base rate 0.2538). The table below reports
+the *extended* specification C, whose wide predicted range exposes the
+missingness confound; the shipped four-feature specification B has held-out log
+loss 0.5513 and Brier 0.1830 on the same split:
 
 | Predicted bin | $n$ | Mean predicted | Observed rate | Gap |
 |---|---:|---:|---:|---:|
@@ -517,7 +542,8 @@ absolute gap in a bin with $n \ge 50$ other than the lowest is 0.040, and the
 three central bins holding 1,340 pairs are within 0.040 of nominal. The one real
 defect is the lowest bin, where 70 pairs are predicted at 0.090 and come in at
 0.157: the ridge prior over-shrinks strongly disagreeing pairs toward zero. Held-out
-log loss 0.5572, Brier 0.1856. This is also why the note is careful about the
+log loss 0.5572, Brier 0.1856 for the extended specification shown (spec B:
+0.5513 / 0.1830). This is also why the note is careful about the
 direction of the §6.2c result — the fitted prior *is* calibrated, and calibration
 is not what makes a good edge weight here.
 
@@ -574,8 +600,8 @@ rejections.
 For the `drift` and `shift` families we additionally admit a single `day/60`
 coefficient that is *zero in the offline prior* and estimated only in-episode.
 The offline prior pools stationary and drifting families, so a day term is not
-identifiable there; within one episode the family is fixed, so it is. §3.4-style
-evidence that there is something to detect: mutual acceptance in `drift` falls
+identifiable there; within one episode the family is fixed, so it is. Evidence
+that there is something to detect: mutual acceptance in `drift` falls
 0.263 → 0.237 → 0.164 across day blocks (<30, 30–44, ≥45) while `development`
 is flat at 0.263 → 0.273 → 0.246.
 
@@ -738,7 +764,7 @@ Four consequences we design around rather than complain about:
    separated by noise, and the tie-break ladder (coverage, then mutual
    acceptances, then lower ask cost, then lower inference time) will decide more
    of the ranking than the primary score will.
-3. **A three-seed pilot resolves about 0.5** — larger than the distance between
+3. **A three-seed pilot resolves about 0.43** — larger than the distance between
    the best method we tested and the starter greedy baseline. This is why we do
    not build narrative on the pilot's ordering, and why the earlier "4-phase
    hybrid" result (+1 event over its own fixed control, selected as the best of
@@ -824,7 +850,8 @@ policy.
 Only `no_ask` sits away from the ceiling, at 33% of it. Its contrast against the
 starter greedy baseline is **+0.183 MSMI/100, 95% seed-block CI [+0.042, +0.325],
 sign-flip p = 0.055, 22 wins / 33 ties / 5 losses**, 42 events against 20. H2 is
-supported, and it is supported robustly: we enumerated all 136 pairwise contrasts
+supported (the bootstrap CI excludes zero; the exact sign-flip p is 0.055), and
+it is supported robustly: we enumerated all 136 pairwise contrasts
 among the 17 configurations, and **all sixteen comparisons between an asking
 policy and `no_ask` have an interval excluding zero**, from +0.183 for the
 unmodified starter greedy baseline to +0.425 for our best cell.
@@ -974,7 +1001,8 @@ is a better reason to keep going than any score in this table.
 - **Cold start still favours untargeted asking, and by a wide margin.**
   `defaultask_core4_maxw` and `fullbudget_unranked_maxw` reach 0.600 where
   `unlock_core4_maxw` reaches 0.300 and `unlock_prior_maxw` 0.350 — a full
-  reversal of the development ordering. §7.3 gives the mechanism.
+  reversal of the development ordering (about 12 vs 6 events in this one family;
+  exploratory). §7.3 gives a working explanation.
 - **`shift` and `drift` do not reward the offline prior**, exactly as §4.5
   predicted: the prior pools stationary and non-stationary families, so its
   coefficients are a compromise that fits neither well. The online correction was
@@ -1033,12 +1061,15 @@ The loss structure itself is unambiguous. Averaged across the sixteen asking
 configurations, 60 episodes produce **4,613** assignments, of which **2,733** get
 two responses (59.2%), **690** reach mutual acceptance, **546** produce a date
 (542 inside the 30-day window), **138** have both members answer the
-second-meeting question on time, and **54** qualify as MSMI. The largest single
-loss — 41% — happens before any preference is expressed, at the response stage.
-The second largest — 75% of dates — is the 1–5 day answer delay against a 3-day
-window, which caps that transition at $0.6^2 = 0.36$ no matter what the policy
-does. Between them these two stages, neither of which the allocation rule
-controls, account for 4,613 − 138 = 97% of the loss.
+second-meeting question on time, and **54** qualify as MSMI. Of the **4,559**
+assignments that do not become an MSMI, **1,880** (41%) are lost at the response
+stage, **2,043** (45%) at mutual acceptance, **144** (3%) at the date stage,
+**408** (9%) at the on-time answer stage and **84** (2%) at the final both-Yes
+step. The response and on-time stages are outside the policy's control; the
+on-time stage is capped at $0.6^2 = 0.36$ by the 1–5 day answer delay against
+the 3-day window no matter what the policy does. The mutual-acceptance stage is
+where pair selection acts, and §6.6 shows that even perfect information raises
+its rate only about 12% in relative terms.
 
 ### 6.5 Online adaptation changed nothing
 
@@ -1171,7 +1202,9 @@ from 195 to 582 and changes MSMI/100 by **+0.017, CI [−0.083, +0.158], p = 0.9
 asks by unlock value rather than taking them in member order changes nothing
 (+0.008, p = 1.000, 17/28/15).
 
-**H5 is confirmed**, and the oracle ladder in §6.6 explains it: soft answers
+**H5 is not rejected** (the interval is consistent with the near-forced reading
+but too wide to establish equivalence), and the oracle ladder in §6.6 explains
+it: soft answers
 improve $w_{ij}$, and R4 shows that even *perfect* soft answers improve the
 mutual-acceptance rate by only ~12% and the primary score not at all. At median
 degree 2 the maximum-weight matching is close to forced, so knowing the weights
@@ -1292,7 +1325,9 @@ over-claim.
 What is *not* irreducible: our logging policy consumes ~20 of the 23 available
 sparse pairs, so the volume lever is nearly exhausted, but pair quality is not —
 sparse worlds still contain goal- and pace-agreeing pairs and a matcher that finds
-them should roughly double the mutual-acceptance rate on the same volume. The
+them may improve the mutual-acceptance rate on the same volume, although the
+oracle ladder (§6.6) suggests perfect information raises it only about 12% in
+relative terms. The
 correct sparse strategy is therefore **selective, not expansive**: with 23 pairs
 and 200 members, spending clarification to reveal *all* of them is less valuable
 than revealing the *good* ones early, because members exit and the pool thins.
@@ -1331,7 +1366,8 @@ consequences:
 
 Cold start is the one family where targeted clarification *underperforms* the
 untargeted default, and it did so in both our three-seed pilot and the ten-seed
-scaled run. The mechanism is now clear rather than speculative:
+scaled run. The following is our working explanation; it is untested, and the
+shrinkage rule in §8.1 is its test:
 
 - Only **20.6%** of cold-start members have their hard bundle pre-observed,
   against 36.4% elsewhere, so 79% of the pool is askable and the queue is long.
@@ -1486,7 +1522,12 @@ This note and the accompanying code were produced with the assistance of
 large-language-model coding agents, used for: reading and summarising the
 starter kit and its documentation; drafting and debugging the experiment
 harness, the policy implementations and the analysis scripts; and drafting and
-critically revising this document. All experimental numbers reported here were
+critically revising this document. Separate chat-assistant sessions
+(Claude- and Gemini-family models, via Arena.ai Agent Mode and other tools)
+additionally contributed ideation, cross-checking of the draft against its own
+tables, and pre-submission review; every such suggestion was accepted only
+after arithmetic or artefact cross-check, and the final decisions rest with the
+team. All experimental numbers reported here were
 produced by executing the committed Python code against the organisers' public
 simulator release 1.0.0 on public seeds, and every table is reproducible from
 the scripts named in §9. No model was used to generate results, and no result was
@@ -1545,7 +1586,7 @@ of a generator we did not write.
 
 ### 8.5 References
 
-All five works below were checked against their publishers' records on 9 October
+All works below were checked against their publishers' records on 9 October
 2026; volume, issue and page numbers are as printed there, so the `[verify]`
 markers that appeared in earlier drafts of this note are removed. We have not
 fabricated a citation to fill a gap, and we cite nothing we have not located.
@@ -1562,7 +1603,7 @@ fabricated a citation to fill a gap, and we cite nothing we have not located.
   retire permanently after a mutual second-meeting Yes, or age out at day 60, and
   the first two are visible in the observation contract. H4 (waiting/batching) is
   therefore not a speculative add-on but the one lever the theory says could still
-  be large, and §8.2 puts it second in the Round 2 build order.
+  be large, and §8.2 schedules it as the fourth step of the Round 2 build order.
 - **Edmonds, J. (1965).** "Paths, Trees, and Flowers." *Canadian Journal of
   Mathematics*, 17(3), 449–467. DOI 10.4153/CJM-1965-045-4. The blossom algorithm
   — the correct general-graph maximum-matching primitive for a pool that is not
@@ -1575,7 +1616,8 @@ fabricated a citation to fill a gap, and we cite nothing we have not located.
   construction (§8.1, planned).
 - **Russo, D., Van Roy, B., Kazerouni, A., Osband, I., & Wen, Z. (2018).** "A
   Tutorial on Thompson Sampling." *Foundations and Trends in Machine Learning*,
-  11(1). Background for the label-starvation argument in §4.5: with a mean of 0.87
+  11(1). Background for the label-starvation argument in §4.5: with a mean of
+  about 0.9
   MSMI events per episode, a posterior over pair outcomes cannot be updated often
   enough to matter inside a 60-day episode, which is why we adapt on directional
   responses instead.
@@ -1584,11 +1626,59 @@ fabricated a citation to fill a gap, and we cite nothing we have not located.
   10.1257/aer.100.1.130. Motivation for treating introductions as a two-sided
   *allocation* problem with competition for the same candidates (§7.6) rather than
   as an independent pair-ranking problem.
+- **Karp, R. M., Vazirani, U. V., & Vazirani, V. V. (1990).** "An Optimal
+  Algorithm for On-line Bipartite Matching." *Proceedings of STOC '90*, 352–358.
+  DOI 10.1145/100216.100262. Foundational online-matching background; its
+  bipartite one-sided-arrival model and guarantees do not transfer to this
+  simulator's general-graph, reciprocal-feasibility setting, and we do not imply
+  that they do.
+- **Gamlath, B., Kapralov, M., Maggiori, A., Svensson, O., & Wajc, D. (2019).**
+  "Online Matching with General Arrivals." *Proceedings of FOCS 2019*, 26–37.
+  DOI 10.1109/FOCS.2019.00011. The closest model-family reference for general
+  arrivals; our daily batch decisions and clarification actions still make the
+  setting distinct.
+- **Saar-Tsechansky, M., Melville, P., & Provost, F. (2009).** "Active
+  Feature-Value Acquisition." *Management Science*, 55(4), 664–684. DOI
+  10.1287/mnsc.1080.0952. Cost-aware information-acquisition context for the
+  clarification problem; an analogy for budgeted questioning, not a direct
+  matching algorithm.
 - **Vouchsafe / Romeo & Juliet (2026).** *The One Introduction Problem — final
   participant specification 1.0.0*, with the bundled `docs/DATA_CONTRACT.md`,
   `docs/POLICY_INTERFACE.md` and `docs/SUBMISSION.md`. Authoritative for every rule
   quoted in this note; where an earlier draft of our own work conflicted with it,
   the specification won and the draft was corrected (§8.3).
+
+### 8.6 Data and software provenance
+
+- Simulator and data: organisers' public synthetic release 1.0.0; the bundled
+  `starter/kit.py` is unchanged and records upstream commit
+  `a8e26b35118cfa8e886a02f93984923e43ab64f6` (`starter/SOURCE.md`,
+  `starter/LICENSE`, `starter/DATA_LICENSE.md`). Every member and outcome is
+  synthetic (§8.4). No private seeds, private worlds, private organiser files or
+  real-user data were used; the only external data are the six supplied training
+  pools used for the §3.3 marginals.
+- Experiment code carries no separate top-level license; the scripts are those
+  named in §9. The three official baselines were additionally re-verified
+  through the organisers' reference evaluator in trusted-local subprocess mode
+  (54/54 episodes identical; `research/VERIFICATION_2026_10_09.md`).
+- The three-seed soft-question screen (72 episodes) and the seven-seed follow-up
+  (42 episodes) were run on the author's Ubuntu VM. The shared bundle contains
+  the aggregate soft-question results but not the VM-generated row-level JSON;
+  this is documented in `research/PROVENANCE_AND_ARTIFACT_STATUS.md`.
+
+### 8.7 Computational environment and reproducibility
+
+- All core factorial, head-to-head and oracle-ladder episodes ran in-process;
+  the exact execution host of those runs is not recorded in this bundle and no
+  hardware specification is claimed for them. Wall times in §6.7 are in-process
+  seconds per episode, not official per-invocation or Docker timings. No
+  Docker/container-mode validation has been performed (Round 2 work, §8.2).
+- Dependencies are pinned in `requirements.txt`; the starter kit is standard
+  library only. The working environment for the §9 scripts is recorded in §9
+  (Python 3.13 on the author's machine); no VM hardware details are claimed.
+- Reproducibility anchors: every policy random draw is seeded from public inputs
+  only (§5.1); bootstrap intervals use analysis seed 20261009; reruns are
+  bit-identical by construction.
 
 ---
 

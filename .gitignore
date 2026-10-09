@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+*.zip
+*.tmp
+
+# PDF build intermediates (rev2/rev3)
+_rev2_build.*
+_rev2_src.md
+_rev2_header.tex
+_rev3_build.*
+_rev3_src.md
+_rev3_header.tex

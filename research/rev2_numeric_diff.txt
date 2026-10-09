@@ -1,0 +1,34 @@
+T1 — numeric multiset diff, RESEARCH_NOTE_FINAL.md (code-fence text excluded) vs
+extracted text of RESEARCH_NOTE_ROUND1_rev2.pdf (final build, 26 pp).
+
+RESULT: no content number differs. Every multiset delta is an extraction
+artifact, categorised below. Table values (incl. the §6.8 "Ask cost A vs B"
+column 582 vs 195 / 582 vs 614 / 195 vs 195) verified present with equal
+counts on both sides.
+
+IN SOURCE ONLY:
+{"-1": 1, "-2": 1, "-3": 1, "0.076": 1, "0.6": 2, "10": 1, "2": 4}
+
+IN PDF ONLY:
+{"0.0762": 1, "0.62": 2, "1": 27, "11..25": 1 each, "26": 27, "210": 2,
+ "3.1": 2, "3.2": 1, "3.3": 1, "4.3": 2, "6.6": 1, "6.8": 1, "6.9": 1,
+ "7.1": 1, "30": 1, "95%": 1, "−1": 1, "−2": 1, "−3": 1}   (− = U+2212)
+
+CATEGORY ANNOTATIONS
+A. ASCII-hyphen vs U+2212 minus: src "-1/-2/-3" (from $10^{-1..-3}$) ↔ pdf
+   "−1/−2/−3". Same digits, different minus glyph in extraction. NOT a change.
+B. Superscript concatenation: src "0.076"+"2", "0.6"+"2" (from $0.076^2$,
+   $0.6^2$), "2"+"10" (from $2^{10}$) ↔ pdf "0.0762", "0.62", "210".
+   Extractor joins superscripts; PDF shows true superscripts. NOT a change.
+C. Footer page numbers: pdf-only "1".."25" (once) and "26" (27×) come from the
+   running footer "Page N of 26" (26 pages). No such tokens exist in the md.
+   NOT content.
+D. Section-cross-reference duplication: "3.1/3.2/3.3/4.3/6.6/6.8/6.9/7.1/30/
+   95%/6..." one-off extras arise where a section number or "95%" sits at a
+   line break and the extractor emits it once more than the md tokenisation.
+   Spot-checked on pages 4-22: every occurrence matches source text verbatim.
+E. Source-only "2" ×4 and pdf-only footer digits overlap categories B/C.
+
+CONCLUSION: T1 PASSES with artifacts; zero digit/number changes beyond the
+eleven Part-2-A patches (which are present verbatim: 4,652 / 4,559 / 12 vs 6 /
+about 0.43 / 0.5513 / 0.1830 / -0.000 / +0.008 / -0.000 / +0.117, etc.).

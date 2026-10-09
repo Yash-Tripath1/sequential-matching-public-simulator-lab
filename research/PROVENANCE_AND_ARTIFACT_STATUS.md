@@ -2,7 +2,12 @@
 
 **Updated 9 October 2026 for the Round 1 submission.**
 
-- The Round 1 research note is `research/RESEARCH_NOTE_ROUND1.pdf` (submitted document).
+- The Round 1 research note was first submitted as `research/RESEARCH_NOTE_ROUND1.pdf`
+  (kept as the submission record). Corrected/compact rebuilds live alongside it:
+  `RESEARCH_NOTE_ROUND1_rev2.pdf` (full corrected note) and
+  `RESEARCH_NOTE_ROUND1_rev3.pdf` (compact figure-driven revision), built by
+  `research/build_pdf_rev2.py` / `build_pdf_rev3.py` from
+  `RESEARCH_NOTE_FINAL.md` / `RESEARCH_NOTE_REV3.md`.
   Its editable source `RESEARCH_NOTE_FINAL.md` is mirrored in `research/` with four small
   corrections applied after the PDF was rendered (age-window conditioning note in §3.3,
   Bonferroni wording in §5.4, softened mechanism claim in §6.2c, per-seed coverage/ceiling

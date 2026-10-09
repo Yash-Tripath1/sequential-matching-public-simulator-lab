@@ -1,0 +1,452 @@
+[
+ {
+  "i": 0,
+  "span": "\\text{assigned} \\to \\text{both respond} \\to \\text{mutual accept} \\to \\text{date}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 1,
+  "span": "V_i \\;=\\; \\frac{1}{3}\\sum_{j \\,\\in\\, \\mathcal{C}(i)} \\pi_{ij}\\cdot \\max\\!\\big(0,",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 2,
+  "span": "t = 0 \\dots 59",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 3,
+  "span": "V",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 4,
+  "span": "|V| = 200",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 5,
+  "span": "i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 6,
+  "span": "a_i \\le 20",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 7,
+  "span": "e_i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 8,
+  "span": "(\\text{age}_i, \\text{gender}_i, \\text{zone}_i)",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 9,
+  "span": "\\{f_{ik}\\}_{k \\in H \\cup S}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 10,
+  "span": "H",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 11,
+  "span": "S",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 12,
+  "span": "\\{\\texttt{observed}, \\texttt{not\\_asked}, \\texttt{declined}\\}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 13,
+  "span": "f_{ik} = \\varnothing",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 14,
+  "span": "N = |\\{i : a_i \\le 59\\}|",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 15,
+  "span": "\\mathrm{MSMI}/100 = 100 M / N",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 16,
+  "span": "M",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 17,
+  "span": "\\varnothing",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 18,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 19,
+  "span": "i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 20,
+  "span": "i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 21,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 22,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 23,
+  "span": "i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 24,
+  "span": "\\varnothing",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 25,
+  "span": "0.6^2 = 0.36",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 26,
+  "span": "10^{-2}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 27,
+  "span": "0.076^2 \\approx 0.006",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 28,
+  "span": "(i,j)",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 29,
+  "span": "i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 30,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 31,
+  "span": "k",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 32,
+  "span": "\\max_{\\mathcal{M}} \\sum_{(i,j)\\in\\mathcal{M}} \\hat p_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 33,
+  "span": "\\hat p_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 34,
+  "span": "\\Pr(\\text{MSMI} \\mid i,j \\text{ assigned})",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 35,
+  "span": "\\mathcal{M}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 36,
+  "span": "\\hat p",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 37,
+  "span": "\\Pr(\\text{MSMI})",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 38,
+  "span": "\\hat p",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 39,
+  "span": "\\Pr(\\text{MSMI})",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 40,
+  "span": "\\le 0",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 41,
+  "span": "+1",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 42,
+  "span": "-1",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 43,
+  "span": "0",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 44,
+  "span": "i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 45,
+  "span": "V",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 46,
+  "span": "\\mathcal{C}(i)",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 47,
+  "span": "|\\text{age}_i - \\text{age}_j| \\le 10",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 48,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 49,
+  "span": "\\pi_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 50,
+  "span": "w_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 51,
+  "span": "u_j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 52,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 53,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 54,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 55,
+  "span": "\\max(0, w_{ij} - u_j)",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 56,
+  "span": "u_j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 57,
+  "span": "\\sim 10^{-3}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 58,
+  "span": "\\Pr(\\text{mutual acceptance} \\mid \\text{both responded})",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 59,
+  "span": "\\lambda = 3",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 60,
+  "span": "n",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 61,
+  "span": "n \\ge 50",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 62,
+  "span": "\\deg(i) \\times (0.2 + |\\beta_k|)",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 63,
+  "span": "\\lambda = 4",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 64,
+  "span": "\\beta_0",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 65,
+  "span": "w_{ij} - u_i - u_j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 66,
+  "span": "\\varnothing",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 67,
+  "span": "k",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 68,
+  "span": "k \\in \\{2,3,5\\}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 69,
+  "span": "2^{10}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 70,
+  "span": "2^{10}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 71,
+  "span": "n \\approx 2\\sigma^2(z_{0.975}+z_{0.80})^2/\\Delta^2",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 72,
+  "span": "\\sigma = 0.457",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 73,
+  "span": "\\hat p \\in [0.23, 0.56]",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 74,
+  "span": "[0.06, 0.98]",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 75,
+  "span": "[0.01, 7.01]",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 76,
+  "span": "p = 0.26",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 77,
+  "span": "n \\approx 546",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 78,
+  "span": "0.6^2 = 0.36",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 79,
+  "span": "w_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 80,
+  "span": "w_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 81,
+  "span": "V_i = \\frac{1}{3}\\sum_j \\pi_{ij}\\max(0, w_{ij}-u_j)",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 82,
+  "span": "w_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 83,
+  "span": "\\sum_j \\pi_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 84,
+  "span": "V_i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 85,
+  "span": "\\sum_j \\pi_{ij}",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 86,
+  "span": "i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 87,
+  "span": "j",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 88,
+  "span": "i",
+  "rendered": "native xelatex (compile OK)"
+ },
+ {
+  "i": 89,
+  "span": "k \\in \\{2,3,5\\}",
+  "rendered": "native xelatex (compile OK)"
+ }
+]
