@@ -1,3 +1,11 @@
+> **SUPERSEDED.** This prior-phase draft is retained as the record of the 2×2
+> clarification × matcher factorial. The submitted Round 1 note is
+> `research/RESEARCH_NOTE_ROUND1.pdf`; see `research/ROUND1_NOTE.md`. Its
+> 17-configuration factorial and structural analysis supersede this draft's headline
+> (the potential-ask +0.117 effect is real but saturated: any asking rule reaches
+> 97–98% of the coverage ceiling, and targeted asking is not supported as a further
+> lever). Nothing in this draft is retracted as data; its interpretation is updated.
+
 # Budgeted Clarification for Sequential Matching
 ## Public-simulator evidence on hard-constraint queries and general-graph allocation
 
