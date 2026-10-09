@@ -1,0 +1,1171 @@
+{
+  "runner": "in_process_public_simulator_diagnostics",
+  "seeds": [
+    101,
+    202,
+    303
+  ],
+  "variants": [
+    "development",
+    "sparse",
+    "cold_start",
+    "delayed",
+    "shift",
+    "drift"
+  ],
+  "rows": [
+    {
+      "seed": 101,
+      "variant": "development",
+      "schedule": "four_phase",
+      "ask_cost": 198,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 26,
+          "positive_labels": 1,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 63,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 88,
+          "positive_labels": 3,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 202,
+      "variant": "development",
+      "schedule": "four_phase",
+      "ask_cost": 189,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 15,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 42,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 60,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 303,
+      "variant": "development",
+      "schedule": "four_phase",
+      "ask_cost": 183,
+      "days_at_budget_limit": 14,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 17,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 50,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 74,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 101,
+      "variant": "sparse",
+      "schedule": "four_phase",
+      "ask_cost": 192,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 10,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 18,
+          "positive_labels": 0,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 24,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 202,
+      "variant": "sparse",
+      "schedule": "four_phase",
+      "ask_cost": 162,
+      "days_at_budget_limit": 12,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 5,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 10,
+          "positive_labels": 0,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 11,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 303,
+      "variant": "sparse",
+      "schedule": "four_phase",
+      "ask_cost": 165,
+      "days_at_budget_limit": 12,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 10,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 19,
+          "positive_labels": 0,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 21,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 101,
+      "variant": "cold_start",
+      "schedule": "four_phase",
+      "ask_cost": 246,
+      "days_at_budget_limit": 20,
+      "days_with_any_ask": 21,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 18,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 56,
+          "positive_labels": 0,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 77,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 202,
+      "variant": "cold_start",
+      "schedule": "four_phase",
+      "ask_cost": 207,
+      "days_at_budget_limit": 16,
+      "days_with_any_ask": 18,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 9,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 32,
+          "positive_labels": 0,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 47,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 303,
+      "variant": "cold_start",
+      "schedule": "four_phase",
+      "ask_cost": 240,
+      "days_at_budget_limit": 20,
+      "days_with_any_ask": 20,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 18,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 48,
+          "positive_labels": 0,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 73,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 101,
+      "variant": "delayed",
+      "schedule": "four_phase",
+      "ask_cost": 198,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 25,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 59,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 83,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 202,
+      "variant": "delayed",
+      "schedule": "four_phase",
+      "ask_cost": 189,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 14,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 39,
+          "positive_labels": 0,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 61,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 303,
+      "variant": "delayed",
+      "schedule": "four_phase",
+      "ask_cost": 183,
+      "days_at_budget_limit": 14,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 17,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 44,
+          "positive_labels": 0,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 68,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 101,
+      "variant": "shift",
+      "schedule": "four_phase",
+      "ask_cost": 198,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 27,
+          "positive_labels": 1,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 67,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 95,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 202,
+      "variant": "shift",
+      "schedule": "four_phase",
+      "ask_cost": 189,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 17,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 45,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 67,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 303,
+      "variant": "shift",
+      "schedule": "four_phase",
+      "ask_cost": 183,
+      "days_at_budget_limit": 14,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 18,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 51,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 76,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 101,
+      "variant": "drift",
+      "schedule": "four_phase",
+      "ask_cost": 198,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 26,
+          "positive_labels": 1,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 63,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 90,
+          "positive_labels": 3,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 202,
+      "variant": "drift",
+      "schedule": "four_phase",
+      "ask_cost": 189,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 15,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 42,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 60,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 303,
+      "variant": "drift",
+      "schedule": "four_phase",
+      "ask_cost": 183,
+      "days_at_budget_limit": 14,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 17,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 50,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 74,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 15,
+      "thompson_days": 15,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 30
+    },
+    {
+      "seed": 101,
+      "variant": "development",
+      "schedule": "adaptive",
+      "ask_cost": 198,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 26,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "30": {
+          "mature_labels": 64,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 92,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 30,
+      "thompson_days": 0,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 15
+    },
+    {
+      "seed": 202,
+      "variant": "development",
+      "schedule": "adaptive",
+      "ask_cost": 189,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 15,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 42,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 62,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 17,
+      "thompson_days": 13,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 28
+    },
+    {
+      "seed": 303,
+      "variant": "development",
+      "schedule": "adaptive",
+      "ask_cost": 183,
+      "days_at_budget_limit": 14,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 17,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 50,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 75,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 20,
+      "thompson_days": 10,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 25
+    },
+    {
+      "seed": 101,
+      "variant": "sparse",
+      "schedule": "adaptive",
+      "ask_cost": 192,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 10,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 18,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "45": {
+          "mature_labels": 24,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 0,
+      "thompson_days": 30,
+      "greedy_days": 30,
+      "adaptive_gp_ever": false,
+      "adaptive_first_gp_day": null
+    },
+    {
+      "seed": 202,
+      "variant": "sparse",
+      "schedule": "adaptive",
+      "ask_cost": 162,
+      "days_at_budget_limit": 12,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 5,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 10,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "45": {
+          "mature_labels": 11,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 0,
+      "thompson_days": 30,
+      "greedy_days": 30,
+      "adaptive_gp_ever": false,
+      "adaptive_first_gp_day": null
+    },
+    {
+      "seed": 303,
+      "variant": "sparse",
+      "schedule": "adaptive",
+      "ask_cost": 165,
+      "days_at_budget_limit": 12,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 10,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 19,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "45": {
+          "mature_labels": 21,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 0,
+      "thompson_days": 30,
+      "greedy_days": 30,
+      "adaptive_gp_ever": false,
+      "adaptive_first_gp_day": null
+    },
+    {
+      "seed": 101,
+      "variant": "cold_start",
+      "schedule": "adaptive",
+      "ask_cost": 246,
+      "days_at_budget_limit": 20,
+      "days_with_any_ask": 21,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 18,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 56,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "45": {
+          "mature_labels": 78,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 1,
+      "thompson_days": 29,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 44
+    },
+    {
+      "seed": 202,
+      "variant": "cold_start",
+      "schedule": "adaptive",
+      "ask_cost": 207,
+      "days_at_budget_limit": 16,
+      "days_with_any_ask": 18,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 9,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 32,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "45": {
+          "mature_labels": 47,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 0,
+      "thompson_days": 30,
+      "greedy_days": 30,
+      "adaptive_gp_ever": false,
+      "adaptive_first_gp_day": null
+    },
+    {
+      "seed": 303,
+      "variant": "cold_start",
+      "schedule": "adaptive",
+      "ask_cost": 240,
+      "days_at_budget_limit": 20,
+      "days_with_any_ask": 20,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 18,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 48,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "45": {
+          "mature_labels": 73,
+          "positive_labels": 0,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 0,
+      "thompson_days": 30,
+      "greedy_days": 30,
+      "adaptive_gp_ever": false,
+      "adaptive_first_gp_day": null
+    },
+    {
+      "seed": 101,
+      "variant": "delayed",
+      "schedule": "adaptive",
+      "ask_cost": 198,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 25,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 58,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 83,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 27,
+      "thompson_days": 3,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 18
+    },
+    {
+      "seed": 202,
+      "variant": "delayed",
+      "schedule": "adaptive",
+      "ask_cost": 189,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 14,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 39,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "45": {
+          "mature_labels": 60,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 7,
+      "thompson_days": 23,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 38
+    },
+    {
+      "seed": 303,
+      "variant": "delayed",
+      "schedule": "adaptive",
+      "ask_cost": 183,
+      "days_at_budget_limit": 14,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 17,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 44,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "45": {
+          "mature_labels": 68,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 10,
+      "thompson_days": 20,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 35
+    },
+    {
+      "seed": 101,
+      "variant": "shift",
+      "schedule": "adaptive",
+      "ask_cost": 198,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 27,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "30": {
+          "mature_labels": 66,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 95,
+          "positive_labels": 1,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 30,
+      "thompson_days": 0,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 15
+    },
+    {
+      "seed": 202,
+      "variant": "shift",
+      "schedule": "adaptive",
+      "ask_cost": 189,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 17,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 45,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 67,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 17,
+      "thompson_days": 13,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 28
+    },
+    {
+      "seed": 303,
+      "variant": "shift",
+      "schedule": "adaptive",
+      "ask_cost": 183,
+      "days_at_budget_limit": 14,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 18,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 50,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 76,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 20,
+      "thompson_days": 10,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 25
+    },
+    {
+      "seed": 101,
+      "variant": "drift",
+      "schedule": "adaptive",
+      "ask_cost": 198,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 19,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 26,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "30": {
+          "mature_labels": 64,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 95,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 30,
+      "thompson_days": 0,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 15
+    },
+    {
+      "seed": 202,
+      "variant": "drift",
+      "schedule": "adaptive",
+      "ask_cost": 189,
+      "days_at_budget_limit": 15,
+      "days_with_any_ask": 17,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 15,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 42,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 62,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 17,
+      "thompson_days": 13,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 28
+    },
+    {
+      "seed": 303,
+      "variant": "drift",
+      "schedule": "adaptive",
+      "ask_cost": 183,
+      "days_at_budget_limit": 14,
+      "days_with_any_ask": 16,
+      "max_daily_ask_cost": 12,
+      "checkpoints": {
+        "15": {
+          "mature_labels": 17,
+          "positive_labels": 0,
+          "strategy": "thompson"
+        },
+        "30": {
+          "mature_labels": 50,
+          "positive_labels": 1,
+          "strategy": "gp_ucb"
+        },
+        "45": {
+          "mature_labels": 75,
+          "positive_labels": 2,
+          "strategy": "greedy"
+        }
+      },
+      "gp_days": 20,
+      "thompson_days": 10,
+      "greedy_days": 30,
+      "adaptive_gp_ever": true,
+      "adaptive_first_gp_day": 25
+    }
+  ],
+  "summary": {
+    "four_phase": {
+      "episodes": 18,
+      "mean_total_ask_units": 194,
+      "mean_days_at_12_unit_cap": 15.055555555555555,
+      "episodes_ever_hitting_12": 18,
+      "mean_days_with_any_ask": 17.72222222222222,
+      "day15_mature_labels_median": 17.0,
+      "day15_positive_labels_median": 0.0,
+      "day15_mature_labels_mean": 16.88888888888889,
+      "day30_mature_labels_median": 46.5,
+      "day30_positive_labels_median": 1.0,
+      "day30_mature_labels_mean": 44.333333333333336,
+      "day45_mature_labels_median": 70.5,
+      "day45_positive_labels_median": 1.0,
+      "day45_mature_labels_mean": 63.833333333333336
+    },
+    "adaptive": {
+      "episodes": 18,
+      "mean_total_ask_units": 194,
+      "mean_days_at_12_unit_cap": 15.055555555555555,
+      "episodes_ever_hitting_12": 18,
+      "mean_days_with_any_ask": 17.72222222222222,
+      "day15_mature_labels_median": 17.0,
+      "day15_positive_labels_median": 0.0,
+      "day15_mature_labels_mean": 16.88888888888889,
+      "day30_mature_labels_median": 46.5,
+      "day30_positive_labels_median": 1.0,
+      "day30_mature_labels_mean": 44.27777777777778,
+      "day45_mature_labels_median": 70.5,
+      "day45_positive_labels_median": 1.0,
+      "day45_mature_labels_mean": 64.66666666666667,
+      "adaptive_gp_episodes": 13,
+      "first_gp_day_median_if_switched": 25
+    }
+  },
+  "note": "Observational diagnostics only; no private seeds or hidden policy inputs."
+}

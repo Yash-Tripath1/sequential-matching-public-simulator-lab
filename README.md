@@ -1,79 +1,69 @@
-# Sequential Matching — public simulator experiment lab
+# Sequential Matching — Public Simulator Research Lab
 
-An exploratory comparison of sequential-matching policies against the organisers' **public synthetic simulator**. The repository includes the policy code, the exact simulator file used, saved episode-level results, a chart, and reproduction scripts.
+An exploratory study of budgeted clarification and online matching using the organizers' **public synthetic simulator**. This repository contains the policy prototypes, unchanged simulator snapshot, reproducible analysis code, available episode-level results, charts, and a draft research note.
 
-> **Scope:** synthetic simulator experiment only. These results are not a private-evaluation result, a real-world compatibility estimate, or evidence of product effectiveness.
+> **Scope:** All reported episodes use public synthetic worlds. These results are not private-evaluation scores, Docker-validation results, real-user evidence, or evidence of real-world compatibility or product effectiveness.
 
-## Pilot findings
+## Current research status
 
-We ran **11 methods × 18 cases = 198 episodes**: six public variants (`development`, `sparse`, `cold_start`, `delayed`, `shift`, `drift`) with three seeds (101, 202, 303) per variant. All 198 in-process episodes completed with legal simulator actions. The reported primary score is the equal-weight mean of MSMI per 100 arrived members across the six variants; higher is better.
+The current primary experiment is a matched **2 × 2 clarification-policy × matcher factorial**, with the three supplied controls:
 
-![Overall MSMI results and scenario-by-scenario variation](results/msmi_findings.png)
+- 6 policies × 6 public scenario families × 10 public seeds = **360 policy–world rows** across **60 matched worlds**.
+- Potential-ask versus default clarification, crossed with greedy versus general-graph maximum-weight matching.
+- No-clarification greedy and random-feasible controls are included.
+- Primary result: the potential-ask main effect is **+0.117 MSMI per 100 arrived members** (95% seed-block bootstrap CI **[+0.025, +0.208]**, exact two-sided sign-flip *p* = **0.0449**, unadjusted). The matcher main effect is **+0.058** (95% CI **[−0.013, +0.129]**, *p* = **0.195**). Treat these as exploratory public-simulator evidence, not a confirmed effect; the ask advantage reverses in cold start.
 
-| Method | Mean MSMI / 100 | Mean coverage |
-|---|---:|---:|
-| Potential asks + max-weight similarity (7 soft fields) | **0.639** | 0.348 |
-| Potential asks + starter greedy matcher | **0.611** | 0.348 |
-| Thompson pattern sampling | 0.472 | 0.347 |
-| Starter greedy | 0.389 | 0.349 |
-| GP surrogate + UCB | 0.389 | 0.345 |
-| Max-weight similarity, default asks | 0.389 | 0.347 |
-| Random feasible | 0.278 | 0.348 |
-| GP surrogate, mean only | 0.222 | 0.336 |
-| GA-tuned core weights | 0.222 | 0.345 |
-| Core max-weight, equal weights | 0.194 | 0.345 |
-| No clarification | 0.111 | 0.123 |
+A separate soft-question experiment is secondary. Its three-seed screen showed a small pilot uplift for hard-plus-soft questions with max-weight matching; the seven-seed public holdout estimate was only **+0.024 MSMI/100** (95% CI **[−0.071, +0.131]**, *p* = **0.844**). It does **not** establish a reliable soft-question benefit. Around 83 additional ask units per episode were used with virtually unchanged coverage.
 
-### What stands out
+See [`research/SCALED_FACTORIAL_RESULTS.md`](research/SCALED_FACTORIAL_RESULTS.md) for full tables, scenario results, contrasts, caveats, and soft-question summaries. See [`research/SIMULATION_OVERVIEW_AND_REQUIREMENTS_AUDIT.md`](research/SIMULATION_OVERVIEW_AND_REQUIREMENTS_AUDIT.md) for the simulator/spec audit and limitations. The earlier 198-episode pilot is retained separately in [`experiment_log.md`](experiment_log.md) and its historical output files.
 
-- **Potentially useful ask heuristic:** with the same starter greedy matcher, potential asks scored 0.611 vs 0.389 with the starter's usual asks. With the same seven-soft-field max-weight matcher, they scored 0.639 vs 0.389 with the usual asks. In both paired comparisons, potential asks won 8 cases, tied 8, and lost 2. This is an encouraging signal, not a settled result.
-- **Clarification and coverage:** no-clarification coverage averaged 12.2%, compared with about 34–35% for the other policies. In this simulator, unknown hard constraints can block possible pairs.
-- **Learning methods:** Thompson pattern sampling scored 0.472. GP-UCB scored 0.389, above the GP mean-only version at 0.222 in this pilot. The tiny GA selected equal weights and scored 0.222 on held-out cases.
-- **Sparse variant:** every method scored zero MSMIs across the three sparse cases.
+## Research note and form support
 
-These outcomes are rare and each method had only three seeds per scenario. Treat the score differences and ordering as exploratory, not statistically conclusive. More seeds and official evaluator/container validation are needed before choosing a submission policy.
+- [`research/RESEARCH_NOTE_DRAFT.docx`](research/RESEARCH_NOTE_DRAFT.docx) — a roughly 10-page section/page-break draft for review (verify final pagination in Word/LibreOffice); author details and declarations must be checked before submission.
+- [`research/RESEARCH_NOTE_DRAFT.md`](research/RESEARCH_NOTE_DRAFT.md) — editable source.
+- [`research/GFORM_DRAFT_ANSWERS.md`](research/GFORM_DRAFT_ANSWERS.md) — concise draft answers mapped to the form fields.
 
-## Methods
+The soft-question aggregate graph and data file use the published aggregate values recorded in the results note. The user-VM row-level JSON files for the 3-seed screen and 7-seed soft-question holdout were not present when this bundle was prepared, so they are not included. The ten-seed factorial's full row-level JSON is included.
 
-- Supplied baselines: **greedy**, **no clarification**, and **random feasible**.
-- **Max-weight similarity:** maximum-weight general-graph matching using observed agreement across seven soft fields.
-- **Thompson pattern:** Beta posteriors over coarse observable pair-pattern groups; updates on mature, visible MSMI outcomes.
-- **GP mean / GP-UCB:** small online Gaussian-process surrogates over observable pair features, trained on completed MSMI outcomes; UCB adds one posterior standard deviation.
-- **Potential ask:** ranks available members by how many plausible blocked edges their missing hard constraints could unlock. It is heuristic VOI, not an exact expected-value calculation.
-- **GA-tuned:** a small offline genetic algorithm tunes four core-feature matching weights. The GA is a tuner, not a per-introduction policy.
-- **Controls:** potential asks with the starter greedy matcher, plus default asks with equal-weight core-feature max-weight matching.
+## Figures and data
 
-All policies receive only simulator observations and their own policy memory; the experimental policy code does not inspect `world['truth']`.
+- `results/scaled_factorial_heatmap.png` — main six-policy/six-family result chart.
+- `results/factorial_effects_forest.png` — ask, matcher, and interaction main effects with seed-block bootstrap intervals.
+- `results/policy_workflow.png` — method overview diagram.
+- `results/soft_ask_holdout_aggregate.png` — overall soft-question holdout estimate and descriptive scenario point estimates. Scenario-specific intervals are not shown because raw soft-holdout rows are not bundled.
+- `results/scaled_factorial_10seeds.json` — all 360 core factorial rows and analysis summaries.
+- `results/scaled_factorial_summary.csv`, `results/scaled_factorial_contrasts.csv` — readable factorial exports.
+- Historical pilot and phase-screen artifacts are retained in `results/` and clearly identified as exploratory in the accompanying reports.
 
-## Reproduce
+## Methods in brief
 
-Requires Python 3.11 or newer for the pinned numerical/plotting dependencies. The upstream simulator kit is bundled, so the experiment does not need to fetch source code or data at runtime.
+The potential-ask policy ranks available members by the number of plausible candidate edges whose hard feasibility might be blocked by unknown constraints. This is a **heuristic**, not an exact expected-value-of-information calculation. All known hard constraints remain non-negotiable gates. The max-weight policy matches the currently feasible general graph using observed similarity across seven soft fields; it does not inspect hidden simulator truth. The controlled comparisons hold one of the clarification or matching components fixed.
+
+The core factorial's primary score is the equal-weight mean of MSMI per 100 arrived members across six scenario families. Confidence intervals resample public seed blocks; exact sign-flip tests use the ten seed-block differences. The reported *p*-values are unadjusted for multiple contrasts. Rare, discrete outcomes and scenario heterogeneity limit inference.
+
+## Reproduce checks and analysis
+
+Use the existing Python environment or create a virtual environment. The unittest command runs one small episode as a smoke test; the two figure commands only regenerate plots from saved outputs and do not run experiments.
 
 ```bash
-python -m venv .venv
-# macOS/Linux:
-source .venv/bin/activate
-# Windows PowerShell:
-# .venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-python -m unittest discover -s tests  # quick installation/simulator smoke tests
-python run_suite.py       # baseline methods + GA search and held-out test
-python run_controls.py    # paired controls; appends 36 episodes
-python make_report.py     # refreshes CSV exports and README chart
+python -m unittest discover -s tests
+python make_scaled_factorial_heatmap.py
+python make_research_figures.py
+# Optional: rebuild the editable research-note DOCX
+python -m pip install -r requirements-report.txt
+python tools/build_research_note.py
 ```
 
-The full run took about 21 minutes for the initial suite and about 3–4 minutes for controls in the environment used for this pilot; timing depends on hardware. `run_suite.py` writes progress to `results/public_pilot_results.json`. It starts a fresh suite if rerun; `run_controls.py` skips control cases already recorded. To reproduce the bundled result from scratch, run the commands in order.
+The runners for the larger simulations are included, but executing them re-runs episodes. Do not run them just to preview this repository. Main runner files:
 
-The checked-in result artifacts are:
+- `scaled_factorial.py` — additional public seeds for the core factorial.
+- `soft_ask_screen.py` — targeted soft-field screen.
+- `soft_ask_validation_7seeds.py` — soft-question holdout.
+- `phase_screen.py`, `phase_hybrid_policy.py`, `checkpoint_diagnostics.py`, `corrected_learning_rerun.py` — exploratory phase/learning diagnostics.
 
-- `results/public_pilot_results.json` — all 198 episode rows and summaries.
-- `results/summary.csv`, `results/by_variant.csv`, `results/episode_results.csv` — spreadsheet-friendly exports.
-- `results/msmi_findings.png` — chart embedded above.
-- `results/ga_search_history.json`, `results/ga_selected_weights.json`, `results/ga_training_cache.json` — GA training record.
-- `experiment_log.md` — full protocol, caveats, scenario breakdown, and interpretation.
+## Provenance and reuse
 
-## Validation and provenance
+The bundled `starter/kit.py` is copied unchanged from public starter release 1.0.0 at upstream commit `a8e26b35118cfa8e886a02f93984923e43ab64f6`. See `starter/SOURCE.md`, `starter/LICENSE`, and `starter/DATA_LICENSE.md` for provenance and the upstream code/data terms. The experiment code has no separate top-level open-source license; no new license is implied by this bundle.
 
-The bulk experiment runs policies **in-process** against the public simulator to make repeated comparisons practical. Recorded policy runtimes are not official per-invocation subprocess or offline-Docker timings. Use the organisers' official evaluator/container for final submission validation; that final validation has not been performed for every custom policy in this lab.
-
-The bundled `starter/kit.py` is copied unchanged from the public starter release 1.0.0 at upstream commit `a8e26b35118cfa8e886a02f93984923e43ab64f6`. See `starter/SOURCE.md` and preserve the bundled upstream MIT notice in `starter/LICENSE`. The synthetic-data policy is in `starter/DATA_LICENSE.md`. The experiment scripts do not currently assign a separate open-source license; choose one before inviting reuse if desired.
+The detailed public-simulator experiment was run in-process; recorded wall times are not official per-invocation subprocess or Docker timings. No private evaluator, private seed set, Docker assessment, or real-user evaluation has been performed. `SHA256SUMS.txt` lists checksums for the packaged files (excluding the checksum list itself).

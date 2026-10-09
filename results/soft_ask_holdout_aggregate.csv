@@ -1,0 +1,8 @@
+scenario,paired_difference_msmi_per_100,n_seed_blocks,ci95_low,ci95_high,exact_sign_flip_p,source_note
+Overall,0.0238,7,-0.0714,0.1310,0.84375,Seven-seed public holdout aggregate reported in SCALED_FACTORIAL_RESULTS.md; episode-level soft-run JSON not bundled
+Development,-0.0710,7,,,,Scenario point estimate only; no per-family interval from available aggregate
+Sparse,0.0000,7,,,,Scenario point estimate only; no per-family interval from available aggregate
+Cold start,-0.1430,7,,,,Scenario point estimate only; no per-family interval from available aggregate
+Delayed,0.0000,7,,,,Scenario point estimate only; no per-family interval from available aggregate
+Shift,0.2860,7,,,,Scenario point estimate only; no per-family interval from available aggregate
+Drift,0.0710,7,,,,Scenario point estimate only; no per-family interval from available aggregate

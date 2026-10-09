@@ -157,10 +157,15 @@ def mature_primary_label(intro: dict, feedback: list[dict], day: int) -> int | N
     date = dates[0]
     if date.get("value") is not True:
         return 0
+    date_day = int(date["occurred_day"])
+    # Match the official MSMI definition: the first date must happen within
+    # 30 days of assignment. Late dates are retained in feedback but are not a
+    # positive target, even if both second-meeting answers are timely.
+    if date_day - int(intro["assigned_day"]) > 30:
+        return 0
     second = [e for e in events if e.get("event") == "second_meeting_intention"]
     if len(second) < 2:
         return None
-    date_day = int(date["occurred_day"])
     success = all(
         e.get("value") == "yes"
         and e.get("occurred_day") is not None
@@ -371,6 +376,113 @@ class PotentialAskGreedyPolicy(PotentialAskPolicy):
         return kit.baseline_match(state)
 
 
+class CoreSoftAskPolicy(MaxWeightPolicy):
+    """Targeted clarification for core soft fields; heuristic, not exact VOI.
+
+    In soft-only mode, query fields only among currently hard-feasible pairs.
+    In hard-plus-soft mode, start with the existing potential hard-constraint
+    asks, then use any remaining daily budget on core-soft fields that could
+    change scores of feasible or planned-to-be-unblocked candidate edges.
+    """
+    name = "soft_core_maxweight"
+    core_soft_fields = tuple(CORE)
+
+    def __init__(self, *args, include_hard: bool = False, **kwargs):
+        self.include_hard = include_hard
+        super().__init__(*args, **kwargs)
+
+    @staticmethod
+    def _pair_will_be_feasible(a: dict, b: dict, hard_asked: set[str], include_hard: bool) -> bool:
+        status = kit.eligibility(a, b)["status"]
+        if status == "infeasible":
+            return False
+        if status == "feasible":
+            return True
+        if not include_hard:
+            return False
+        # A needs-clarification pair is considered only if every member with
+        # missing hard fields is receiving the constraints bundle now, and none
+        # of those missing fields was explicitly declined.
+        for member in (a, b):
+            missing = [f for f in kit.HARD if member.get("fields", {}).get(f) is None]
+            if missing:
+                statuses = member.get("field_status", {})
+                if any(statuses.get(f) == "declined" for f in missing):
+                    return False
+                if member["member_id"] not in hard_asked:
+                    return False
+        return True
+
+    def asks(self, state: dict) -> list[dict]:
+        hard_asks = PotentialAskPolicy.asks(self, state) if self.include_hard else []
+        hard_asked = {a["member_id"] for a in hard_asks if a["field"] == "constraints"}
+        budget = int(state.get("ask_budget_remaining", 12)) - 3 * len(hard_asks)
+        if budget <= 0:
+            return hard_asks
+
+        available = [m for m in state.get("members", []) if m.get("available")]
+        past = {
+            pair_key(i["user_a"], i["user_b"])
+            for i in state.get("introductions", [])
+        }
+        question_scores: dict[tuple[str, str], float] = defaultdict(float)
+
+        # Score each candidate pair once. Existing core-field agreement raises
+        # its priority; querying a field already known on the other endpoint
+        # has higher immediate comparison value, while two-unknown pairs retain
+        # some value in case both questions fit the remaining budget.
+        for i, a in enumerate(available):
+            for b in available[i + 1:]:
+                key = pair_key(a["member_id"], b["member_id"])
+                if key in past or not self._pair_will_be_feasible(a, b, hard_asked, self.include_hard):
+                    continue
+                for field in self.core_soft_fields:
+                    va = a.get("fields", {}).get(field)
+                    vb = b.get("fields", {}).get(field)
+                    known_elsewhere = sum(
+                        known_equal(a, b, other_field)
+                        for other_field in self.core_soft_fields
+                        if other_field != field
+                    )
+                    priority = 1.0 + known_elsewhere
+                    if va is None and a.get("field_status", {}).get(field) not in ("declined", "observed"):
+                        question_scores[(a["member_id"], field)] += priority * (1.0 if vb is not None else 0.5)
+                    if vb is None and b.get("field_status", {}).get(field) not in ("declined", "observed"):
+                        question_scores[(b["member_id"], field)] += priority * (1.0 if va is not None else 0.5)
+
+        ranked = sorted(
+            ((score, member_id, field) for (member_id, field), score in question_scores.items() if score > 0),
+            key=lambda row: (-row[0], row[1], row[2]),
+        )
+        soft_asks = [
+            {"member_id": member_id, "field": field}
+            for _, member_id, field in ranked[:budget]
+        ]
+        return hard_asks + soft_asks
+
+
+class CoreSoftAskGreedyPolicy(CoreSoftAskPolicy):
+    name = "soft_core_greedy"
+
+    def pairs(self, state: dict) -> list[list[str]]:
+        return kit.baseline_match(state)
+
+
+class HardPlusCoreSoftAskMaxWeightPolicy(CoreSoftAskPolicy):
+    name = "hard_plus_soft_maxweight"
+
+    def __init__(self, *args, **kwargs):
+        kwargs["include_hard"] = True
+        super().__init__(*args, **kwargs)
+
+
+class HardPlusCoreSoftAskGreedyPolicy(HardPlusCoreSoftAskMaxWeightPolicy):
+    name = "hard_plus_soft_greedy"
+
+    def pairs(self, state: dict) -> list[list[str]]:
+        return kit.baseline_match(state)
+
+
 POLICY_FACTORIES = {
     "greedy": lambda **kw: GreedyPolicy(**kw),
     "no_ask": lambda **kw: NoAskPolicy(**kw),
@@ -382,6 +494,10 @@ POLICY_FACTORIES = {
     "gp_ucb": lambda **kw: GpUcbPolicy(kappa=1.0, **kw),
     "potential_ask": lambda **kw: PotentialAskPolicy(**kw),
     "potential_ask_greedy": lambda **kw: PotentialAskGreedyPolicy(**kw),
+    "soft_core_maxweight": lambda **kw: CoreSoftAskPolicy(include_hard=False, **kw),
+    "soft_core_greedy": lambda **kw: CoreSoftAskGreedyPolicy(include_hard=False, **kw),
+    "hard_plus_soft_maxweight": lambda **kw: HardPlusCoreSoftAskMaxWeightPolicy(**kw),
+    "hard_plus_soft_greedy": lambda **kw: HardPlusCoreSoftAskGreedyPolicy(**kw),
 }
 
 
@@ -432,6 +548,10 @@ def run_episode(method: str, seed: int, variant: str, weights: dict[str, float] 
         "mean_first_intro_wait_days": statistics.mean(waits) if waits else None,
         "policy_wall_seconds_in_process": policy_seconds,
         "ask_cost": result["ask_cost"],
+        "hard_constraint_bundles": sum(a["field"] == "constraints" for a in sim.ask_log),
+        "soft_field_questions": sum(a["field"] in SOFT for a in sim.ask_log),
+        "asks_by_field": {field: sum(a["field"] == field for a in sim.ask_log)
+                           for field in ["constraints"] + SOFT},
     })
     return result
 
