@@ -1,2 +1,0 @@
-# Optional dependency for regenerating the editable DOCX research-note draft.
-python-docx==1.1.2
