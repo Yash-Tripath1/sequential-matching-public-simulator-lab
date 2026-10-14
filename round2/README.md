@@ -1,6 +1,6 @@
 # Bipartite Bard — The Sequential Matching Problem, Round 2
 
-Team Bipartite Bard · Anadi Tripathi (IIT Madras), with Umaid
+Team Bipartite Bard — a solo entry by Anadi Tripathi, IIT Madras
 Vouchsafe / RomeoJulietLove hackathon · Final build, October 2026
 
 **Read [`REPORT.md`](REPORT.md) for the findings.** This file is the map.

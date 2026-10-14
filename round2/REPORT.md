@@ -1,6 +1,6 @@
 # The Sequential Matching Problem — Round 2 Technical Report
 
-**Team:** Bipartite Bard · Anadi Tripathi (IIT Madras), with Umaid
+**Team:** Bipartite Bard (solo entry) · Anadi Tripathi, IIT Madras
 **Kit:** RomeoJulietLove/The-Sequential-Matching-Problem, participant specification 1.0.0
 **Kit commit:** `a8e26b3` · `kit.py` SHA-256 `0d2cb3d3b46ca2a6…`
 **Report date:** 13 October 2026
@@ -23,7 +23,7 @@ What we gained instead is a decomposition of *which components matter*:
 |---|---:|---|
 | **Clarification on/off** | **−0.304** (p < 0.001) | askable pool never drains |
 | **Pair choice** (random vs greedy) | **−0.070** (p = 0.004) | none |
-| **Ask priority** (longest-wait first) | +0.038 (p = 0.136, n.s.) | **−1.05 d p90** (p < 0.001) |
+| **Ask priority** (longest-wait first) | −0.038 (p = 0.136, n.s.) | **−1.05 d p90** (p < 0.001) |
 
 Clarification is worth roughly ten times anything else we tested. Pairing
 *quality* matters; pairing *quantity* does not. Ask *priority* is free on the
@@ -111,7 +111,7 @@ policies including our own reimplementations of two baselines.
 ## 4 Reproducibility statement
 
 Round 1 reported **1,326 episodes across 17 configurations**. The code behind
-**13 of those configurations was never committed** and does not survive in any
+**11 of those configurations was never committed** and does not survive in any
 of the three locations we searched (the original VM bundle, a Drive snapshot
 timestamped 9 Oct 08:03 IST, and a 47-file re-upload that proved byte-identical
 to the repository in all 47 cases).
@@ -130,6 +130,9 @@ description alone produced the *wrong* policy. A signed-vs-unsigned disagreement
 in the agreement score gave 0.367 where the incumbent scored 0.525. Configurations
 must be verified by scoring, not by name.
 
+Six of the seventeen are reproducible; **eleven are not**. Five of the six are named
+below, alongside the best-known non-reproducible configuration.
+
 | configuration | Round 1 | reproducible today |
 |---|---:|---|
 | `greedy` | 0.350 | **yes, exact** |
@@ -138,7 +141,7 @@ must be verified by scoring, not by name.
 | `max_weight_similarity` | 0.408 | **yes, exact** |
 | `potential_ask` (incumbent) | 0.525 | yes, after fixing the sign error |
 | `lab_potential_core4_maxw` | 0.592 | **no code survives** |
-| remaining 12 of 17 | — | **no code survives** |
+| remaining 10 of 17 | — | **no code survives** |
 
 An attempt to reconstruct `lab_potential_core4_maxw` (potential-ranked asking
 with max-weight matching on the four core soft fields) was made and **abandoned**;
@@ -319,7 +322,7 @@ designs and this simulator, not a proof that no better policy exists.
 
 - All results describe the supplied synthetic simulator. They are not evidence
   about real matching, real people, or any product.
-- Six of the seventeen Round 1 configurations are reproducible; thirteen are not,
+- Six of the seventeen Round 1 configurations are reproducible; eleven are not,
   and we make no claim about them.
 - `oldest_first` is validated against our own instrumentation only; it has no
   external anchor against the organiser's evaluator, unlike the three baselines.
@@ -345,9 +348,20 @@ designs and this simulator, not a proof that no better policy exists.
 | Attribution | `LICENSE.kit` |
 | All three baseline comparisons | §5.1–5.2 |
 | At least one ablation | §5.3 (clarification), §5.4 (pairing), §5.5 (ask priority) |
-| Scenario-level results | `results/` |
+| Scenario-level results | `results/primary_120seeds.json` → `ceilings` (per-family). Per-family policy scores: see §8.1 |
 | Declared training seeds | none — no model is fitted |
 | Inference random seed | `PYTHONHASHSEED=0`, pinned in the Dockerfile |
+
+### 8.1 Per-scenario results — status
+
+`analyse.py` computes the primary score **per scenario family** for every arm and
+prints it, but that breakdown was not captured into `results/` when the 120-seed run
+was analysed. `results/primary_120seeds.json` therefore carries per-family *ceilings*
+but not yet per-family *policy scores*.
+
+This is a known gap in the archived artifacts, not a gap in the experiment — the
+numbers exist and are regenerated with the command in `REPRODUCE.md` §3. We flag it
+rather than point to a file that does not contain what we claim.
 
 ---
 

@@ -80,6 +80,37 @@ no_ask           0.098 [0.075, 0.122]  141 events  cov 0.120  cov/ceil 0.344
 
 ---
 
+### 3.1 Per-scenario results (required — do not skip)
+
+`analyse.py` writes `analysis.json` into the output directory next to
+`episodes.jsonl`. It contains `summary[arm]["family"]` — the primary score broken
+out by **each of the six scenario families** for every arm. That is the
+scenario-level evidence the submission requires, and it is **not** in
+`results/` yet.
+
+Copy it across and it lands in `results/`:
+
+```bash
+cp ~/out_all/analysis.json /path/to/round2/results/per_family_120seeds.json
+```
+
+Verify it has all six families for all four arms:
+
+```bash
+python3 -c "
+import json
+d=json.load(open('results/per_family_120seeds.json'))
+for arm,s in d['summary'].items():
+    f=s.get('family',{})
+    print(arm, len(f), {k:round(v,3) for k,v in f.items()})
+"
+```
+
+Expect four arms, each with six families (`development`, `sparse`, `cold_start`,
+`delayed`, `shift`, `drift`).
+
+---
+
 ## 4 Waiting-time analysis
 
 ```bash

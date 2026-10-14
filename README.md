@@ -1,6 +1,6 @@
 # The One Introduction Problem · Bipartite Bard
 
-Team **Bipartite Bard** · Anadi Tripathi (IIT Madras), with Umaid
+Team **Bipartite Bard** — a solo entry by Anadi Tripathi, IIT Madras
 Vouchsafe Sequential Matching Hackathon · built on the organisers' public
 synthetic simulator (participant specification 1.0.0, kit commit `a8e26b3`).
 
