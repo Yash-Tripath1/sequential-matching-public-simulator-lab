@@ -1,0 +1,5 @@
+arm,source,shipped,n_seeds,msmi_per_100,ci_lo,ci_hi,events,coverage,cov_over_ceiling,ask_cost,unserved_per_200
+greedy,supplied,True,120,0.402,0.357,0.448,579,0.333,0.978,197,133.3
+oldest_first,ours,False,120,0.364,0.319,0.409,524,0.334,0.98,197,133.2
+random_feasible,supplied,False,120,0.332,0.292,0.374,478,0.335,0.982,197,133.0
+no_ask,supplied,False,120,0.098,0.075,0.122,141,0.12,0.344,0,176.0

@@ -1,128 +1,97 @@
-# The One Introduction Problem · Bipartite Bard Round 1 lab
+# The One Introduction Problem · Bipartite Bard
 
-**A supply-constrained sequential matching policy: clarification targeting,
-outcome-relevant weighting, and variance-aware evaluation.**
-Round 1 research submission for the *Vouchsafe Sequential Matching Hackathon*,
-built entirely on the organisers' public synthetic simulator (starter release 1.0.0).
+Team **Bipartite Bard** · Anadi Tripathi (IIT Madras), with Umaid
+Vouchsafe Sequential Matching Hackathon · built on the organisers' public
+synthetic simulator (participant specification 1.0.0, kit commit `a8e26b3`).
 
-**Team:** Bipartite Bard · **Lead/members:** Anadi Tripathi · **Institution:** IIT Madras
-**Submission note:** [`research/RESEARCH_NOTE_ROUND1_rev3.pdf`](research/RESEARCH_NOTE_ROUND1_rev3.pdf)
-(compact, figure-driven) · full note:
-[`research/RESEARCH_NOTE_ROUND1_rev2.pdf`](research/RESEARCH_NOTE_ROUND1_rev2.pdf)
+---
 
-> **Status (9 Oct 2026).** All headline numbers reproduce the lab's published rows:
-> the three official baselines re-verified through the organisers' reference
-> evaluator, 54/54 episodes identical
-> ([`research/VERIFICATION_2026_10_09.md`](research/VERIFICATION_2026_10_09.md)).
-> Everything below is exploratory public-seed evidence; honesty labels at the bottom.
+## This repository has two rounds
 
-## At a glance
-
-1. **Supply, not ranking, sets the score.** Coverage ceilings are 0.399 / 0.341 / 0.178
-   (development / cold start / sparse); all sixteen asking configurations land at
-   97 to 98% of ceiling.
-2. **Asking at all is the step function:** any ask rule beats no clarification,
-   +0.183 MSMI/100, CI [+0.042, +0.325]; all 16 ask-vs-no-ask intervals exclude zero.
-3. **Pre-specified incumbent vs official greedy:** +0.175, CI [+0.092, +0.258],
-   p = 0.016, 23 wins / 29 ties / 8 losses; on the seven fresh seeds alone, +0.143.
-4. **Among competent ask-and-match rules almost nothing separates:** 13 configurations
-   span 0.400 to 0.592; only 3 of 78 pairwise intervals exclude zero (weight coding and
-   global matching).
-5. **Perfect information buys almost nothing:** an oracle with free complete
-   clarification reaches coverage 0.298 vs 0.297, one extra assignment per episode.
-
-## Key figures
-
-Full set of eight in [`research/figures/`](research/figures/); the four core results:
-
-**Which configurations score highest? Mostly the intervals overlap.**
-![MSMI per 100 arrived members for all 17 configurations with 95% seed-block CIs](research/figures/fig1_msmi_forest.png)
-
-**Where introductions are lost on the way to an MSMI.** Mutual acceptance is the
-largest single count-level loss, and the one stage pair selection touches.
-![Funnel from assignment to MSMI](research/figures/fig4_funnel.png)
-
-**What moved the score, and what did not.** Only asking-vs-nothing and the
-pre-specified incumbent contrast exclude zero with margin.
-![Twelve contrasts with 95% seed-block CIs](research/figures/fig6_contrasts.png)
-
-**Most of the pool can never be introduced, whatever the policy.**
-![Member partition: can be introduced / no feasible partner / both / declined hard field](research/figures/fig8_who_can_be_served.png)
-
-Also in the set: coverage vs the structural ceiling
-([fig2](research/figures/fig2_coverage_vs_ceiling.png)), per-family heatmap
-([fig3](research/figures/fig3_family_heatmap.png)), the oracle ladder
-([fig5](research/figures/fig5_oracle_ladder.png)) and askable-population saturation
-([fig7](research/figures/fig7_askable_saturation.png)).
-
-## Repository map
-
-```
-starter/                     organisers' public kit, unchanged (own MIT notice)
-tests/test_smoke.py          smoke test
-experiment_lab.py            episode harness: labels, seed-block bootstrap CI, sign-flip test
-scaled_factorial.py          10-seed x 6-family factorial runner (17 configurations)
-soft_ask_screen.py           3-seed soft-question pilot (72 episodes)
-soft_ask_validation_7seeds.py  7-seed held-out soft-question follow-up (42 episodes)
-run_suite.py, run_controls.py, phase_screen.py,
-phase_hybrid_policy.py, corrected_learning_rerun.py,
-checkpoint_diagnostics.py    prior-phase exploratory scripts (see archive note below)
-make_research_figures.py     supplementary figure generator (method diagram etc.)
-make_report.py               report helper
-tools/build_research_note.py note assembly helper
-results/                     every run output: JSON/CSV aggregates used by the note
-research/                    notes, PDFs, builders, provenance, verification, figures
-CHECKLIST.md                 owner actions before/after submission
-SHA256SUMS.txt               checksums of packaged files
-```
-
-## Reproducing the numbers
-
-| Result | Command / source | Output |
+| | what | status |
 |---|---|---|
-| Official-baseline verification (54/54 identical) | organisers' `evaluate.py` + `policy.py`, trusted-local mode | `results/reference_verification_3seeds.json` |
-| 10-seed factorial (360 episodes) | `python3 scaled_factorial.py` | `results/scaled_factorial_10seeds.json`, `results/scaled_factorial_summary.csv` |
-| Soft-ask pilot and holdout | `python3 soft_ask_screen.py`, `python3 soft_ask_validation_7seeds.py` | `results/soft_ask_holdout_aggregate.csv` |
-| Figures in `research/figures/` | generated from the checked-in aggregates (no simulation) | `research/figures/fig1..8` |
-| Submission PDFs | `python3 research/build_pdf_rev2.py`, `python3 research/build_pdf_rev3.py` | `research/RESEARCH_NOTE_ROUND1_rev2/rev3.pdf` |
+| **[`round2/`](round2/)** | **the final build — this is the submission** | current |
+| root files, `research/`, `results/`, `starter/`, `tools/`, `tests/` | Round 1 research lab | **frozen**, kept for provenance |
 
-Round 1 harness scripts named in the note's artifact index (`scripts/` directory:
-structure/supply diagnosis, rollout logging, prior fitting, oracle ladder, ask
-timing, attainable ceiling) plus `results/analysis.json`,
-`results/primary_summary.csv` and `results/ask_timing.json` live on the author's
-working machine and are **pending push**; they are listed, never reconstructed,
-in [`research/PROVENANCE_AND_ARTIFACT_STATUS.md`](research/PROVENANCE_AND_ARTIFACT_STATUS.md)
-and [`research/ROUND1_NOTE.md`](research/ROUND1_NOTE.md).
+**Assessors: everything required for the final build is in [`round2/`](round2/).**
+Start at [`round2/REPORT.md`](round2/REPORT.md).
 
-## Research note lineage
+---
 
-| File | What it is |
-|---|---|
-| `research/RESEARCH_NOTE_ROUND1.pdf` | first uploaded PDF (kept as submission record) |
-| `research/RESEARCH_NOTE_ROUND1_rev2.pdf` | full corrected note, 26 pp, native math |
-| `research/RESEARCH_NOTE_ROUND1_rev3.pdf` | compact revision: 9 body pages + appendix, 8 figures |
-| `research/RESEARCH_NOTE_FINAL.md` / `RESEARCH_NOTE_REV3.md` | sources of rev2 / rev3 |
-| `research/rev2_numeric_diff.txt`, `rev2_math_manifest.json` | acceptance-test evidence |
+## Round 2 — the final build
 
-## Prior-phase archive (exploratory, superseded)
+**We ship the supplied `greedy` baseline.** Three alternatives were tested on 120
+fresh seeds and none beat it. We report that rather than tuning until something
+won.
 
-`experiment_log.md`, `research/SIMULATION_OVERVIEW_AND_REQUIREMENTS_AUDIT.md`,
-the `phase_*` / `corrected_learning_rerun` / `checkpoint_diagnostics` scripts and
-the pilot JSONs document the pre-Round-1 pilot and phase screens. They are kept
-for provenance; their numbers are **not** Round 1 claims, and their original
-charts were superseded by the figure set above (the audit's embedded charts now
-point at the new figures).
+Headline table — 120 seeds × 6 scenarios × 4 policies = **2,880 episodes**, paired
+on identical worlds:
 
-## Honesty labels (apply to everything here)
+| arm | MSMI/100 | 95% CI | cov/ceiling | unserved/200 |
+|---|---:|---|---:|---:|
+| **`greedy`** (supplied, **shipped**) | **0.402** | [0.357, 0.448] | 0.978 | 133.3 |
+| `oldest_first` (ours) | 0.364 | [0.319, 0.409] | 0.980 | 133.2 |
+| `random_feasible` (supplied) | 0.332 | [0.292, 0.374] | 0.982 | 133.0 |
+| `no_ask` (supplied) | 0.098 | [0.075, 0.122] | 0.344 | 176.0 |
 
-Exploratory public-simulator evidence · public seeds only · unadjusted p-values ·
-in-process timings (not official per-invocation or Docker timings) · fully
-synthetic data · not private evaluation, not real-user evidence, not evidence of
-product effectiveness. Analysis-only scripts read simulator ground truth and are
-never imported by any policy at inference time. AI tools used: Arena.ai Agent
-Mode plus additional LLM chat assistants (ideation, debugging, drafting, review);
-every number was checked against the simulator, the specification or publisher
-records.
+**What the ablations showed:**
 
-Starter kit unchanged, upstream commit `a8e26b35118cfa8e886a02f93984923e43ab64f6`
-(`starter/SOURCE.md`). No separate code license is asserted by this bundle.
+- **Clarification is load-bearing.** Removing it drops reachable coverage from
+  98% of the structural ceiling to 34% and costs −0.304 on the primary outcome
+  (p < 0.001). Nothing else we tested moves the score by more than hundredths.
+- **Pairing quality beats pairing quantity.** `random_feasible` makes *more*
+  introductions and reaches a *higher* share of the ceiling — and scores 0.070
+  lower (p = 0.004). The bottleneck is *whom* you pair, not how many.
+- **Ask priority is a free fairness lever.** Directing every clarification slot
+  to the longest-waiting member removes **1.05 days from the p90 wait**
+  (p < 0.001) with no significant outcome cost.
+- **Seed-set variation dominates.** The same code scored 0.489 and 0.336 on two
+  disjoint 30-seed sets — roughly ten times the size of any policy difference.
+
+Full report: [`round2/REPORT.md`](round2/REPORT.md) ·
+reproduction: [`round2/REPRODUCE.md`](round2/REPRODUCE.md)
+
+---
+
+## Round 1 — frozen
+
+The Round 1 research note is at
+[`research/RESEARCH_NOTE_ROUND1_rev3.pdf`](research/RESEARCH_NOTE_ROUND1_rev3.pdf).
+
+**Important:** Round 1 reported 17 configurations. The code for 13 of them was
+never committed and does not survive in any location we searched. We therefore
+cite nothing we cannot run. The non-replication of Round 1's headline claim is
+one of the findings of Round 2 — see `round2/REPORT.md` §5.9.
+
+Six configurations do reproduce exactly, including all three supplied baselines:
+`greedy` 0.350, `no_ask` 0.167, `random_feasible` 0.358.
+
+---
+
+## Reproducibility
+
+All Round 2 results come from code in [`round2/code/`](round2/code/) and were
+validated against the organiser's own evaluator on **9 independent metrics with
+9 exact matches** — see
+[`round2/results/validation_vs_official_evaluator.csv`](round2/results/validation_vs_official_evaluator.csv).
+
+Kit integrity: `kit.py` SHA-256 begins `0d2cb3d3b46ca2a6`. Verify before trusting
+anything:
+
+```bash
+python3 -c "import hashlib; print(hashlib.sha256(open('round2/code/kit.py','rb').read()).hexdigest())"
+```
+
+---
+
+## Attribution and scope
+
+The simulator, evaluator and baselines are the organiser's, used under the kit's
+stated permissions (`round2/LICENSE.kit`). Hypothesis design, harness, analysis
+and all reported findings are ours.
+
+Every result describes the supplied synthetic simulator. Nothing here is evidence
+about real matching, real people, or any product.
+
+AI tooling (Arena.ai Agent Mode) was used for code and drafting. All results come
+from code in this repository.
