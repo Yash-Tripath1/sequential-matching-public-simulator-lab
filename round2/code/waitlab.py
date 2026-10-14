@@ -49,7 +49,7 @@ from kit import HARD, SOFT, generate  # noqa: E402
 import networkx as nx  # noqa: E402
 
 VARIANTS = ("development", "sparse", "cold_start", "delayed", "shift", "drift")
-ARMS = ("greedy", "no_ask", "random_feasible", "potential_ask", "potential_core4", "waitfloor", "oldest_first", "signed_potential")
+ARMS = ("greedy", "no_ask", "random_feasible", "potential_ask", "potential_core4", "potential_ask_greedy", "waitfloor", "oldest_first", "signed_potential", "no_ask_random")
 CORE = ("relationship_goal", "relationship_pace", "lifestyle", "conversations")
 CD_CACHE: dict[tuple[int, str], dict[str, int]] = {}
 
@@ -303,8 +303,10 @@ ASK_RULES = {
     "random_feasible": asks_greedy,
     "potential_ask": asks_potential,
     "potential_core4": asks_potential,
+    "potential_ask_greedy": asks_potential,
     "waitfloor": asks_waitfloor,
     "oldest_first": asks_oldest_first,
+    "no_ask_random": asks_none,
     "signed_potential": lambda st: _by_potential_signed(st, _slots(st)),
 }
 MATCHERS = {
@@ -313,8 +315,10 @@ MATCHERS = {
     "random_feasible": pairs_random_feasible,
     "potential_ask": max_weight_pairs,
     "potential_core4": max_weight_pairs_core4,
+    "potential_ask_greedy": kit.baseline_match,
     "waitfloor": max_weight_pairs,
     "oldest_first": max_weight_pairs,
+    "no_ask_random": pairs_random_feasible,
     "signed_potential": max_weight_pairs,
 }
 

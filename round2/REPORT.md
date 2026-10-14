@@ -23,11 +23,14 @@ What we gained instead is a decomposition of *which components matter*:
 |---|---:|---|
 | **Clarification on/off** | **−0.304** (p < 0.001) | askable pool never drains |
 | **Pair choice** (random vs greedy) | **−0.070** (p = 0.004) | none |
-| **Ask priority** (longest-wait first) | −0.038 (p = 0.136, n.s.) | **−1.05 d p90** (p < 0.001) |
+| **Ask priority + matcher** (`oldest_first` arm) | −0.038 (p = 0.136, n.s.) | **−1.05 d p90** (p < 0.001) |
+| **Matcher rescoring** (only the fields that matter) | −0.011 (n.s.) | none |
 
 Clarification is worth roughly ten times anything else we tested. Pairing
 *quality* matters; pairing *quantity* does not. Ask *priority* is free on the
-outcome and is a pure fairness lever.
+outcome and is a pure fairness lever. And the matcher barely matters at all:
+two independent factorials put its main effect near zero, and rescoring it on
+only the fields that enter the acceptance probability changes nothing (§5.11).
 
 ### Number to remember
 
@@ -130,8 +133,10 @@ description alone produced the *wrong* policy. A signed-vs-unsigned disagreement
 in the agreement score gave 0.367 where the incumbent scored 0.525. Configurations
 must be verified by scoring, not by name.
 
-Six of the seventeen are reproducible; **eleven are not**. Five of the six are named
-below, alongside the best-known non-reproducible configuration.
+Six of the seventeen are reproducible; **eleven are not**. All six are named below,
+alongside the best-known non-reproducible configuration. The six are exactly the
+methods present in the surviving 360-episode artifact (6 methods x 6 families x
+10 seeds), which is why that number, and not a larger one, is what we can cite.
 
 | configuration | Round 1 | reproducible today |
 |---|---:|---|
@@ -140,6 +145,7 @@ below, alongside the best-known non-reproducible configuration.
 | `random_feasible` | 0.358 | **yes, exact** |
 | `max_weight_similarity` | 0.408 | **yes, exact** |
 | `potential_ask` (incumbent) | 0.525 | yes, after fixing the sign error |
+| `potential_ask_greedy` | 0.467 | **yes, exact** |
 | `lab_potential_core4_maxw` | 0.592 | **no code survives** |
 | remaining 10 of 17 | — | **no code survives** |
 
@@ -162,6 +168,33 @@ No multiplicity correction; six pre-specified contrasts.
 | `oldest_first` (ours) | 0.364 | [0.319, 0.409] | 524 | 0.334 | 0.980 | 197 | 133.2 |
 | `random_feasible` (supplied) | 0.332 | [0.292, 0.374] | 478 | 0.335 | 0.982 | 197 | 133.0 |
 | `no_ask` (supplied) | 0.098 | [0.075, 0.122] | 141 | 0.120 | 0.344 | 0 | 176.0 |
+
+### 5.1b Per-scenario results
+
+MSMI/100 by scenario family. The headline score is the unweighted mean of the six
+family means; these are the components.
+
+| arm | development | sparse | cold_start | delayed | shift | drift | mean |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **`greedy`** | **0.496** | **0.125** | **0.421** | **0.404** | **0.479** | **0.487** | **0.402** |
+| `oldest_first` | 0.471 | 0.092 | 0.354 | 0.396 | 0.417 | 0.454 | 0.364 |
+| `random_feasible` | 0.429 | 0.113 | 0.308 | 0.383 | 0.362 | 0.396 | 0.332 |
+| `no_ask` | 0.138 | 0.013 | 0.062 | 0.129 | 0.113 | 0.133 | 0.098 |
+
+**`greedy` is the highest-scoring arm in all six families**, not merely on average.
+That is a stronger basis for the ship decision than the aggregate alone, because it
+cannot be an artefact of one family dominating the unweighted mean.
+
+Two further readings:
+
+- **`sparse` dominates the variance.** Every arm scores roughly a quarter of its
+  `development` value there. It is the hardest family by a wide margin and the main
+  contributor to between-seed spread.
+- **`oldest_first` reverses in `sparse`** (0.092, below `random_feasible` at 0.113)
+  while leading it in the other five. Since `oldest_first` differs from `greedy` in
+  both ask rule and matcher (§5.5), the most likely explanation is that
+  `max_weight_pairs` handles sparse eligibility worse than `kit.baseline_match` —
+  consistent with `random_feasible` also falling furthest behind there.
 
 ### 5.2 Paired contrasts
 
@@ -210,9 +243,16 @@ The bottleneck is not how many people you serve. It is whom you pair them with.
 
 ### 5.5 Ablation 3 — ask priority is a free fairness lever
 
-`oldest_first` holds the matcher identical to the incumbent and changes one
-thing: every clarification slot goes to the longest-waiting askable member,
-instead of the most promising one. Paired by seed, lower is better:
+**This arm is not a clean single-variable ablation, and we say so.**
+Relative to `greedy`, `oldest_first` changes **two** things at once: the ask rule
+(`asks_oldest_first` instead of `asks_greedy`) *and* the matcher
+(`max_weight_pairs` instead of `kit.baseline_match`). Relative to the Round 1
+incumbent `potential_ask` it changes only the ask rule, because those two arms
+share `max_weight_pairs` — but `potential_ask` was not part of the 120-seed run,
+so that clean contrast is not available at this sample size.
+
+The table below therefore reports the **arm** comparison, and the effect must not
+be read as the causal effect of ask priority alone. Paired by seed, lower is better:
 
 | metric | `greedy` | `oldest_first` | diff | 95% CI |
 |---|---:|---:|---:|---|
@@ -221,9 +261,10 @@ instead of the most promising one. Paired by seed, lower is better:
 | median wait (served) | **4.533** | 4.929 | −0.396 | [−0.604, −0.188] |
 | unserved / 200 | 133.301 | 133.150 | +0.151 | [−0.007, +0.315] |
 
-Asking strategy removes **1.05 days from the p90 wait** at no significant cost
-to the outcome. It gives up 0.40 days of median speed for the best-matched
-members and buys a shorter tail for everyone else.
+The `oldest_first` arm shows **1.05 days less p90 wait** at no significant cost to
+the outcome, giving up 0.40 days of median speed for the best-matched members and
+buying a shorter tail for everyone else. Because two components change together,
+we attribute this to the arm rather than to ask priority specifically.
 
 We did **not** ship it: the outcome is the ranked metric and the interval on the
 outcome difference [−0.010, +0.089] does not exclude a real loss, whereas
@@ -301,6 +342,205 @@ larger than the effect itself.
 
 ---
 
+### 5.10 A second, independent fresh-seed study (parallel workstream)
+
+A separate workstream ran an independent Round 2 study on a **disjoint set of ten
+fresh seeds (1111–2020)**, six families, 360 episodes, with the same seed-block
+resampling discipline. We report its results here because they answer the same
+three questions on worlds neither study's design decisions ever saw. Where the two
+studies disagree, that disagreement is itself the finding.
+
+**Confirmation (Q1) — the same answer, independently.** The incumbent's edge over
+`greedy` measured **+0.008, 95% CI [−0.217, +0.233], sign-flip p = 1.000,
+W/T/L 14/27/19**. Greedy is stable across seed sets (0.350 → 0.358); the incumbent
+is not (0.525 → 0.367). Two independent fresh-seed studies now agree: **the chosen
+configuration is not confirmed.**
+
+| configuration | fresh-seed primary | 95% CI | Round 1 (screen seeds) |
+|---|---:|---|---:|
+| Potential asks · global match (incumbent) | 0.367 | [0.192, 0.558] | 0.525 |
+| Potential asks · greedy ordering | 0.442 | [0.267, 0.617] | 0.467 |
+| Greedy + default asks (official) | 0.358 | [0.225, 0.517] | 0.350 |
+| Max-weight similarity | 0.258 | [0.142, 0.400] | 0.408 |
+| Random feasible (official) | 0.208 | [0.100, 0.325] | 0.358 |
+| No clarification (official) | 0.067 | [0.000, 0.183] | 0.167 |
+
+What *does* survive is the step function: `greedy − no_ask` on fresh seeds is
+**+0.292, CI [+0.108, +0.483], p = 0.023, W/T/L 27/29/4**. Asking at all remains
+the only robust lever, replicating our own −0.304 at 120 seeds in sign and magnitude.
+
+**Interactions (Q2) — the same null, independently.** Fresh-seed factorial effects:
+ask main **+0.096 [−0.088, +0.288]**, allocation main **−0.088 [−0.204, +0.038]**,
+ask × allocation interaction **+0.025 [−0.200, +0.267]**. All three straddle zero.
+Pooling the allocation effect with its Round 1 value (+0.058) gives roughly
+**−0.015 over twenty seed blocks**: global maximum-weight matching adds nothing on
+average over greedy ordering.
+
+This is the second independent measurement of a null interaction. The first, on
+Round 1's ten-seed factorial, was **0.000 [−0.117, +0.125], p = 1.000**. Two
+designs, two seed sets, same answer: **the components are additive.**
+
+**A discrepancy we are not going to paper over.** On this study's fresh seeds,
+potential asks + greedy ordering (0.442) sits *above* greedy (0.358). On our own
+30-seed set it sits *below* it (0.444 vs 0.489). The two studies disagree in sign.
+Given that seed-set variation is roughly ten times any policy difference (§6), this
+is the expected behaviour of small effects, not a contradiction to be resolved by
+picking the flattering number. We report both.
+
+**Calibration and waiting (Q3).** An analysis-only world audit across the twenty
+fresh worlds found the Round 1 fitted prior's lowest-bin miscalibration reproduced
+exactly: **predicted 0.090, observed 0.157**. Mean latent response rate is flat
+across observability groups (0.758 / 0.764 / 0.758) while the declined-hard-field
+share moves sharply (74% / 70% / 1%) — observability selects *who is askable*, not
+*who is compatible*.
+
+On waiting: `no_ask` serves 25 of 200 at a 3.55-day mean wait, while every asking
+rule serves about 65 at 6.3–7.0 days. The four asking rules' unserved counts agree
+to within 0.5 members. **Rules change whether members wait, not who waits** — the
+unserved set is a property of the world's infeasible core, not of the policy.
+
+### 5.11 The matcher is not the bottleneck (a fourth ablation)
+
+`kit.baseline_match` scores an unweighted count over **seven** soft fields, but the
+generator's acceptance probability uses only **four**, with unequal weights
+(`relationship_goal` 0.7, `relationship_pace` 0.4, `lifestyle` 0.25,
+`conversations` 0.2). Three fields that cannot affect acceptance are counted
+equally with four that can.
+
+We tested whether fixing this helps, holding the supplied ask rule fixed:
+
+| matcher | MSMI/100 | vs supplied | paired SE | W/T/L |
+|---|---:|---:|---:|---|
+| `greedy7` — supplied baseline (7 fields, unweighted) | 0.489 | — | — | — |
+| `core4` — only the 4 that matter | 0.478 | **−0.011** | 0.040 | 8/14/8 |
+| `core4w` — the 4, weighted as generated | 0.458 | **−0.031** | 0.041 | 9/10/11 |
+
+**It does not help.** Both differences are within noise. The extra fields are not
+diluting a signal; and more to the point, the choice of matcher is not where the
+outcome is decided. This is a fourth ablation pointing the same direction as the
+other three: clarification is the lever, and everything downstream of it is
+second-order.
+
+The weighted variant is also the one that *should* be most exposed to changing
+conditions, since `shift` reweights the same four fields to 0.25 / 0.8 / −0.25 / 0.5
+and we do not adapt. It does worst in `shift` (0.533 vs 0.583), consistent with a
+static weighting going stale — the same staleness the calibration work in §8.1 is
+designed to measure directly.
+
+---
+
+### 5.12 Directional calibration (our study)
+
+The parallel study in §5.10 measured calibration at the level of the fitted prior.
+Here we measure it directly on the shipped policy: **53,908 directional outcomes**
+from 360 episodes (60 seeds × 6 families), logging each introduction as **two
+separate directional draws**, since `a→b` and `b→a` are distinct events sharing
+only the pair-level `shared` term.
+
+23.4% of directions produce no answer (non-response), and are excluded from
+calibration rather than imputed.
+
+**1. The score carries real signal.** Empirical directional acceptance rises
+monotonically with the policy's observable agreement count:
+
+| known agreements | n | empirical acceptance | 95% CI |
+|---|---:|---:|---|
+| 0 | 29,073 | 0.459 | [0.450, 0.468] |
+| 1 | 6,929 | 0.488 | [0.465, 0.511] |
+| 2 | 3,881 | 0.536 | [0.508, 0.565] |
+| 3 | 1,291 | 0.666 | [0.622, 0.708] |
+| 4 | 129 | 0.698 | [0.540, 0.837] |
+
+**2. But the score has a blind spot, and it is large.** The generator scores a
+disagreement as `−0.5 × weight`; the policy scores it as `0`, the same as *unknown*.
+Holding agreements fixed and varying known disagreements:
+
+| known agreements | known disagreements | n | acceptance |
+|---:|---:|---:|---:|
+| 0 | 0 | 4,370 | **0.492** |
+| 0 | 1 | 792 | 0.437 |
+| 0 | 2 | 58 | 0.345 |
+| 0 | 4 | 386 | **0.288** |
+| 1 | 0 | 459 | 0.617 |
+| 1 | 3 | 863 | 0.410 |
+
+The policy assigns these the **same score** to a pair with no known agreements and
+no known disagreements (0.492) and one with four known disagreements (0.288) — a
+**20-point gap it cannot see**. This is a concrete, fixable defect in the ranking
+function, and it is the single clearest calibration finding in this study.
+
+**3. Calibration holds when the world is stationary and fails when it changes.**
+Mean predicted minus observed acceptance, by family and day block:
+
+| family | days 0–19 | days 20–34 | days 35–59 |
+|---|---:|---:|---:|
+| development | +0.003 | −0.010 | +0.006 |
+| sparse | +0.003 | +0.010 | −0.009 |
+| cold_start | +0.009 | +0.005 | +0.019 |
+| delayed | +0.005 | −0.024 | −0.004 |
+| **shift** | **−0.028** | **−0.027** | **−0.032** |
+| **drift** | +0.003 | −0.010 | **−0.097** |
+
+Two distinct failures, both predicted by the generator:
+
+- **`shift`** reweights the soft fields (`relationship_pace` 0.4 → 0.8, `lifestyle`
+  0.25 → −0.25). An unweighted agreement count no longer tracks acceptance, so
+  calibration is off by about **0.03 uniformly**, from the first day.
+- **`drift`** applies a −0.5 logit penalty from day 35. Calibration is fine before
+  (gap +0.003, −0.010) and then collapses to **−0.097** after.
+
+This is "test under changing conditions" made concrete: **a static calibration is
+correct on stationary worlds and wrong by up to ten points on changing ones.** The
+calibration *slope* tells the same story — 1.00 on development, 0.65 on sparse,
+0.70 on `shift`.
+
+**4. Most of the error is not ours.** Brier decomposition (binned on the predicted
+probability):
+
+| family | Brier | calibration | refinement | irreducible (≥) |
+|---|---:|---:|---:|---:|
+| development | 0.2476 | 0.0000 | 0.2476 | 0.0350 |
+| drift | 0.2467 | 0.0004 | 0.2463 | 0.0345 |
+| shift | 0.2483 | 0.0010 | 0.2473 | 0.0339 |
+
+At least **14% of the Brier score is irreducible in principle** — it comes from
+`bias` (N(0, 0.7)) and `shared` (N(0, 0.45)), which no policy can observe. What
+remains is almost entirely *refinement* (genuine uncertainty about which pairs
+succeed), not calibration error. The calibration failures that do exist are
+concentrated in the changing worlds, as the table above shows.
+
+**5. There is no demographic effect — and we can show why the raw numbers lie.**
+Unconditionally, directional acceptance varies across groups:
+
+| group | levels | spread in acceptance |
+|---|---:|---:|
+| gender | 3 | 0.034 |
+| age | 26 | 0.081 |
+| zone | 16 | 0.144 |
+
+A 14-point spread across zones looks like a disparity. It is not. The generator
+contains **no demographic term of any kind**, so any real effect would have to
+come from *which* pairs get formed — and eligibility depends on zone. Conditioning
+on the observable pair features removes it entirely:
+
+| zone | n | acceptance (within `n_agree=0, n_disagree=0`, development) |
+|---|---:|---:|
+| zone_a | 3,479 | 0.490 |
+| zone_b | 679 | 0.496 |
+| zone_c | 186 | 0.478 |
+
+The spread collapses from **0.144 to 0.018**. The disparity is composition, not
+treatment: different zones have different distributions of observable pair
+features, and once you compare like with like, directional acceptance is flat.
+This is the same conclusion §5.7 reaches for allocation, now established for
+directional calibration on independent data.
+
+*(Note: spreads computed as max−min over many levels are upward-biased, so the
+unconditional figures are descriptive only. The conditional comparison is the
+decisive one and does not depend on that statistic.)*
+
+---
+
 ## 6 Uncertainty — what this study cannot resolve
 
 **Seed-set variation dominates policy variation.** The same code scored 0.489
@@ -327,6 +567,10 @@ designs and this simulator, not a proof that no better policy exists.
 - `oldest_first` is validated against our own instrumentation only; it has no
   external anchor against the organiser's evaluator, unlike the three baselines.
   Its waiting result rests on that instrumentation.
+- `oldest_first` differs from `greedy` in **both** ask rule and matcher, so the
+  0.038 outcome gap and the 1.05-day p90 improvement cannot be attributed to ask
+  priority alone (§5.5). The clean single-variable contrast, against
+  `potential_ask`, was not run at 120 seeds.
 - The `waitfloor` arm ran under a signed-ranking defect and is **not reported**.
 - The disparity decomposition measures reachable supply after the episode; no
   policy observes these attributes, and the generator contains no demographic
@@ -347,7 +591,7 @@ designs and this simulator, not a proof that no better policy exists.
 | Technical report | this file |
 | Attribution | `LICENSE.kit` |
 | All three baseline comparisons | §5.1–5.2 |
-| At least one ablation | §5.3 (clarification), §5.4 (pairing), §5.5 (ask priority) |
+| At least one ablation | §5.3 (clarification), §5.4 (pairing), §5.5 (ask priority), §5.11 (matcher) |
 | Scenario-level results | `results/primary_120seeds.json` → `ceilings` (per-family). Per-family policy scores: see §8.1 |
 | Declared training seeds | none — no model is fitted |
 | Inference random seed | `PYTHONHASHSEED=0`, pinned in the Dockerfile |
@@ -359,9 +603,12 @@ prints it, but that breakdown was not captured into `results/` when the 120-seed
 was analysed. `results/primary_120seeds.json` therefore carries per-family *ceilings*
 but not yet per-family *policy scores*.
 
-This is a known gap in the archived artifacts, not a gap in the experiment — the
-numbers exist and are regenerated with the command in `REPRODUCE.md` §3. We flag it
-rather than point to a file that does not contain what we claim.
+**Resolved.** The per-family scores for all four arms are now in
+`results/per_family_120seeds.json` and are reported in full at §5.1b. Their
+unweighted mean reproduces every headline figure in §5.1 exactly
+(0.402, 0.364, 0.332, 0.098), which is an independent check on the aggregation.
+Directional calibration is reported in full at §5.12, from 53,908 logged
+directional outcomes.
 
 ---
 
