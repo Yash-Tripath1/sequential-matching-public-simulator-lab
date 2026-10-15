@@ -1,7 +1,0 @@
-a,b,diff,lo,hi,p,w,t,l
-greedy,oldest_first,0.038,-0.01,0.089,0.136,199,355,166
-greedy,no_ask,0.304,0.261,0.349,0.0,343,357,20
-greedy,random_feasible,0.07,0.023,0.116,0.004,205,385,130
-oldest_first,no_ask,0.266,0.221,0.312,0.0,311,378,31
-oldest_first,random_feasible,0.032,-0.019,0.083,0.239,214,331,175
-no_ask,random_feasible,-0.234,-0.281,-0.189,0.0,44,391,285
