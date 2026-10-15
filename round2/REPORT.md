@@ -29,8 +29,17 @@ What we gained instead is a decomposition of *which components matter*:
 Clarification is worth roughly ten times anything else we tested. Pairing
 *quality* matters; pairing *quantity* does not. Ask *priority* is free on the
 outcome and is a pure fairness lever. And the matcher barely matters at all:
-two independent factorials put its main effect near zero, and rescoring it on
-only the fields that enter the acceptance probability changes nothing (§5.11).
+three independent designs put its main effect near zero, rescoring it on only the
+fields that enter the acceptance probability changes nothing (§5.11), and holding
+the ask rule fixed while swapping the matcher moves the score by +0.003 (§5.13).
+
+We also tested the one configuration with a real claim to beating the baseline.
+`potential_ask` led Round 1 at 0.525 against `greedy` at 0.350. Across **all 120
+of our seeds** it scores **0.369 against `greedy` at 0.402** — a gap of −0.033
+[−0.090, +0.025] — and Round 1's +0.175 sits **seven standard errors** away
+(§5.14). That run also re-derived the shipped baseline from scratch in a
+different environment and matched the transcribed 120-seed figures on four
+statistics to three decimals, which closes the only provenance gap in §5.1–5.6.
 
 ### Number to remember
 
@@ -541,6 +550,140 @@ decisive one and does not depend on that statistic.)*
 
 ---
 
+### 5.13 Did we test the one serious alternative to the shipped policy?
+
+Yes. `greedy` was chosen among four arms at 120 seeds, but the strongest
+candidate from the Round 1 and parallel work was **potential asks + greedy
+ordering** — the configuration that scored 0.467 on the Round 1 screen and 0.442
+on the parallel study's fresh seeds, above `greedy` there. We ran it on 30 seeds
+paired against the arms already measured on those same worlds.
+
+| arm | MSMI/100 | vs `greedy` | 95% CI | p | W/T/L |
+|---|---:|---:|---|---:|---|
+| **`greedy`** (shipped) | **0.489** | — | — | — | — |
+| `potential_ask_greedy` | 0.447 | −0.042 | [−0.148, +0.065] | 0.480 | 10/4/16 |
+| `potential_ask` | 0.444 | −0.044 | [−0.175, +0.086] | 0.538 | 10/5/15 |
+| `oldest_first` | 0.472 | −0.017 | [−0.125, +0.092] | 0.803 | 12/4/14 |
+| `waitfloor` | 0.372 | −0.117 | [−0.232, −0.001] | 0.060 | 10/2/18 |
+
+**Neither potential-ask variant beats the shipped baseline on our worlds.** The
+point estimates favour `greedy` by about 0.04, though the intervals span zero.
+This does not contradict the parallel study, which found the reverse on its own
+disjoint seed set — it is the same small-effect instability documented in §5.10,
+and we report both rather than selecting.
+
+### The matcher effect, isolated cleanly
+
+Because `potential_ask` and `potential_ask_greedy` use the **identical ask rule**
+and differ only in the matcher, their contrast isolates allocation with nothing
+else moving:
+
+| contrast | diff | 95% CI | p | W/T/L |
+|---|---:|---|---:|---|
+| greedy ordering − max-weight matching | **+0.003** | [−0.073, +0.078] | **1.000** | 11/7/12 |
+
+**The matcher effect is indistinguishable from zero, and the win/loss split is
+almost symmetric.** This is the third independent measurement of the same null:
+
+| study | matcher / allocation main effect |
+|---|---:|
+| Round 1 factorial (10 seeds) | +0.058 [−0.013, +0.129] |
+| Parallel fresh-seed study (10 seeds) | −0.088 [−0.204, +0.038], pooled ≈ −0.015 |
+| **This work (30 seeds, ask rule held fixed)** | **+0.003 [−0.073, +0.078]** |
+
+Three designs, three seed sets, one answer: **changing the global allocation
+buys nothing over the supplied greedy ordering.** Together with §5.11, where
+rescoring the matcher on only the fields that affect acceptance also changed
+nothing, the conclusion is well supported.
+
+---
+
+---
+
+### 5.14 The definitive test: both arms on all 120 seeds
+
+Sections 5.9 and 5.13 left an asymmetry in the comparison that mattered most.
+`potential_ask` — the Round 1 incumbent — had only ever been measured on the
+30-seed block 1101–1130, and that block turned out to be unusually kind to
+`greedy`: 0.489 there, against 0.402 across all 120 seeds. A comparison run
+inside the better half of the seed range cannot settle whether the incumbent
+beats the shipped baseline. This section removes the asymmetry. We ran `greedy`
+and `potential_ask` on the remaining 90 seeds (1131–1220), which gives a
+complete paired comparison on all 120 worlds and the first 120-seed measurement
+of the incumbent anywhere.
+
+**Design.** 90 fresh seeds × 6 scenarios × 2 arms = **1,080 episodes** on
+identical worlds. Executed as six chunks of 15 seeds (180 episodes each),
+14 min 31 s to 15 min 13 s per chunk, about 90 minutes wall time on 2 workers,
+**zero failed episodes**. The chunking was deliberate: this execution
+environment reaps processes that run much beyond 50 minutes (we observed one
+die at 51 of 1,440 episodes), so no single invocation was allowed to exceed
+30 minutes. Each chunk writes to its own directory and the harness resumes from
+`episodes.jsonl`, so a reaped chunk can be restarted without losing work.
+
+| arm | seeds | episodes | MSMI/100 | 95% CI | events | coverage | ask cost | unserved/200 |
+|---|---:|---:|---:|---|---:|---:|---:|---:|
+| **`greedy`** (shipped) | 120 | 720 | **0.402** | [0.357, 0.448] | **579** | 0.334 | 197.5 | 133.3 |
+| `potential_ask` | 120 | 720 | 0.369 | [0.324, 0.416] | 532 | 0.334 | 197.2 | 133.2 |
+
+| paired contrast | n | diff | 95% CI | SE | p | W/T/L |
+|---|---:|---:|---|---:|---:|---:|
+| `greedy` − `potential_ask` | 120 | **+0.033** | [−0.025, +0.090] | 0.029 | 0.305 | 58/18/44 |
+
+**Both halves of the seed range point the same way**, which is the part that
+matters — the 30-seed result in §5.9 was not an artefact of a lucky block:
+
+| seed block | n | `greedy` | `potential_ask` | diff | 95% CI |
+|---|---:|---:|---:|---:|---|
+| 1101–1130 (§5.9) | 30 | 0.489 | 0.444 | +0.044 | [−0.081, +0.175] |
+| 1131–1220 (new) | 90 | 0.373 | 0.344 | +0.029 | [−0.033, +0.092] |
+| **pooled** | **120** | **0.402** | **0.369** | **+0.033** | **[−0.025, +0.090]** |
+
+Per-seed SD of the difference is 0.321, spanning −0.750 to +1.083: on
+individual worlds either arm can win by a lot, and only the average is stable.
+
+**A by-product: the 120-seed baseline is now independently verified.** The
+tables in §5.1–5.6 were transcribed from terminal output on a separate machine
+whose raw per-episode log we did not have. Re-running `greedy` from scratch in
+a different environment reproduces them:
+
+| statistic | this run (120 seeds) | transcribed (120 seeds) |
+|---|---:|---:|
+| primary MSMI/100 | **0.4021** | **0.402** |
+| mutual second-meeting intentions | **579** | **579** |
+| coverage | **0.3335** | **0.333** |
+| unserved per 200 | **133.30** | **133.3** |
+| ask cost | 197.5 | 197 |
+
+Four exact matches to three decimals across independently executed runs. The
+transcription in §5.1–5.6 is faithful, and the harness is deterministic across
+machines — which also means the non-replication reported in §5.9 cannot be an
+environment difference.
+
+**What this does to Round 1's headline.** Round 1 reported `potential_ask` at
+0.525 against `greedy` at 0.350 on 10 seeds — a gap of **+0.175**. Across 120
+fresh seeds we measure the same gap at **−0.033** (SE 0.029). Round 1's
+estimate sits **7.1 standard errors** away; our 95% interval for the gap,
+[−0.090, +0.025], does not come within a factor of six of +0.175. Taken with
+§5.13 (the same comparison at 30 seeds) and §5.10 (the parallel study, +0.008
+on its own disjoint seeds), the most parsimonious explanation remains that
+0.525 was the maximum of 17 configurations evaluated on the same 10 worlds.
+
+**Waiting again diverges from outcome.** On the 90-seed block `potential_ask`
+keeps people waiting slightly *less* (mean 6.36 d vs 6.81 d; p95 21 d vs 22 d;
+median and p90 identical at 4 d and 16 d) while scoring *lower* on the primary
+outcome. Reading the waiting table alone would favour the losing arm — the same
+trap flagged in §5.6, in the opposite direction.
+
+**Conclusion.** The incumbent has now been measured at the same scale as the
+shipped policy, on the full seed range, and it does not beat it. The interval
+still contains zero, so the defensible claim remains *no alternative has
+demonstrated a reliable advantage over `greedy`* — not *`greedy` is proven
+optimal*. But the specific objection that motivated this section, that the
+incumbent had only been tested on a favourable seed block, no longer stands.
+
+---
+
 ## 6 Uncertainty — what this study cannot resolve
 
 **Seed-set variation dominates policy variation.** The same code scored 0.489
@@ -555,6 +698,20 @@ significance.
 
 **Nothing we built beat the supplied baseline.** That is a finding about our
 designs and this simulator, not a proof that no better policy exists.
+
+**We searched a discrete design space, not a continuous one.** The candidate
+set was 17 hand-specified configurations (ask rule × matcher × priority),
+evaluated on shared worlds. We did not run an automated or evolutionary search
+over policy parameters, for a reason that is quantitative rather than a matter
+of taste: one candidate evaluation costs 720 episodes, roughly 60 minutes of
+wall time at 2 workers, so a population-based search could not complete even a
+handful of generations inside the round. Worse, with the per-seed SD of 0.26–0.32
+documented above, the noise floor on a 30-seed fitness estimate is ≈ 0.06, which
+is *larger* than every policy gap we have measured except clarification. A
+search optimised on a seed budget we could afford would be fitting noise, and
+any winner would have to be re-validated on seeds large enough to make the
+search pointless. We judged that a clean negative result at 120 seeds is worth
+more to the organisers than an unvalidated evolved policy.
 
 ---
 
@@ -587,11 +744,12 @@ designs and this simulator, not a proof that no better policy exists.
 | Dockerfile | `Dockerfile` |
 | Pinned dependencies | none required for the shipped arm; `requirements.txt` documents the optional one |
 | Reproducible evaluation command | `REPRODUCE.md` |
-| Machine-readable results | `results/` |
+| Machine-readable results | `results/` — including per-seed values for the full 120-seed greedy-vs-incumbent comparison in `results/greedy_vs_potential_120seeds.json` |
 | Technical report | this file |
 | Attribution | `LICENSE.kit` |
 | All three baseline comparisons | §5.1–5.2 |
 | At least one ablation | §5.3 (clarification), §5.4 (pairing), §5.5 (ask priority), §5.11 (matcher) |
+| Head-to-head with the Round 1 incumbent | §5.14 — both arms on all 120 seeds, 1,440 episodes; machine-readable in `results/greedy_vs_potential_120seeds.json` |
 | Scenario-level results | `results/primary_120seeds.json` → `ceilings` (per-family). Per-family policy scores: see §8.1 |
 | Declared training seeds | none — no model is fitted |
 | Inference random seed | `PYTHONHASHSEED=0`, pinned in the Dockerfile |
