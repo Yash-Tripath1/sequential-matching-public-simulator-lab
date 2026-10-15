@@ -185,6 +185,29 @@ the reconstruction did not run successfully and no result from it is reported.
 Seeds 1101–1220. All policies on identical worlds, paired. Seed-block bootstrap.
 No multiplicity correction; six pre-specified contrasts.
 
+**Statistics conventions, used identically in every table below.** A contrast is
+`diff = arm − reference`, signed so that a positive number favours the arm.
+`W/T/L` counts **seeds won / tied / lost by the arm named in the row**; the seed
+is the resampling unit throughout. A tie means the two per-seed primary scores
+are equal to within 1e-9 — they are rationals with denominator 12, so this is
+exact equality up to floating-point representation, and it is deliberately more
+permissive than bit-for-bit comparison because the 30-seed block's values reach
+us as JSON floats from a different machine. **p** is a two-sided Wilcoxon
+signed-rank test, normal approximation with the standard tie correction on
+averaged |diff| ranks. Intervals are seed-block bootstraps (50,000 resamples).
+Where a table is headed `greedy − arm` instead, the sign and the W/T/L both
+follow `greedy`, and the heading says so.
+
+> **Correction, 15 Oct 2026.** An earlier draft computed every Wilcoxon p-value
+> in §5.13–5.15 with a defective routine: it ranked the differences by their
+> position in an unsorted array rather than by magnitude, so those p-values were
+> meaningless. All of them have been recomputed. **No point estimate, interval,
+> win/tie/loss count or conclusion changed** — every corrected p remains on the
+> same side of every threshold the report relies on — but three of them moved
+> materially and the earlier figures should not be cited. The corrected values
+> are the ones below, and `results/analysis_120seeds_four_arm.json` carries the
+> matching per-seed data and method string.
+
 ### 5.1 Primary outcome
 
 | arm | MSMI/100 | 95% CI | events | coverage | cov/ceiling | ask | unserved/200 |
@@ -471,6 +494,17 @@ is designed to measure directly.
 
 The parallel study in §5.10 measured calibration at the level of the fitted prior.
 Here we measure it directly on the shipped policy: **53,908 directional outcomes**
+**A scope caveat on the calibration seeds.** The calibration run used seeds
+**1101–1160**, which are the first sixty of the same 120 evaluation seeds used
+for every headline comparison in this report. The two studies are therefore
+*not* independent of each other: the same worlds inform §5.12's calibration
+curves and the primary outcome tables. We did not have compute left for a
+separate calibration seed block, and we would rather state the overlap than let
+it read as a second confirmation. Nothing in §5.12 is used to *fit* anything —
+no parameter is estimated from it and shipped — so the overlap is a shared-input
+issue, not a circular-validation one. It does mean §5.12 should be read as a
+description of these 120 worlds, not as external corroboration of them.
+
 from 360 episodes (60 seeds × 6 families), logging each introduction as **two
 separate directional draws**, since `a→b` and `b→a` are distinct events sharing
 only the pair-level `shared` term.
@@ -590,10 +624,10 @@ paired against the arms already measured on those same worlds.
 | arm | MSMI/100 | vs `greedy` | 95% CI | p | W/T/L |
 |---|---:|---:|---|---:|---|
 | **`greedy`** (shipped) | **0.489** | — | — | — | — |
-| `potential_ask_greedy` | 0.447 | −0.042 | [−0.148, +0.065] | 0.480 | 10/4/16 |
-| `potential_ask` | 0.444 | −0.044 | [−0.175, +0.086] | 0.538 | 10/5/15 |
-| `oldest_first` | 0.472 | −0.017 | [−0.125, +0.092] | 0.803 | 12/4/14 |
-| `waitfloor` | 0.372 | −0.117 | [−0.232, −0.001] | 0.060 | 10/2/18 |
+| `potential_ask_greedy` | 0.447 | −0.042 | [−0.147, +0.064] | 0.437 | 10/4/16 |
+| `potential_ask` | 0.444 | −0.044 | [−0.178, +0.081] | 0.627 | 10/5/15 |
+| `oldest_first` | 0.472 | −0.017 | [−0.122, +0.092] | 0.591 | 12/4/14 |
+| `waitfloor` | 0.372 | −0.117 | [−0.233, −0.008] | 0.066 | 10/2/18 |
 
 **Neither potential-ask variant beats the shipped baseline on our worlds.** The
 point estimates favour `greedy` by about 0.04, though the intervals span zero.
@@ -609,7 +643,7 @@ else moving:
 
 | contrast | diff | 95% CI | p | W/T/L |
 |---|---:|---|---:|---|
-| greedy ordering − max-weight matching | **+0.003** | [−0.073, +0.078] | **1.000** | 11/7/12 |
+| greedy ordering − max-weight matching | **+0.003** | [−0.075, +0.075] | **0.667** | 11/7/12 |
 
 **The matcher effect is indistinguishable from zero, and the win/loss split is
 almost symmetric.** This is the third independent measurement of the same null:
@@ -618,7 +652,7 @@ almost symmetric.** This is the third independent measurement of the same null:
 |---|---:|
 | Round 1 factorial (10 seeds) | +0.058 [−0.013, +0.129] |
 | Parallel fresh-seed study (10 seeds) | −0.088 [−0.204, +0.038], pooled ≈ −0.015 |
-| **This work (30 seeds, ask rule held fixed)** | **+0.003 [−0.073, +0.078]** |
+| **This work (30 seeds, ask rule held fixed)** | **+0.003 [−0.075, +0.075]** |
 
 Three designs, three seed sets, one answer: **changing the global allocation
 buys nothing over the supplied greedy ordering.** Together with §5.11, where
@@ -657,7 +691,7 @@ die at 51 of 1,440 episodes), so no single invocation was allowed to exceed
 
 | paired contrast | n | diff | 95% CI | SE | p | W/T/L |
 |---|---:|---:|---|---:|---:|---:|
-| `greedy` − `potential_ask` | 120 | **+0.033** | [−0.025, +0.090] | 0.029 | 0.305 | 58/18/44 |
+| `greedy` − `potential_ask` | 120 | **+0.033** | [−0.025, +0.090] | 0.029 | 0.356 | 58/18/44 |
 
 **Both halves of the seed range point the same way**, which is the part that
 matters — the 30-seed result in §5.9 was not an artefact of a lucky block:
@@ -685,7 +719,15 @@ a different environment reproduces them:
 | ask cost | 197.5 | 197 |
 
 Three of the five match exactly to three decimals and two agree to within
-rounding (ask cost 197.5 vs 197; coverage 0.3335 vs 0.333). The
+rounding (ask cost 197.5 vs 197; coverage 0.3335 vs 0.333).
+
+**The transcription is now confirmed per-seed as well.** We subsequently
+re-ran `greedy` on the 1101–1130 block (180 episodes, 6 min) and compared all
+thirty per-seed primary scores against the transcribed values: **30 of 30 are
+identical** to within 1e-9, and the block mean is 0.4889 against a transcribed
+0.4889. So the VM figures are verified at the level of individual worlds, not
+only in the mean, and `greedy` now has raw per-episode rows for all 120 seeds
+(`results/raw_episodes/`). The
 transcription in §5.1–5.6 is faithful, and the harness is deterministic across
 machines — which also means the non-replication reported in §5.9 cannot be an
 environment difference.
@@ -755,10 +797,10 @@ per agreement (≈0.03–0.13), so equal weighting is the neutral choice.
 
 | arm | MSMI/100 | 95% CI | events¹ | diff | 95% CI | p | W/T/L |
 |---|---:|---|---:|---:|---|---:|---|
-| **`disagreement_aware`** (new) | **0.415** | [0.369, 0.463] | 433 | **+0.013** | [−0.025, +0.051] | 0.835 | 46/29/45 |
+| **`disagreement_aware`** (new) | **0.415** | [0.369, 0.463] | 433 | **+0.013** | [−0.025, +0.051] | 0.524 | 46/29/45 |
 | **`greedy`** (supplied, **shipped**) | 0.402 | [0.357, 0.448] | 403 | — | — | — | — |
-| `potential_ask` | 0.369 | [0.324, 0.416] | 372 | −0.033 | [−0.090, +0.025] | 0.305 | 44/18/58 |
-| `potential_ask_greedy` | 0.361 | [0.317, 0.406] | 359 | −0.041 | [−0.089, +0.007] | 0.141 | 44/12/64 |
+| `potential_ask` | 0.369 | [0.324, 0.416] | 372 | −0.033 | [−0.090, +0.025] | 0.356 | 44/18/58 |
+| `potential_ask_greedy` | 0.361 | [0.317, 0.406] | 359 | −0.041 | [−0.089, +0.007] | 0.098 | 44/12/64 |
 
 ¹ mutual second-meeting intentions on the 1131–1220 block (90 seeds).
 
@@ -817,7 +859,7 @@ greedy selection and measured honestly.
    sensitive to which worlds are drawn.
 4. **Shipping it would repeat Round 1's error.** Round 1's 0.525 was the maximum
    of 17 configurations on 10 seeds (§5.9). Switching the shipped policy on a
-   p = 0.835 difference, on the last available day, is the same mistake with a
+   p = 0.52 difference, on the last available day, is the same mistake with a
    slightly larger sample.
 
 **Why we report it anyway.** Because it is the only arm above the baseline at 120

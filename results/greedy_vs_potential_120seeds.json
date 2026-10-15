@@ -52,14 +52,15 @@
     "ci_hi": 0.0903,
     "se": 0.0293,
     "sd": 0.3211,
-    "p": 0.3047,
+    "p": 0.3564,
     "w": 58,
     "t": 18,
     "l": 44,
     "diff_range": [
       -0.75,
       1.0833
-    ]
+    ],
+    "p_method": "two-sided Wilcoxon signed-rank, normal approximation, tie-corrected"
   },
   "blocks": {
     "A_1101_1130": {
@@ -460,54 +461,55 @@
       "disagreement_aware": 0.4153
     },
     "contrasts_vs_greedy": {
-      "potential_ask": {
-        "n": 120,
-        "diff": 0.0326,
-        "ci_lo": -0.025,
-        "ci_hi": 0.0903,
-        "se": 0.0293,
-        "sd": 0.3211,
-        "p": 0.3047,
-        "w": 58,
-        "t": 18,
-        "l": 44,
-        "rng": [
-          -0.75,
-          1.0833
-        ]
-      },
-      "potential_ask_greedy": {
-        "n": 120,
-        "diff": 0.041,
-        "ci_lo": -0.0069,
-        "ci_hi": 0.0889,
-        "se": 0.0246,
-        "sd": 0.2694,
-        "p": 0.1408,
-        "w": 64,
-        "t": 12,
-        "l": 44,
-        "rng": [
-          -0.5833,
-          0.8333
-        ]
-      },
       "disagreement_aware": {
         "n": 120,
-        "diff": -0.0132,
-        "ci_lo": -0.0507,
-        "ci_hi": 0.025,
+        "diff": 0.0132,
+        "ci_lo": -0.025,
+        "ci_hi": 0.0507,
         "se": 0.0195,
         "sd": 0.2136,
-        "p": 0.8354,
-        "w": 45,
+        "p": 0.5245,
+        "w": 46,
         "t": 29,
-        "l": 46,
+        "l": 45,
         "rng": [
           -0.6667,
           0.6667
         ]
+      },
+      "potential_ask": {
+        "n": 120,
+        "diff": -0.0326,
+        "ci_lo": -0.0903,
+        "ci_hi": 0.025,
+        "se": 0.0293,
+        "sd": 0.3211,
+        "p": 0.3564,
+        "w": 44,
+        "t": 18,
+        "l": 58,
+        "rng": [
+          -1.0833,
+          0.75
+        ]
+      },
+      "potential_ask_greedy": {
+        "n": 120,
+        "diff": -0.041,
+        "ci_lo": -0.0889,
+        "ci_hi": 0.0069,
+        "se": 0.0246,
+        "sd": 0.2694,
+        "p": 0.0978,
+        "w": 44,
+        "t": 12,
+        "l": 64,
+        "rng": [
+          -0.8333,
+          0.5833
+        ]
       }
-    }
+    },
+    "statistics_note": "diff = arm - greedy; W/T/L from the arm's perspective; tie rule |diff| <= 1e-9; p from a two-sided Wilcoxon signed-rank test (normal approximation, tie-corrected). p-values recomputed 15 Oct 2026 after a defect in the earlier ranking step; point estimates and intervals unchanged."
   }
 }
