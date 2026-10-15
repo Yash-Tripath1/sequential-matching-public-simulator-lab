@@ -1,0 +1,52 @@
+{
+ "summary": {
+  "greedy": {
+   "family": {
+    "development": 0.496,
+    "sparse": 0.125,
+    "cold_start": 0.421,
+    "delayed": 0.404,
+    "shift": 0.479,
+    "drift": 0.487
+   },
+   "primary": 0.402
+  },
+  "oldest_first": {
+   "family": {
+    "development": 0.471,
+    "sparse": 0.092,
+    "cold_start": 0.354,
+    "delayed": 0.396,
+    "shift": 0.417,
+    "drift": 0.454
+   },
+   "primary": 0.364
+  },
+  "no_ask": {
+   "family": {
+    "development": 0.138,
+    "sparse": 0.013,
+    "cold_start": 0.062,
+    "delayed": 0.129,
+    "shift": 0.113,
+    "drift": 0.133
+   },
+   "primary": 0.098
+  },
+  "random_feasible": {
+   "family": {
+    "development": 0.429,
+    "sparse": 0.113,
+    "cold_start": 0.308,
+    "delayed": 0.383,
+    "shift": 0.362,
+    "drift": 0.396
+   },
+   "primary": 0.3318
+  }
+ },
+ "meta": {
+  "source": "analyse.py on ~/out_all (120 seeds, 1101-1220)",
+  "note": "primary = unweighted mean of the six family means"
+ }
+}

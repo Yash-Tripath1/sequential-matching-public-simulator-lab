@@ -1,0 +1,27 @@
+# Raw per-episode results
+
+Every file is newline-delimited JSON, gzip-compressed, one record per episode.
+Records carry `seed`, `variant`, `arm`, `seconds`, `metrics`, `waits`,
+`askable_by_day`, `asks_by_day` and a per-member `members` array. Successful
+episodes have no `valid` key; a failed episode carries `valid: false` plus an
+`error`. Filter with `if r.get('valid') is False or not r.get('metrics'): continue`.
+
+`members.jsonl` is deliberately not committed: the harness regenerates it from
+`episodes.jsonl` at the end of every run, so it is derived data.
+
+## Coverage
+
+| arm | seeds | episodes | file(s) |
+|---|---|---|---|
+| `greedy` | 1131–1220 (90) | 540 | `greedy_potential_ask_1131-1220_chunk*` |
+| `potential_ask` | 1131–1220 (90) | 540 | `greedy_potential_ask_1131-1220_chunk*` |
+| `potential_ask_greedy` | 1101–1220 (120) | 720 | `potential_ask_greedy_1101-1130` + `..._chunk*` |
+| `disagreement_aware` | 1101–1220 (120) | 720 | `disagreement_aware_1101-1130` + `..._chunk*` |
+
+## Not available
+
+`no_ask`, `random_feasible` and `oldest_first` raw rows were produced on a
+separate machine whose per-episode log could not be recovered; only the
+aggregates in `../primary_120seeds.json` and `../contrasts_120seeds.csv`
+survive for those arms. The `greedy` and `potential_ask` figures in those
+aggregates were independently re-derived here and match (§5.14).

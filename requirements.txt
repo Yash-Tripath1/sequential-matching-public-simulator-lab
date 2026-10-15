@@ -1,4 +1,4 @@
+# Optional. The greedy arm needs NOTHING beyond the standard library.
+# networkx is only required by the max-weight matcher arms
+# (potential_ask / waitfloor / oldest_first) and is imported lazily.
 networkx==3.7
-numpy==2.3.5
-scikit-learn==1.6.1
-matplotlib==3.10.9

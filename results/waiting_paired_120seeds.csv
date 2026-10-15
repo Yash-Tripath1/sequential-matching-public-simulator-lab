@@ -1,0 +1,5 @@
+metric,greedy,oldest_first,diff,lo,hi,sig
+mean wait (served),6.813,6.667,0.146,0.033,0.259,True
+p90 wait (served),16.725,15.675,1.05,0.742,1.358,True
+median wait (served),4.533,4.929,-0.396,-0.604,-0.188,True
+unserved / 200,133.301,133.15,0.151,-0.007,0.315,False

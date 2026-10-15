@@ -1,0 +1,10 @@
+arm,metric,ours,official,match
+greedy,msmi_per_100,0.708333,0.708333,True
+greedy,coverage,0.347917,0.347917,True
+greedy,ask_cost,194.5,194.5,True
+no_ask,msmi_per_100,0.166667,0.166667,True
+no_ask,coverage,0.127083,0.127083,True
+no_ask,ask_cost,0.0,0.0,True
+random_feasible,msmi_per_100,0.5,0.5,True
+random_feasible,coverage,0.350417,0.350417,True
+random_feasible,ask_cost,194.5,194.5,True

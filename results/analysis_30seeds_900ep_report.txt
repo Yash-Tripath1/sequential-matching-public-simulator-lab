@@ -1,0 +1,147 @@
+loaded 900 episodes, 180000 member rows
+
+========================================================================================
+1. PRIMARY SCORE  (unweighted mean of six family means; seed-block bootstrap)
+   world-sharing: dev/delayed/shift/drift are the SAME 200 members per seed,
+   so a seed is ~3 independent worlds, not 6. Seed is the only resampling unit.
+========================================================================================
+arm              n_seeds  MSMI/100               95% CI   events     cov  cov/ceil    ask  unserved
+greedy                30     0.489       [0.397, 0.586]      176   0.338     0.979    195     132.4
+potential_ask         30     0.444       [0.342, 0.544]      160   0.338     0.979    195     132.4
+waitfloor             30     0.372       [0.283, 0.461]      134   0.340     0.984    195     132.0
+oldest_first          30     0.472       [0.386, 0.558]      170   0.339     0.982    195     132.2
+
+========================================================================================
+2. PAIRED CONTRASTS  (identical seed/variant worlds; seed-block bootstrap)
+   6 contrasts reported; no multiplicity correction
+========================================================================================
+contrast                              diff               95% CI       p          W/T/L
+greedy - potential_ask              +0.044     [-0.081, +0.175]   0.541       53/84/43
+greedy - waitfloor                  +0.117     [+0.008, +0.236]   0.061       64/81/35
+greedy - oldest_first               +0.017     [-0.092, +0.122]   0.804       46/94/40
+potential_ask - waitfloor           +0.072     [-0.025, +0.172]   0.186       50/96/34
+potential_ask - oldest_first        -0.028     [-0.128, +0.078]   0.636       42/87/51
+waitfloor - oldest_first            -0.100     [-0.189, -0.017]   0.039       30/96/54
+
+========================================================================================
+3. WHO GETS LEFT WAITING  (waits are day-of-first-intro minus day-of-arrival,
+   served members only, exactly as the official evaluator defines them)
+========================================================================================
+arm                 mean  median     p90    max  unserved/200  never-asked  asked&unserved
+greedy              6.83     4.0    17.0     59         132.4            -               -
+potential_ask       6.20     3.0    16.0     58         132.4            -               -
+waitfloor           6.53     4.0    17.0     59         132.0            -               -
+oldest_first        6.58     5.0    16.0     59         132.2            -               -
+
+========================================================================================
+5. ASK-QUEUE SATURATION  (mean over episodes; is the daily cap binding?)
+========================================================================================
+arm              d0    d5    d10   d15   d20   d30   d45   d59  
+greedy           45    30    15    3     0     0     0     0       <- askable
+                 4.0   4.0   3.8   2.1   0.7   0.0   0.0   0.0     <- asks/day (cap 4)
+potential_ask    45    30    15    3     0     0     0     0       <- askable
+                 4.0   4.0   3.8   2.1   0.8   0.0   0.0   0.0     <- asks/day (cap 4)
+waitfloor        45    30    15    3     0     0     0     0       <- askable
+                 4.0   4.0   3.8   2.1   0.7   0.0   0.0   0.0     <- asks/day (cap 4)
+oldest_first     45    30    15    3     0     0     0     0       <- askable
+                 4.0   4.0   3.8   2.1   0.7   0.0   0.0   0.0     <- asks/day (cap 4)
+
+========================================================================================
+4. ALLOCATION DISPARITY DECOMPOSITION
+   Leg 1 eligibility supply : P(complete-disclosure degree > 0) - a property of the WORLD
+   Leg 2 ask allocation     : mean ask units per member who needed clarification
+   Leg 3 realised access    : served rate + wait, among members WITH a feasible partner
+   The outcome generator contains no demographic term; gender/age are negative controls.
+========================================================================================
+
+--- arm: greedy  (members: 6000) ---
+  gender       
+      man: supply=0.39 served|reach=0.97 wait= 6.7 ask= 0.9 (n=2752)
+      non_binary: supply=0.42 served|reach=0.99 wait= 4.7 ask= 0.9 (n=481)
+      woman: supply=0.39 served|reach=0.98 wait= 6.8 ask= 0.9 (n=2767)
+  age band     
+      21-27: supply=0.38 served|reach=0.98 wait= 7.3 ask= 1.0 (n=1536)
+      28-34: supply=0.42 served|reach=0.98 wait= 6.1 ask= 0.9 (n=1706)
+      35-40: supply=0.41 served|reach=0.98 wait= 6.5 ask= 0.9 (n=1408)
+      41-46: supply=0.37 served|reach=0.96 wait= 6.5 ask= 0.9 (n=1350)
+  zone         
+      zone_a: supply=0.48 served|reach=0.98 wait= 6.8 ask= 0.9 (n=3650)
+      zone_b: supply=0.32 served|reach=0.97 wait= 6.0 ask= 0.9 (n=1361)
+      zone_c: supply=0.23 served|reach=0.99 wait= 6.4 ask= 1.1 (n=694)
+      zone_d: supply=0.12 served|reach=1.00 wait= 5.5 ask= 1.0 (n=295)
+  has_children 
+      False: supply=0.40 served|reach=0.98 wait= 6.4 ask= 0.9 (n=5088)
+      True: supply=0.34 served|reach=0.96 wait= 7.8 ask= 0.9 (n=912)
+  smoking      
+      no: supply=0.42 served|reach=0.98 wait= 6.4 ask= 0.9 (n=4504)
+      occasionally: supply=0.31 served|reach=0.96 wait= 7.3 ask= 1.0 (n=1185)
+      yes: supply=0.29 served|reach=0.90 wait= 7.5 ask= 0.9 (n=311)
+
+--- arm: potential_ask  (members: 6000) ---
+  gender       
+      man: supply=0.39 served|reach=0.97 wait= 6.1 ask= 0.9 (n=2752)
+      non_binary: supply=0.42 served|reach=1.00 wait= 4.4 ask= 0.9 (n=481)
+      woman: supply=0.39 served|reach=0.98 wait= 6.1 ask= 0.9 (n=2767)
+  age band     
+      21-27: supply=0.38 served|reach=0.96 wait= 6.5 ask= 1.0 (n=1536)
+      28-34: supply=0.42 served|reach=0.98 wait= 5.6 ask= 0.9 (n=1706)
+      35-40: supply=0.41 served|reach=0.98 wait= 5.5 ask= 0.9 (n=1408)
+      41-46: supply=0.37 served|reach=0.98 wait= 6.4 ask= 0.9 (n=1350)
+  zone         
+      zone_a: supply=0.48 served|reach=0.97 wait= 5.8 ask= 0.9 (n=3650)
+      zone_b: supply=0.32 served|reach=0.99 wait= 6.2 ask= 0.9 (n=1361)
+      zone_c: supply=0.23 served|reach=0.98 wait= 6.6 ask= 1.1 (n=694)
+      zone_d: supply=0.12 served|reach=1.00 wait= 5.8 ask= 1.0 (n=295)
+  has_children 
+      False: supply=0.40 served|reach=0.98 wait= 5.7 ask= 0.9 (n=5088)
+      True: supply=0.34 served|reach=0.96 wait= 7.3 ask= 0.9 (n=912)
+  smoking      
+      no: supply=0.42 served|reach=0.98 wait= 5.7 ask= 0.9 (n=4504)
+      occasionally: supply=0.31 served|reach=0.97 wait= 7.1 ask= 1.0 (n=1185)
+      yes: supply=0.29 served|reach=0.90 wait= 6.3 ask= 0.9 (n=311)
+
+--- arm: waitfloor  (members: 6000) ---
+  gender       
+      man: supply=0.39 served|reach=0.99 wait= 6.5 ask= 0.9 (n=2752)
+      non_binary: supply=0.42 served|reach=1.00 wait= 4.6 ask= 0.9 (n=481)
+      woman: supply=0.39 served|reach=0.98 wait= 6.5 ask= 0.9 (n=2767)
+  age band     
+      21-27: supply=0.38 served|reach=0.98 wait= 7.1 ask= 1.0 (n=1536)
+      28-34: supply=0.42 served|reach=0.99 wait= 5.9 ask= 0.9 (n=1706)
+      35-40: supply=0.41 served|reach=0.98 wait= 5.8 ask= 0.9 (n=1408)
+      41-46: supply=0.37 served|reach=0.97 wait= 6.5 ask= 0.9 (n=1350)
+  zone         
+      zone_a: supply=0.48 served|reach=0.98 wait= 6.3 ask= 0.9 (n=3650)
+      zone_b: supply=0.32 served|reach=0.99 wait= 6.5 ask= 0.9 (n=1361)
+      zone_c: supply=0.23 served|reach=0.98 wait= 6.4 ask= 1.1 (n=694)
+      zone_d: supply=0.12 served|reach=1.00 wait= 4.8 ask= 1.0 (n=295)
+  has_children 
+      False: supply=0.40 served|reach=0.98 wait= 6.1 ask= 0.9 (n=5088)
+      True: supply=0.34 served|reach=0.97 wait= 7.6 ask= 0.9 (n=912)
+  smoking      
+      no: supply=0.42 served|reach=0.99 wait= 6.1 ask= 0.9 (n=4504)
+      occasionally: supply=0.31 served|reach=0.97 wait= 7.3 ask= 1.0 (n=1185)
+      yes: supply=0.29 served|reach=0.96 wait= 7.1 ask= 0.9 (n=311)
+
+--- arm: oldest_first  (members: 6000) ---
+  gender       
+      man: supply=0.39 served|reach=0.98 wait= 6.4 ask= 0.9 (n=2752)
+      non_binary: supply=0.42 served|reach=0.99 wait= 4.7 ask= 0.9 (n=481)
+      woman: supply=0.39 served|reach=0.98 wait= 6.4 ask= 0.9 (n=2767)
+  age band     
+      21-27: supply=0.38 served|reach=0.98 wait= 6.6 ask= 1.0 (n=1536)
+      28-34: supply=0.42 served|reach=0.99 wait= 6.2 ask= 0.9 (n=1706)
+      35-40: supply=0.41 served|reach=0.98 wait= 6.2 ask= 0.9 (n=1408)
+      41-46: supply=0.37 served|reach=0.97 wait= 6.2 ask= 0.9 (n=1350)
+  zone         
+      zone_a: supply=0.48 served|reach=0.98 wait= 6.4 ask= 0.9 (n=3650)
+      zone_b: supply=0.32 served|reach=0.99 wait= 6.2 ask= 0.9 (n=1361)
+      zone_c: supply=0.23 served|reach=0.98 wait= 6.4 ask= 1.1 (n=694)
+      zone_d: supply=0.12 served|reach=1.00 wait= 4.0 ask= 1.0 (n=295)
+  has_children 
+      False: supply=0.40 served|reach=0.98 wait= 6.0 ask= 0.9 (n=5088)
+      True: supply=0.34 served|reach=0.96 wait= 8.0 ask= 0.9 (n=912)
+  smoking      
+      no: supply=0.42 served|reach=0.99 wait= 6.2 ask= 0.9 (n=4504)
+      occasionally: supply=0.31 served|reach=0.96 wait= 6.9 ask= 1.0 (n=1185)
+      yes: supply=0.29 served|reach=0.93 wait= 6.3 ask= 0.9 (n=311)
