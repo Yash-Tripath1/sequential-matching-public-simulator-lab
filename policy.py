@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Round 2 policy — JSON stdin/stdout adapter (policy interface 1.0.0).
+"""Round 2 policy: JSON stdin/stdout adapter (policy interface 1.0.0).
 
 One invocation = one phase of one day. Reads exactly one JSON request from
 stdin, writes exactly one JSON object to stdout, exits 0. Diagnostics go to

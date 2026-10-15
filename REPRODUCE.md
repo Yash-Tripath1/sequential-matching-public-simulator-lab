@@ -22,7 +22,7 @@ the Docker image installs nothing.
 | `kit.py` SHA-256 | `0d2cb3d3b46ca2a6…` (full digest in `SHA256SUMS.txt`) |
 | networkx | 3.7 |
 | inference random seed | `PYTHONHASHSEED=0` (pinned in `Dockerfile`) |
-| training seeds | none — no model is fitted |
+| training seeds | none: no model is fitted |
 
 Verify the kit before doing anything else:
 
@@ -30,7 +30,7 @@ Verify the kit before doing anything else:
 python3 -c "import hashlib; print(hashlib.sha256(open('code/kit.py','rb').read()).hexdigest())"
 ```
 
-Must begin `0d2cb3d3`. If it does not, stop — you have the wrong simulator.
+Must begin `0d2cb3d3`. If it does not, stop, you have the wrong simulator.
 
 ---
 
@@ -57,7 +57,7 @@ python3 ceilings.py $CEIL development,sparse,cold_start,delayed,shift,drift ~/ou
 ```
 
 Runtime: ~42 min per 1,440 episodes on 4 cores (≈7 s/episode, 4 workers). The
-progress counter advances by 20 per line, so a line appears every ~35 s — this is
+progress counter advances by 20 per line, so a line appears every ~35 s: this is
 normal, not a stall.
 
 Then analyse:
@@ -80,10 +80,10 @@ no_ask           0.098 [0.075, 0.122]  141 events  cov 0.120  cov/ceil 0.344
 
 ---
 
-### 3.1 Per-scenario results (required — do not skip)
+### 3.1 Per-scenario results (required: do not skip)
 
 `analyse.py` writes `analysis.json` into the output directory next to
-`episodes.jsonl`. It contains `summary[arm]["family"]` — the primary score broken
+`episodes.jsonl`. It contains `summary[arm]["family"]`: the primary score broken
 out by **each of the six scenario families** for every arm. That is the
 scenario-level evidence the submission requires, and it is **not** in
 `results/` yet.
@@ -156,25 +156,25 @@ for HS in 0 42; do PYTHONHASHSEED=$HS python3 waitlab.py --seeds 1101 --arms gre
 ```
 
 Both runs must produce identical `msmi_per_100_arrived_members` per episode.
-If they differ, the sweep is not reproducible — report it rather than proceeding.
+If they differ, the sweep is not reproducible, report it rather than proceeding.
 
 ---
 
 ## 7 Docker
 
 ```bash
-docker build -t bipartite-bard:round2 .
+docker build -t bipartite-bard:round2.
 echo '{"phase":"ask","state":{"day":0,"members":[],"introductions":[],"ask_budget_remaining":12},"memory":{}}' | docker run --rm -i bipartite-bard:round2
 echo '{"phase":"match","state":{"day":0,"members":[],"introductions":[]},"memory":{}}' | docker run --rm -i bipartite-bard:round2
 ```
 
 `kit.py`, `policy.py` and `evaluate.py` are duplicated at the repository root
-(from `code/`) so that the organisers' documented commands — `docker build .`,
-`python evaluate.py ...`, `python -m unittest -v` — all work from the project
+(from `code/`) so that the organisers' documented commands, `docker build.`,
+`python evaluate.py...`, `python -m unittest -v`: all work from the project
 root. The Dockerfile copies from `code/`, so the build works whether or not
 those root copies are present.
 
-Both must print valid JSON and exit 0. The image installs **nothing** — the
+Both must print valid JSON and exit 0. The image installs **nothing**: the
 shipped `greedy` arm is standard-library only, and `networkx` is imported lazily
 so it is never needed at container start.
 
@@ -198,4 +198,4 @@ aggregates and were checked for internal consistency:
 - all six contrasts equal the difference of the arm point estimates
 - all six W/T/L rows sum to 720
 
-To regenerate the raw data, re-run §3 — about 85 minutes on 4 cores.
+To regenerate the raw data, re-run §3, about 85 minutes on 4 cores.

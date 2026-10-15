@@ -1,4 +1,4 @@
-fallback audit — 6 seeds x 6 variants x 3 arms = 108 episodes
+fallback audit: 6 seeds x 6 variants x 3 arms = 108 episodes
 rule limit: 10 s per invocation
 
   greedy                 episodes=  36  fallbacks=0  max single call=0.1234s  mean episode=3.49s

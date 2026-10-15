@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""equivalence_check.py — confirm the two implementations of the candidate agree.
+"""equivalence_check.py: confirm the two implementations of the candidate agree.
 
 `disagreement_aware` deliberately exists in two places:
 
-  * `policy.py::pairs_greedy_signed` — a selectable arm, so that anyone can
+  * `policy.py:pairs_greedy_signed`: a selectable arm, so that anyone can
     reproduce the result with `ROUND2_ARM=disagreement_aware` through the
     organisers' own `evaluate.py`.
-  * `waitlab.py::pairs_disagreement_aware` — the arm that actually produced the
+  * `waitlab.py:pairs_disagreement_aware`: the arm that actually produced the
     120-seed numbers in REPORT.md section 5.15, inside the instrumented harness
     that records per-member and waiting-time data.
 
@@ -91,7 +91,7 @@ def main() -> int:
         print(f"      {m}")
     ok = not mismatches
     print()
-    print("RESULT:", "IDENTICAL on every state compared" if ok else "DIVERGENT — do not ship the candidate")
+    print("RESULT:", "IDENTICAL on every state compared" if ok else "DIVERGENT: do not ship the candidate")
     return 0 if ok else 1
 
 

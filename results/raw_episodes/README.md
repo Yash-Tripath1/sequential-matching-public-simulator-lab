@@ -20,8 +20,8 @@ episodes have no `valid` key; a failed episode carries `valid: false` plus an
 | `potential_ask_greedy` | 1101–1220 (120) | 720 | `potential_ask_greedy_1101-1130` + `..._chunk*` |
 | `disagreement_aware` | 1101–1220 (120) | 720 | `disagreement_aware_1101-1130` + `..._chunk*` |
 
-All four arms the rules name — greedy, no-clarification, random-feasible and our
-candidate — therefore have full raw coverage on the same 120 seeds.
+All four arms the rules name, greedy, no-clarification, random-feasible and our
+candidate, therefore have full raw coverage on the same 120 seeds.
 
 ## Not available
 

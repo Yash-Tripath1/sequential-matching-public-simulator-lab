@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""verify_data.py — integrity check for the data this submission uses.
+"""verify_data.py: integrity check for the data this submission uses.
 
 The organisers' starter repository ships `verify_data.py` next to a `data/`
 directory of pre-generated questionnaire pools. **This submission does not use
@@ -43,7 +43,7 @@ checks = 0
 def check(label: str, ok: bool, detail: str = "") -> None:
     global checks
     checks += 1
-    print(f"  [{'PASS' if ok else 'FAIL'}] {label}" + (f" — {detail}" if detail else ""))
+    print(f"  [{'PASS' if ok else 'FAIL'}] {label}" + (f": {detail}" if detail else ""))
     if not ok:
         failures.append(label)
 
@@ -55,7 +55,7 @@ def world_fingerprint(seed: int, variant: str) -> str:
 
 
 def main() -> int:
-    print("verify_data.py — determinism and kit integrity")
+    print("verify_data.py: determinism and kit integrity")
     print(f"  kit VERSION : {getattr(kit, 'VERSION', 'unknown')}")
     print(f"  root        : {ROOT}")
     print()
@@ -82,11 +82,11 @@ def main() -> int:
 
     print()
     if failures:
-        print(f"FAILED — {len(failures)} of {checks} checks failed:")
+        print(f"FAILED: {len(failures)} of {checks} checks failed:")
         for f in failures:
             print(f"  - {f}")
         return 1
-    print(f"OK — all {checks} checks passed.")
+    print(f"OK: all {checks} checks passed.")
     print()
     print("Note: no data/ directory is used. Worlds are generated deterministically")
     print("by kit.generate(); see README.md and REPORT.md section 3.")

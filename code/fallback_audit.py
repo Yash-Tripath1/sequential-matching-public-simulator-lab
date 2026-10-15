@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""fallback_audit.py — count silent fallbacks and measure per-call latency.
+"""fallback_audit.py: count silent fallbacks and measure per-call latency.
 
 Why this exists
 ---------------
@@ -13,8 +13,8 @@ as a perfectly valid episode with zero introductions and no visible trace.
 
 `policy.py` therefore counts fallbacks in `memory`, which the protocol carries
 across calls and back to the harness. This script runs complete episodes
-through the same `decide()` entry point the evaluator uses — in process, so it
-is fast enough to run over hundreds of episodes — and reports:
+through the same `decide()` entry point the evaluator uses, in process, so it
+is fast enough to run over hundreds of episodes, and reports:
 
   * fallbacks per arm, and the first few reasons if any occurred
   * the largest single-invocation time, against the 10 s per-call rule limit
@@ -60,7 +60,7 @@ def parse_seeds(spec: str) -> list[int]:
 
 
 def episode(world, arm: str) -> dict:
-    """Mirror evaluate.py::episode, but call decide() in process."""
+    """Mirror evaluate.py:episode, but call decide() in process."""
     sim = Simulator(world)
     memory = None
     calls = 0
@@ -119,7 +119,7 @@ def main() -> int:
     seeds = parse_seeds(args.seeds)
     arms = [a for a in args.arms.split(",") if a.strip()]
 
-    print(f"fallback audit — {len(seeds)} seeds x {len(VARIANTS)} variants "
+    print(f"fallback audit: {len(seeds)} seeds x {len(VARIANTS)} variants "
           f"x {len(arms)} arms = {len(seeds) * len(VARIANTS) * len(arms)} episodes")
     print(f"rule limit: {RULE_LIMIT_S:.0f} s per invocation\n")
 
