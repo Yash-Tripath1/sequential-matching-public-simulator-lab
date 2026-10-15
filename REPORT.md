@@ -3,7 +3,46 @@
 **Team:** Bipartite Bard (solo entry) · Anadi Tripathi, IIT Madras
 **Kit:** RomeoJulietLove/The-Sequential-Matching-Problem, participant specification 1.0.0
 **Kit commit:** `a8e26b3` · `kit.py` SHA-256 `0d2cb3d3b46ca2a6…`
-**Report date:** 13 October 2026
+**Report date:** 15 October 2026
+
+---
+
+## Contents
+
+- [1 Summary](#1-summary)
+  - [Number to remember](#number-to-remember)
+- [2 The question](#2-the-question)
+- [3 Method](#3-method)
+  - [3.1 Shipped policy](#31-shipped-policy)
+  - [3.2 Harness](#32-harness)
+  - [3.3 Validation against the organiser's evaluator](#33-validation-against-the-organisers-evaluator)
+- [4 Reproducibility statement](#4-reproducibility-statement)
+- [5 Results — 120 fresh seeds, 2,880 episodes](#5-results--120-fresh-seeds-2880-episodes)
+  - [5.1 Primary outcome](#51-primary-outcome)
+  - [5.1b Per-scenario results](#51b-per-scenario-results)
+  - [5.2 Paired contrasts](#52-paired-contrasts)
+  - [5.3 Ablation 1 — clarification is load-bearing](#53-ablation-1--clarification-is-load-bearing)
+  - [5.4 Ablation 2 — pairing quality, not pairing quantity](#54-ablation-2--pairing-quality-not-pairing-quantity)
+  - [5.5 Ablation 3 — ask priority is a free fairness lever](#55-ablation-3--ask-priority-is-a-free-fairness-lever)
+  - [5.6 A trap in the waiting table](#56-a-trap-in-the-waiting-table)
+  - [5.7 Allocation disparity is a property of the world](#57-allocation-disparity-is-a-property-of-the-world)
+  - [5.8 Why no learned scorer can help](#58-why-no-learned-scorer-can-help)
+  - [5.9 Round 1's headline claim did not replicate](#59-round-1s-headline-claim-did-not-replicate)
+  - [5.10 A second, independent fresh-seed study (parallel workstream)](#510-a-second-independent-fresh-seed-study-parallel-workstream)
+  - [5.11 The matcher is not the bottleneck (a fourth ablation)](#511-the-matcher-is-not-the-bottleneck-a-fourth-ablation)
+  - [5.12 Directional calibration (our study)](#512-directional-calibration-our-study)
+  - [5.13 Did we test the one serious alternative to the shipped policy?](#513-did-we-test-the-one-serious-alternative-to-the-shipped-policy)
+  - [5.13b The matcher effect, isolated cleanly](#513b-the-matcher-effect-isolated-cleanly)
+  - [5.14 The definitive test: both arms on all 120 seeds](#514-the-definitive-test-both-arms-on-all-120-seeds)
+  - [5.15 The one positive signal: fixing a defect in the shipped matcher](#515-the-one-positive-signal-fixing-a-defect-in-the-shipped-matcher)
+  - [5.16 An independent, pre-registered replication on 120 unseen seeds](#516-an-independent-pre-registered-replication-on-120-unseen-seeds)
+  - [5.17 All four required arms now have complete raw episode logs](#517-all-four-required-arms-now-have-complete-raw-episode-logs)
+  - [5.18 Failure visibility, per-call latency, and empty input](#518-failure-visibility-per-call-latency-and-empty-input)
+- [6 Uncertainty — what this study cannot resolve](#6-uncertainty--what-this-study-cannot-resolve)
+- [7 Limitations](#7-limitations)
+- [8 Submission contents](#8-submission-contents)
+  - [8.1 Per-scenario results — status](#81-per-scenario-results--status)
+- [9 One-paragraph summary for a non-specialist](#9-one-paragraph-summary-for-a-non-specialist)
 
 ---
 
@@ -635,7 +674,7 @@ This does not contradict the parallel study, which found the reverse on its own
 separate seed set — it is the same small-effect instability documented in §5.10,
 and we report both rather than selecting.
 
-### The matcher effect, isolated cleanly
+### 5.13b The matcher effect, isolated cleanly
 
 Because `potential_ask` and `potential_ask_greedy` use the **identical ask rule**
 and differ only in the matcher, their contrast isolates allocation with nothing
@@ -930,9 +969,10 @@ independent 120-seed estimates of the same quantity now exist:
 Both point the same way, neither excludes zero, and both are an order of
 magnitude below the 0.055 a 120-seed design can resolve and the ≈0.165 the
 organisers' 20-seed assessment can resolve (Round 1 §5.5). **Across 240 seeds
-and two independent runs the direction replicates and the magnitude is about one
-seventieth of what the official assessment can detect.** That is the strongest
-honest statement available, and it does not change what we ship.
+and two independent runs the direction replicates and the magnitude is about
+**one sixteenth** of what the official assessment can detect — 0.165 ÷ 0.010 ≈ 16
+for the pooled estimate, and ≈ 13 for the 1101–1220 block alone (§5.15). That is
+the strongest honest statement available, and it does not change what we ship.
 
 **Packaging and transcription, independently confirmed.** A separate review of
 the committed repository confirmed four things this environment could not check:
@@ -1034,6 +1074,18 @@ by the fallback. The evaluator always supplies that key, so this is not a defect
 in the shipped path — but it is precisely the class of failure the counter was
 added to expose, and finding it on day one is the argument for having it.
 
+**Two copies of the candidate — now checked against each other.** A reviewer
+noted that `disagreement_aware` existed twice: as the selectable arm in
+`policy.py`, added so the result could be reproduced through
+`ROUND2_ARM=disagreement_aware`; and as `pairs_disagreement_aware` in
+`code/waitlab.py`, the version that actually produced the 120-seed numbers in
+§5.15. Two copies of one idea are a liability unless they are shown to agree.
+`code/equivalence_check.py` runs both over every decision day of a real episode
+— 3 seeds × 6 variants × 60 days = **1,080 daily matching decisions**, of which
+615 had at least one feasible pair — and compares the returned matching. The two
+returned **the same matching on every one of the 1,080 states**. The §5.15
+numbers can therefore be reproduced through either entry point.
+
 ---
 
 ## 6 Uncertainty — what this study cannot resolve
@@ -1130,7 +1182,10 @@ directional outcomes.
 
 We tested four ways of deciding who to introduce to whom on 120 simulated
 worlds, running 2,880 complete 100-day episodes. The simplest method — the one
-supplied with the challenge — worked best, and we say so. Turning off the
+supplied with the challenge — had the highest score of the four. Two of those
+three gaps are larger than the noise we can resolve at 120 seeds; none is large
+enough to survive the organiser's 20-seed assessment. We report what we measured
+rather than tuning until something won. Turning off the
 option to ask clarifying questions was catastrophic: it cut reachable coverage
 by two thirds. Choosing *which* pairs to make mattered a lot; making *more*
 introductions did not help at all. Changing who we asked first made no

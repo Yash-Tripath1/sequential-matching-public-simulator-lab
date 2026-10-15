@@ -9,15 +9,17 @@ Vouchsafe / RomeoJulietLove hackathon · Final build, October 2026
 > `policy.py` and `evaluate.py` sit at the root (mirrored in `code/`) so the
 > organiser commands — `docker build .`, `python evaluate.py --seeds 101,102,103
 > --variants all --output results/final.json`, `python -m unittest -v` — all run
-> from here without any setup step. Round 1 material is archived in `round1/`
-> and is not part of the assessed build.
+> from here without any setup step. The Round 1 note this work builds on is
+> [`docs/ROUND1_RESEARCH_NOTE.pdf`](docs/ROUND1_RESEARCH_NOTE.pdf).
 
 ---
 
 ## The result in four lines
 
 1. **We ship the supplied `greedy` baseline.** Three alternatives were tested on
-   120 fresh seeds and none beat it. We report that rather than tuning until
+   120 fresh seeds and none beat it on the primary outcome. Two of the three
+   gaps clear the noise floor at 120 seeds; none clears what the organiser's
+   20-seed assessment can resolve. We report that rather than tuning until
    something won.
 2. **Clarification is the whole game.** Removing it drops reachable coverage from
    98% of the structural ceiling to 34%, and costs −0.304 on the primary outcome

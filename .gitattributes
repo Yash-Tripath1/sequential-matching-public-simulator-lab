@@ -1,0 +1,9 @@
+# Pin line endings. The five results CSVs originally carried CRLF, which
+# git normalised on checkout; that changed their bytes and made five
+# SHA256SUMS entries fail. Every text file is now stored and checked out
+# with LF, so the committed bytes are the hashed bytes.
+* text=auto eol=lf
+*.pdf  binary
+*.png  binary
+*.gz   binary
+*.pyc  binary
