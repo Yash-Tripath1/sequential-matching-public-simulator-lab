@@ -41,14 +41,17 @@ of our seeds** it scores **0.369 against `greedy` at 0.402** — a gap of −0.0
 different environment and matched the transcribed 120-seed figures on four
 statistics to three decimals, which closes the only provenance gap in §5.1–5.6.
 
-We also found — and fixed — a real defect in the shipped matcher. It scores only
-agreements, so a known disagreement counts the same as an unknown field, even
-though §5.12 measures that gap at 20 acceptance points. Penalising known
+We also built and measured a fix for a real defect in the shipped matcher — one
+**Round 1 had already identified** ("Unknown is not disagreement", §4.1 of that
+note) and which we reached independently from the calibration data. It scores
+only agreements, so a known disagreement counts the same as an unknown field,
+even though §5.12 measures that gap at 20 acceptance points. Penalising known
 disagreements is a one-line change, and it is **the only arm in the study that
 finishes above `greedy` at 120 seeds** (0.415 vs 0.402). We still do not ship it:
-at +0.013 [−0.025, +0.051] it is a quarter of the smallest effect 120 seeds can
-resolve, and the sign flips between seed blocks. §5.15 reports it in full, with
-the power calculation, as the first thing we would pursue with more compute.
+at +0.013 [−0.025, +0.051] it is roughly **one twelfth of what the organisers'
+own 20-seed assessment can resolve** (Round 1 §5.5), and the sign flips between
+our own seed blocks. §5.15 reports it in full, with its prior art and the power
+calculation, as the first thing we would pursue with more compute.
 
 ### Number to remember
 
@@ -366,11 +369,21 @@ larger than the effect itself.
 
 ### 5.10 A second, independent fresh-seed study (parallel workstream)
 
-A separate workstream ran an independent Round 2 study on a **disjoint set of ten
-fresh seeds (1111–2020)**, six families, 360 episodes, with the same seed-block
-resampling discipline. We report its results here because they answer the same
-three questions on worlds neither study's design decisions ever saw. Where the two
-studies disagree, that disagreement is itself the finding.
+A separate workstream ran an independent Round 2 study on a **separate set of ten
+fresh seeds (reported as spanning 1111–2020)**, six families, 360 episodes, with
+the same seed-block resampling discipline. We report its results here because they
+answer the same three questions on worlds neither study's design decisions ever
+saw. Where the two studies disagree, that disagreement is itself the finding.
+
+> **Caveat — these seed sets may not be strictly disjoint.** Our own block covers
+> 1101–1220. If the parallel study's ten seeds are evenly spaced across its
+> reported range (1111, 1212, …, 2020), then seed 1111 falls inside both sets and
+> the two studies share one world. We were not able to recover the exact seed list
+> from the parallel workstream's notes before the deadline, so we flag the possible
+> overlap rather than assert independence. **No conclusion in this report depends
+> on combining the two seed sets**: every pooled figure we quote is computed within
+> our own 120 worlds. Any future figure that did pool them would double-count
+> world 1111 and should say so.
 
 **Confirmation (Q1) — the same answer, independently.** The incumbent's edge over
 `greedy` measured **+0.008, 95% CI [−0.217, +0.233], sign-flip p = 1.000,
@@ -585,7 +598,7 @@ paired against the arms already measured on those same worlds.
 **Neither potential-ask variant beats the shipped baseline on our worlds.** The
 point estimates favour `greedy` by about 0.04, though the intervals span zero.
 This does not contradict the parallel study, which found the reverse on its own
-disjoint seed set — it is the same small-effect instability documented in §5.10,
+separate seed set — it is the same small-effect instability documented in §5.10,
 and we report both rather than selecting.
 
 ### The matcher effect, isolated cleanly
@@ -683,7 +696,7 @@ fresh seeds we measure the same gap at **−0.033** (SE 0.029). Round 1's
 estimate sits **7.1 standard errors** away; our 95% interval for the gap,
 [−0.090, +0.025], does not come within a factor of six of +0.175. Taken with
 §5.13 (the same comparison at 30 seeds) and §5.10 (the parallel study, +0.008
-on its own disjoint seeds), the most parsimonious explanation remains that
+on its own separate seeds), the most parsimonious explanation remains that
 0.525 was the maximum of 17 configurations evaluated on the same 10 worlds.
 
 **Waiting again diverges from outcome.** On the 90-seed block `potential_ask`
@@ -703,13 +716,23 @@ incumbent had only been tested on a favourable seed block, no longer stands.
 
 ---
 
-### 5.15 The one positive signal: fixing the defect we found in the shipped matcher
+### 5.15 The one positive signal: fixing a defect in the shipped matcher
 
-§5.12 identified a concrete defect in the ranking function we ship. An external
-audit of this repository then pointed out — correctly — that we never tested a
-fix for it. This section does. It produced the only arm in the entire study that
-finishes above the shipped baseline at full scale, and it is also the clearest
-illustration of why we still do not ship it.
+**Round 1 found this defect first.** Its research note (§4.1, "Unknown is not
+disagreement") states the bug in exactly the terms below, fixes it with the same
++1 / −1 / 0 coding, and reports the change at **+0.075 MSMI/100, 95% CI
+[−0.025, +0.192], p = 0.328, W/T/L 14/39/7** on ten seeds. We did not know that
+when we designed this arm — §5.12's 53,908-outcome calibration led us to the
+same conclusion independently. What this section adds is therefore not the idea.
+It is a measurement of the same change on **120 fresh, unselected worlds**:
+twelve times the sample, and free of the selection effect that inflated every
+Round 1 number (§5.9). The direction survives. The magnitude does not.
+
+An external audit of this repository separately pointed out — correctly — that
+we had identified the defect without ever testing a fix for it. This section is
+that test. It produced the only arm in the entire study that finishes above the
+shipped baseline at full scale, and it is also the clearest illustration of why
+we still do not ship it.
 
 **The defect.** `kit.baseline_match` (kit.py:217) scores a candidate pair by
 counting soft fields where both members are known and EQUAL. A field where both
@@ -722,10 +745,10 @@ about which nothing is known.
 
 **The fix.** One line. `disagreement_aware` keeps the supplied ask rule and the
 supplied greedy edge selection and changes only the score: known agreement +1,
-known disagreement −1, undisclosed 0. The weight was chosen a priori and never
-tuned on any seed — the measured acceptance drop per disagreement (≈0.05) is the
-same order as the gain per agreement (≈0.03–0.13), so equal weighting is the
-neutral choice.
+known disagreement −1, undisclosed 0 — the coding Round 1 adopted for its own
+incumbent. The weight was chosen a priori and never tuned on any seed: the
+measured acceptance drop per disagreement (≈0.05) is the same order as the gain
+per agreement (≈0.03–0.13), so equal weighting is the neutral choice.
 
 **Result — 120 seeds, paired on identical worlds.** Sign convention: `diff` is
 *arm − `greedy`*, and W/T/L counts seeds the arm wins / ties / loses.
@@ -752,30 +775,75 @@ act on a field that is known on both sides.
 +0.031). The two halves of our own seed range disagree in sign — the instability
 documented in §6, again.
 
-**Why we still do not ship it.** Three reasons, in order of importance.
+**Two measurements of one change.**
 
-1. **This study was never powered to detect an effect this small.** With per-seed
+| | seeds | diff vs baseline | 95% CI | p | W/T/L |
+|---|---:|---:|---|---:|---|
+| Round 1 note §6.2b — weight coding, 7-field count → signed | 10 | **+0.075** | [−0.025, +0.192] | 0.328 | 14/39/7 |
+| This report §5.15 — `disagreement_aware` vs `greedy` | 120 | **+0.013** | [−0.025, +0.051] | 0.835 | 46/29/45 |
+
+The two intervals share a lower bound of −0.025 to three decimals. Read together
+they say what §5.9 says about the incumbent: the *direction* reproduces, and the
+*magnitude* shrinks by roughly a factor of six once the ten selection worlds are
+replaced by 120 fresh ones.
+
+There is also a discrepancy worth stating, because it is why this test was worth
+running at all. Round 1's §4.1 prescribes +1 / −1 / 0 coding, but the
+configuration we can reconstruct as its incumbent — `potential_ask`, which
+reproduces its headline **0.525 and 63 events exactly** on Round 1's own seeds
+(§5.9) — uses the unsigned agreement count, in which a known disagreement scores
+0.0, the same as an unknown field. The signed variant of the same arm scores
+**0.367 with 44 events** on those seeds. So whatever the note prescribed in
+prose, the code path behind the headline number ranked a known disagreement as
+no information. `disagreement_aware` is that missing fix, applied to the shipped
+greedy selection and measured honestly.
+
+**Why we still do not ship it.** Four reasons, in order of importance.
+
+1. **The organisers' own assessment cannot resolve it.** Round 1's power
+   analysis (§5.5 of that note), from a within-method per-episode SD of 0.457,
+   finds that 20 private seeds × 6 families — 120 episodes, the official
+   protocol — resolves a gap of about **0.165 MSMI/100**. Our +0.013 is roughly
+   **one twelfth of that**. Even if the effect is exactly as estimated, switching
+   the shipped policy could not be detected by the assessment that decides the
+   ranking. This is the decisive reason; the three below are confirmations.
+2. **This study was never powered to detect an effect this small.** With per-seed
    SD 0.214 at n = 120, the smallest effect detectable at 80% power is **0.055**.
    The observed +0.013 is **0.24× that**. Resolving it would take roughly
    **2,055 seeds** — about seventeen times the compute available to us. Calling
    this a win would be calling noise a win.
-2. **The effect is smaller than the seed lottery.** §6 shows the same code moving
+3. **The effect is smaller than the seed lottery.** §6 shows the same code moving
    by ≈0.15 between seed blocks. A 0.013 advantage cannot decide a ranking that
    sensitive to which worlds are drawn.
-3. **Shipping it would repeat Round 1's error.** Round 1's 0.525 was the maximum
+4. **Shipping it would repeat Round 1's error.** Round 1's 0.525 was the maximum
    of 17 configurations on 10 seeds (§5.9). Switching the shipped policy on a
    p = 0.835 difference, on the last available day, is the same mistake with a
    slightly larger sample.
 
-**Why we report it anyway.** Because unlike every other arm here, its direction
-was *predicted* from an independently measured defect rather than fished from a
-leaderboard: 53,908 directional outcomes said known disagreements should cost
-acceptance, and they do. It is the only arm above the baseline at 120 seeds, it
-leads on four of six scenarios, it leads in five of six independent seed chunks,
-and it is a one-line change with no new dependencies and no effect on
-eligibility, budget or episode validity. **With another week, this is the first
-thing we would run at 2,000 seeds.** We would rather hand the organisers a
-measured, honestly underpowered positive signal than a tuned claim.
+**Why we report it anyway.** Because it is the only arm above the baseline at 120
+seeds, it leads on four of six scenarios, it leads in five of six independent
+seed chunks, it has now been arrived at twice by two independent routes (a
+53,908-outcome calibration study here, a coding review in Round 1), and it is a
+one-line change with no new dependencies and no effect on eligibility, budget or
+episode validity. **With another week, this is the first thing we would run at
+2,000 seeds.** We would rather hand the organisers a measured, honestly
+underpowered positive signal — together with its prior art — than a tuned claim.
+
+**Two structural cross-checks against Round 1.** Round 1 computed coverage
+ceilings on its own seeds with its own scripts; we computed ours independently
+on 120 different seeds. They agree to within about 3%: development 0.399 vs
+**0.387**, cold_start 0.341 vs **0.334**, sparse 0.178 vs **0.167**. Round 1's
+hypothesis H6 — that coverage converges to the structural ceiling whatever the
+asking rule — is confirmed here from below as well: every asking policy we ran
+lands at 97–98% of ceiling, and `greedy` sits at **0.978**, matching Round 1's
+reported band exactly.
+
+**A Round 1 question this report closes.** Round 1 listed hypothesis H4 —
+"waiting/batching helps in supply-rich families" — as *untested, planned work*.
+§5.5 and §5.6 test it: `oldest_first` cuts p90 waiting by **1.05 days**
+(p < 0.001) but moves the primary outcome by only +0.038 (p = 0.136). H4 is
+supported for waiting and not supported for the outcome — the divergence in §5.6,
+stated as a hypothesis verdict.
 
 Cost of this section: 1,260 episodes, about 97 minutes on 2 workers, zero failed
 episodes. Per-seed values for all four arms are in
@@ -848,7 +916,7 @@ more to the organisers than an unvalidated evolved policy.
 | Contract tests | `tests/test_policy.py` — `python -m unittest -v`, 5 tests, all pass |
 | Machine-readable results | `results/` — including per-seed values for the full 120-seed greedy-vs-incumbent comparison in `results/greedy_vs_potential_120seeds.json` |
 | Technical report | this file |
-| Attribution | `LICENSE.kit` (organisers' kit) and `LICENSE` (MIT, our code) |
+| Attribution | `LICENSE.kit` (organisers' kit), `LICENSE` (MIT, our code), and `docs/ROUND1_RESEARCH_NOTE.pdf` (the Round 1 note this work builds on) |
 | All three baseline comparisons | §5.1–5.2 |
 | At least one ablation | §5.3 (clarification), §5.4 (pairing), §5.5 (ask priority), §5.11 (matcher) |
 | Head-to-head with the Round 1 incumbent | §5.14 — both arms on all 120 seeds, 1,440 episodes; machine-readable in `results/greedy_vs_potential_120seeds.json` |

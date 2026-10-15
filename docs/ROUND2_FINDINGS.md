@@ -2,6 +2,12 @@
 
 **Team Bipartite Bard · run 10 October 2026 · 900 episodes · public simulator 1.0.0, public seeds**
 
+> **ARCHIVAL — working notes, not findings.** This file is the raw engineering log
+> kept during the Round 2 build. It contains open questions, abandoned branches and
+> internal paths that were never resolved, and it has not been cleaned for
+> publication. **The authoritative statement of results is `REPORT.md`.** Nothing
+> here should be cited as a finding without checking it against that document.
+
 Companion to `ROUND2_PLAN.md`. This document reports what I actually ran and
 what came out. Everything is public-seed, in-process, synthetic. It is
 exploratory and unadjusted for multiplicity.
@@ -329,7 +335,7 @@ before choosing the ship candidate.
 
 ## 7. Engineering: the protocol adapter runs
 
-`/home/user/round2_build/` contains a working submission scaffold:
+The submission scaffold (see `code/` and the root `policy.py`) is built from this work:
 
 - **`policy.py`** — JSON stdin/stdout adapter, one invocation per phase per day.
   Six arms selectable via `--arm` (the official `--baseline` flag is also
