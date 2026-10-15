@@ -91,7 +91,7 @@ scenario-level evidence the submission requires, and it is **not** in
 Copy it across and it lands in `results/`:
 
 ```bash
-cp ~/out_all/analysis.json /path/to/round2/results/per_family_120seeds.json
+cp ~/out_all/analysis.json results/per_family_120seeds.json
 ```
 
 Verify it has all six families for all four arms:

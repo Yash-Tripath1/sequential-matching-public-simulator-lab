@@ -30,6 +30,15 @@ def run(payload):
     return proc
 
 
+def run_arm(payload, arm):
+    """Run root policy.py with a given arm selected via the environment."""
+    import os
+    env = dict(os.environ, ROUND2_ARM=arm)
+    return subprocess.run([sys.executable, str(POLICY)],
+                          input=json.dumps(payload), capture_output=True,
+                          text=True, timeout=30, cwd=str(ROOT), env=env)
+
+
 class PolicyContract(unittest.TestCase):
     def test_policy_file_present(self):
         self.assertTrue(POLICY.is_file(), "policy.py must sit at the project root")
@@ -55,6 +64,62 @@ class PolicyContract(unittest.TestCase):
         # Guards against silently swapping the organisers' kit.
         text = (ROOT / "code" / "kit.py").read_text()
         self.assertIn("VERSION", text)
+
+
+class EmptyInput(unittest.TestCase):
+    """The specification requires the policy to handle an empty population and
+    an empty feasible graph. Every arm must return a valid empty batch, exit 0,
+    and -- because a fallback there would be a real bug rather than a safety
+    net -- must not register a fallback."""
+
+    ARMS = ["greedy", "no_ask", "random_feasible", "potential_ask",
+            "waitfloor", "oldest_first", "disagreement_aware"]
+
+    KEY = {"ask": "asks", "match": "pairs"}
+
+    def test_empty_population_all_arms_both_phases(self):
+        for arm in self.ARMS:
+            for phase in ("ask", "match"):
+                with self.subTest(arm=arm, phase=phase):
+                    payload = {"phase": phase,
+                               "state": {"day": 0, "members": [], "introductions": [],
+                                         "ask_budget_remaining": 12},
+                               "memory": {}}
+                    proc = run_arm(payload, arm)
+                    self.assertEqual(proc.returncode, 0,
+                                     f"{arm}/{phase} stderr: {proc.stderr[:300]}")
+                    body = json.loads(proc.stdout)
+                    self.assertEqual(body.get(self.KEY[phase]), [],
+                                     f"{arm}/{phase} did not return an empty batch")
+                    self.assertEqual(int((body.get("memory") or {}).get("fallbacks", 0)), 0,
+                                     f"{arm}/{phase} registered a fallback on empty input")
+
+    def test_single_member_population_matches_nothing(self):
+        """A one-member pool has an empty feasible graph by construction."""
+        for arm in self.ARMS:
+            with self.subTest(arm=arm):
+                payload = {"phase": "match",
+                           "state": {"day": 0,
+                                     "members": [{"member_id": "solo", "available": True,
+                                                  "fields": {}, "field_status": {}}],
+                                     "introductions": []},
+                           "memory": {}}
+                proc = run_arm(payload, arm)
+                self.assertEqual(proc.returncode, 0, f"{arm} stderr: {proc.stderr[:300]}")
+                body = json.loads(proc.stdout)
+                self.assertEqual(body.get("pairs"), [])
+
+    def test_fallback_counter_is_wired(self):
+        """A deliberately malformed state must register a fallback, so that a
+        real failure can never be scored as a silent valid empty episode."""
+        payload = {"phase": "match",
+                   "state": {"day": 0, "members": [{"member_id": "x"}],
+                             "introductions": []},
+                   "memory": {}}
+        proc = run_arm(payload, "greedy")
+        self.assertEqual(proc.returncode, 0)
+        body = json.loads(proc.stdout)
+        self.assertGreaterEqual(int((body.get("memory") or {}).get("fallbacks", 0)), 1)
 
 
 if __name__ == "__main__":

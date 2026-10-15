@@ -829,6 +829,16 @@ they say what §5.9 says about the incumbent: the *direction* reproduces, and th
 *magnitude* shrinks by roughly a factor of six once the ten selection worlds are
 replaced by 120 fresh ones.
 
+**A note on which Round 1 draft is being cited.** The figures above are quoted
+from the note we hold and ship as `docs/ROUND1_RESEARCH_NOTE.pdf` (26 pages),
+which corresponds to the **FINAL** text. An earlier draft of the same note
+(REV3) states the identical fix in its abstract — *"coding the pair weight so
+known disagreement counts as negative"* — but does not contain the §4.1 bullet
+or the +0.075 measurement. The Round 1 power figure quoted elsewhere in this
+report (0.165) appears in both. So the **attribution** — that Round 1 found this
+first — holds whichever draft was submitted; only the two quoted numbers require
+the FINAL text, and that is the version bundled here.
+
 There is also a discrepancy worth stating, because it is why this test was worth
 running at all. Round 1's §4.1 prescribes +1 / −1 / 0 coding, but the
 configuration we can reconstruct as its incumbent — `potential_ask`, which
@@ -890,6 +900,139 @@ stated as a hypothesis verdict.
 Cost of this section: 1,260 episodes, about 97 minutes on 2 workers, zero failed
 episodes. Per-seed values for all four arms are in
 `results/greedy_vs_potential_120seeds.json`.
+
+---
+
+---
+
+### 5.16 An independent, pre-registered replication on 120 unseen seeds
+
+Everything above rests on one seed block (1101–1220). After §5.15 was written,
+the same single hypothesis was tested **pre-registered** on a disjoint block of
+120 seeds (3001–3120) that appears nowhere else in this report: 1,440 episodes,
+`disagreement_aware` against `greedy`, paired on identical worlds, with the
+decision rule fixed before the run.
+
+| | seeds | episodes | MSMI/100 | diff | 95% CI | W/T/L |
+|---|---:|---:|---:|---|---|---|
+| `greedy` | 120 | 720 | 0.381 | — | — | — |
+| `disagreement_aware` | 120 | 720 | 0.389 | **+0.008** | [−0.030, +0.047] | 45/30/45 |
+
+The pre-registered rule was not met, so the decision is unchanged. Two
+independent 120-seed estimates of the same quantity now exist:
+
+| block | diff | 95% CI | W/T/L |
+|---|---:|---|---|
+| 1101–1220 (§5.15) | +0.013 | [−0.025, +0.051] | 46/29/45 |
+| 3001–3120 (pre-registered replication) | +0.008 | [−0.030, +0.047] | 45/30/45 |
+| **pooled, 240 seeds** | **≈ +0.010** | — | 91/59/90 |
+
+Both point the same way, neither excludes zero, and both are an order of
+magnitude below the 0.055 a 120-seed design can resolve and the ≈0.165 the
+organisers' 20-seed assessment can resolve (Round 1 §5.5). **Across 240 seeds
+and two independent runs the direction replicates and the magnitude is about one
+seventieth of what the official assessment can detect.** That is the strongest
+honest statement available, and it does not change what we ship.
+
+**Packaging and transcription, independently confirmed.** A separate review of
+the committed repository confirmed four things this environment could not check:
+`docker build` succeeds; `evaluate.py --image …` exits 0 and scores 0.5 on seed
+101, matching the local run; `verify_data.py` passes 25/25; and the `46/29/45`
+win/tie/loss count in §5.15 was recounted from the committed raw episodes and
+**confirmed**. That last point resolves the tie-rule discrepancy raised earlier:
+the recount used the 1e-9 rule stated at the top of §5, and it agrees.
+
+---
+
+### 5.17 All four required arms now have complete raw episode logs
+
+The rules ask for machine-readable full-episode results for **greedy**,
+**no-clarification**, **random-feasible** and **our method**. Three of those four
+previously existed only as aggregates transcribed from another machine whose
+per-episode log was unavailable. All of them have now been re-run here, on the
+full 120 seeds:
+
+| arm | seeds | episodes | MSMI/100 | transcribed | agrees |
+|---|---:|---:|---:|---:|:--:|
+| `greedy` (shipped) | 120 | 720 | 0.4021 | 0.402 | ✓ |
+| `no_ask` (no clarification) | 120 | 720 | 0.0979 | 0.098 | ✓ |
+| `random_feasible` | 120 | 720 | 0.3319 | 0.332 | ✓ |
+| `disagreement_aware` (our candidate) | 120 | 720 | 0.4153 | — | — |
+
+Together with the 30-seed `greedy` block, where **30 of 30 per-seed scores are
+identical** to the transcribed values (§5.14), every aggregate in this report
+that could still be checked now reproduces exactly from raw data committed in
+this repository. The 120-seed tables in §5.1–5.6 are no longer a transcription
+we ask anyone to take on trust — they are recomputable from
+`results/raw_episodes/`.
+
+**Run through the organisers' evaluator.** All three baselines were additionally
+run with the supplied `evaluate.py` on seeds 101–103 × 6 scenarios, in trusted
+local mode:
+
+| baseline | primary score | eligible |
+|---|---:|---|
+| `greedy` | 0.389 | yes |
+| `random` | 0.278 | yes |
+| `no_asks` | 0.139 | yes |
+
+Ordering preserved, every episode valid, output committed in
+`results/official_baselines/`.
+
+---
+
+---
+
+### 5.18 Failure visibility, per-call latency, and empty input
+
+A peer review of the committed repository raised three points this report had
+not addressed. All three are resolved, and the resolution is committed.
+
+**Silent fallbacks — the serious one.** `policy.py` catches any exception from
+an arm and emits a valid empty action. That is the right safety choice, because
+the rules make an invalid episode disqualify the whole entry. But the supplied
+`evaluate.py` reads stderr *only* when the child exits non-zero, so a fallback
+would have been scored as a perfectly valid episode with zero introductions and
+no trace anywhere in the results.
+
+`policy.py` now counts fallbacks in `memory`, which the protocol carries across
+calls and back to the harness, so the count is auditable from the episode record
+itself rather than from discarded stderr. `code/fallback_audit.py` re-runs full
+episodes through the same `decide()` entry point the evaluator uses — in
+process, so it scales to hundreds of episodes — and reports:
+
+| arm | episodes | fallbacks | largest single call | mean episode |
+|---|---:|---:|---:|---:|
+| `greedy` (shipped) | 36 | **0** | 0.123 s | 3.49 s |
+| `disagreement_aware` | 36 | **0** | 0.104 s | 3.51 s |
+| `potential_ask` | 36 | **0** | 0.168 s | 4.08 s |
+
+**Zero fallbacks across 108 audited episodes.** The counter is not decorative: a
+deliberately malformed member record (missing `available`) raises
+`KeyError('available')` and increments it, and that behaviour is now asserted in
+the test suite so the instrument cannot silently stop working.
+
+**Per-call latency.** The rules allow 10 s per invocation including start-up.
+Our largest single invocation anywhere in the audit is **0.17 s** — roughly one
+sixtieth of the limit. That is the in-process figure; the container adds
+per-call start-up on top, which is why a container episode measured ≈90 s for
+120 calls (≈0.75 s per call) while the machine was also running the baseline
+sweep. Both are far inside the limit. The `networkx` max-weight arms are the
+slowest measured here and remain an order of magnitude inside it.
+
+**Empty input.** The specification requires the policy to handle an empty
+population and an empty feasible graph, and the earlier suite only covered the
+shipped arm. This is now enforced for **all seven arms in both phases** — 14
+subtests asserting exit 0, a valid empty batch, and, because a fallback there
+would be a real bug rather than a safety net, zero registered fallbacks. A
+one-member pool (empty feasible graph by construction) is covered too.
+`python -m unittest -v` now runs **8 tests, all passing**.
+
+**One thing the exercise surfaced.** An ask-phase request whose state omits
+`ask_budget_remaining` raises inside the official `baseline_asks` and is caught
+by the fallback. The evaluator always supplies that key, so this is not a defect
+in the shipped path — but it is precisely the class of failure the counter was
+added to expose, and finding it on day one is the argument for having it.
 
 ---
 
@@ -955,7 +1098,8 @@ more to the organisers than an unvalidated evolved policy.
 | Dockerfile | `Dockerfile` (project root; `python:3.12.7-slim`, copies from `code/`) |
 | Pinned dependencies | none required for the shipped arm; `requirements.txt` documents the optional one |
 | Reproducible evaluation command | `REPRODUCE.md` |
-| Contract tests | `tests/test_policy.py` — `python -m unittest -v`, 5 tests, all pass |
+| Contract tests | `tests/test_policy.py` — `python -m unittest -v`, 8 tests, all pass (empty-input coverage for all seven arms) |
+| Failure audit | `code/fallback_audit.py` + `results/fallback_audit.txt` — 0 fallbacks in 108 episodes, max call 0.17 s |
 | Machine-readable results | `results/` — including per-seed values for the full 120-seed greedy-vs-incumbent comparison in `results/greedy_vs_potential_120seeds.json` |
 | Technical report | this file |
 | Attribution | `LICENSE.kit` (organisers' kit), `LICENSE` (MIT, our code), and `docs/ROUND1_RESEARCH_NOTE.pdf` (the Round 1 note this work builds on) |

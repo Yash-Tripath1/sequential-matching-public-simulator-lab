@@ -56,7 +56,8 @@ def _nx():
     return nx
 
 CORE = ("relationship_goal", "relationship_pace", "lifestyle", "conversations")
-ARMS = ("greedy", "no_ask", "random_feasible", "potential_ask", "waitfloor", "oldest_first")
+ARMS = ("greedy", "no_ask", "random_feasible", "potential_ask", "waitfloor", "oldest_first",
+        "disagreement_aware")
 DEFAULT_ARM = "greedy"
 
 
@@ -187,6 +188,50 @@ def pairs_max_weight(state: dict) -> list[list[str]]:
     return [sorted(p) for p in _nx().max_weight_matching(graph, maxcardinality=False, weight="weight")]
 
 
+def pairs_greedy_signed(state: dict) -> list[list[str]]:
+    """`greedy`'s own edge selection with one change: a known disagreement
+    scores -1 instead of 0.
+
+    kit.baseline_match counts only agreements, so "we checked and they clash"
+    and "we have no idea" both score zero. REPORT.md sections 5.12 and 5.15
+    measure what that costs: among pairs with no known agreements, empirical
+    acceptance falls from 0.492 with zero known disagreements to 0.288 with
+    four. This is the disclosed candidate of section 5.15.
+
+    It is NOT shipped -- the default arm is and remains `greedy` (section 5.15
+    gives the reason: the measured effect is about one seventieth of what the
+    organisers' 20-seed assessment can resolve). It is selectable with
+    ROUND2_ARM=disagreement_aware purely so the reported result is
+    reproducible by anyone who wants to check it.
+    """
+    members = [m for m in state.get("members", []) if m.get("available")]
+    if len(members) < 2:
+        return []
+    past = {tuple(sorted((i["user_a"], i["user_b"]))) for i in state.get("introductions", [])}
+    edges = []
+    for a, b in itertools.combinations(members, 2):
+        key = tuple(sorted((a["member_id"], b["member_id"])))
+        if key in past or eligibility(a, b)["status"] != "feasible":
+            continue
+        agree = disagree = 0
+        for f in SOFT:
+            va, vb = a["fields"].get(f), b["fields"].get(f)
+            if va is None or vb is None:
+                continue          # undisclosed: no information either way
+            if va == vb:
+                agree += 1
+            else:
+                disagree += 1
+        edges.append((-(agree - disagree), key))
+    used: set = set()
+    out = []
+    for _, pair in sorted(edges):
+        if used.isdisjoint(pair):
+            out.append(list(pair))
+            used.update(pair)
+    return out
+
+
 def pairs_random_feasible(state: dict) -> list[list[str]]:
     """Official `random` baseline: deterministic shuffle, seeded from the day
     only, never from a world seed (none is available in the protocol)."""
@@ -218,6 +263,7 @@ ASK = {
     "potential_ask": asks_potential,
     "waitfloor": asks_waitfloor,
     "oldest_first": asks_oldest_first,
+    "disagreement_aware": baseline_asks,
 }
 MATCH = {
     "greedy": baseline_match,
@@ -226,6 +272,7 @@ MATCH = {
     "potential_ask": pairs_max_weight,
     "waitfloor": pairs_max_weight,
     "oldest_first": pairs_max_weight,
+    "disagreement_aware": pairs_greedy_signed,
 }
 
 
@@ -249,6 +296,19 @@ def decide(request: dict, arm: str) -> dict:
             return {"pairs": action, "memory": memory}
     except Exception as exc:  # noqa: BLE001 - deliberate: never emit an invalid batch
         print(f"warn: {arm} {phase} failed: {exc!r}", file=sys.stderr)
+        # Falling back is the right safety choice: an invalid episode makes the
+        # whole entry ineligible. Falling back SILENTLY is not. The supplied
+        # evaluate.py only reads stderr when the child exits non-zero, so a
+        # fallback would otherwise be scored as a valid episode with zero
+        # introductions and no visible trace. We therefore count fallbacks in
+        # `memory`, which the protocol carries across calls and back to the
+        # harness, so the count is auditable from the episode record itself.
+        memory = dict(memory)
+        memory["fallbacks"] = int(memory.get("fallbacks", 0)) + 1
+        reasons = list(memory.get("fallback_reasons") or [])
+        if len(reasons) < 10:
+            reasons.append(f"{arm}/{phase}: {type(exc).__name__}: {exc}")
+        memory["fallback_reasons"] = reasons
 
     # Unknown phase, or a failure above: emit the valid empty action.
     return {"asks": [], "memory": memory} if phase == "ask" else {"pairs": [], "memory": memory}

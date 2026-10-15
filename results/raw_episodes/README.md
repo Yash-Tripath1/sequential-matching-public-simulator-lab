@@ -13,17 +13,21 @@ episodes have no `valid` key; a failed episode carries `valid: false` plus an
 
 | arm | seeds | episodes | file(s) |
 |---|---|---|---|
-| `greedy` | **1101–1220 (120)** | 720 | `greedy_potential_ask_1131-1220_chunk*` + `greedy_1101-1130` |
+| `greedy` | 1101–1220 (120) | 720 | `greedy_potential_ask_1131-1220_chunk*` + `greedy_1101-1130` |
+| `no_ask` (no clarification) | 1101–1220 (120) | 720 | `no_ask_random_feasible_*.chunk*` |
+| `random_feasible` | 1101–1220 (120) | 720 | `no_ask_random_feasible_*.chunk*` |
 | `potential_ask` | 1131–1220 (90) | 540 | `greedy_potential_ask_1131-1220_chunk*` |
 | `potential_ask_greedy` | 1101–1220 (120) | 720 | `potential_ask_greedy_1101-1130` + `..._chunk*` |
 | `disagreement_aware` | 1101–1220 (120) | 720 | `disagreement_aware_1101-1130` + `..._chunk*` |
 
+All four arms the rules name — greedy, no-clarification, random-feasible and our
+candidate — therefore have full raw coverage on the same 120 seeds.
+
 ## Not available
 
-`no_ask`, `random_feasible` and `oldest_first` raw rows were produced on a
-separate machine whose per-episode log could not be recovered; only the
-aggregates in `../primary_120seeds.json` and `../contrasts_120seeds.csv`
-survive for those arms.
+`oldest_first` raw rows were produced on a separate machine whose per-episode
+log could not be recovered; only its aggregate in `../primary_120seeds.json`
+survives. It is not one of the four arms the rules name.
 
 **Transcription verified.** The aggregate tables for `greedy` were transcribed
 from terminal output on that machine, whose per-episode log was unavailable.
