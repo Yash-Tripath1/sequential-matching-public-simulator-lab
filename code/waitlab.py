@@ -111,12 +111,17 @@ def potential_scores(available: list[dict]) -> dict[str, float]:
 def max_weight_pairs_core4(state: dict) -> list[list[str]]:
     """Maximum-weight matching on the CORE FOUR soft fields only.
 
-    This reconstructs Round 1's `lab_potential_core4_maxw` (reported 0.592,
-    best-of-17, code never committed). Round 1's note describes the winner as
-    potential-ranked asking with max-weight matching restricted to the four
-    core soft fields. If that reconstruction is right, this arm should score
-    near 0.592 on Round 1's seeds; on 120 fresh seeds it will show whether the
-    reported value survives selection.
+    This attempts to reconstruct Round 1's `lab_potential_core4_maxw`
+    (reported 0.592, best-of-17), described in that note as potential-ranked
+    asking with max-weight matching restricted to the four core soft fields.
+
+    The reconstruction is NOT confirmed and must not be cited as
+    `lab_potential_core4_maxw`. Rebuilt from the surviving components in
+    `experiment_lab.py` it scores 0.458 against the published 0.592 on Round
+    1's own ten screen seeds, far enough away that we treat it as the wrong
+    policy rather than as evidence about Round 1 (REPORT.md section 4). The
+    Round 1 code itself IS committed; what is missing is the assembly layer
+    that composed the published configurations.
     """
     members = [m for m in state["members"] if m.get("available")]
     past = {tuple(sorted((i["user_a"], i["user_b"]))) for i in state.get("introductions", [])}

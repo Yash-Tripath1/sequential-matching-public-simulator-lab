@@ -112,13 +112,16 @@ Exact commands, versions, seed lists, expected values and checksums are in
 
 ## Reproducibility, stated up front
 
-Round 1 reported 17 configurations. **The code for 11 of them was never
-committed and does not survive anywhere.** We cite nothing we cannot run.
+Round 1 reported 17 configurations, and **its code is here and it runs**: we
+re-executed all 14 configurations it defines on Round 1's own 10 screen seeds,
+**840 episodes, zero errors** (`REPORT.md` §4).
 
-Six configurations do reproduce exactly, including all three supplied
-baselines. Rebuilding a configuration from its written description gave the
-*wrong* policy once already, where a sign error produced 0.367 where the
-incumbent scored 0.525, so nothing here is reconstructed by description alone.
+Six configurations reproduce exactly, verified on all six scenario families
+each, including all three supplied baselines. The other eleven do not, because
+the assembly layer that composed them was never committed. Two attempts to
+rebuild them from the surviving components produced the wrong policy: 0.458
+against a published 0.592, and 0.150 against 0.492. We cite nothing we cannot
+run, and nothing here is reconstructed from a written description alone.
 
 Full accounting in `REPORT.md` §4 and `docs/ROUND2_FINDINGS.md` §10.
 

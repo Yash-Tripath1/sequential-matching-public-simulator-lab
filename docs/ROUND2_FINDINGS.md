@@ -633,9 +633,16 @@ facts, what is missing, how we know it was computed, and what we cite instead.
 
 ### The one line to say out loud
 
-> Four of the six methods we can still run reproduce exactly. The Round 1
-> **incumbent reproduces only after fixing a sign error**, and the Round 1
-> **winner does not reproduce at all** because its code was never saved.
+> Six of the seventeen configurations reproduce exactly, run from Round 1's own
+> code and verified on all six scenario families (`REPORT.md` §4). The Round 1
+> **winner still does not reproduce**: rebuilding it from the surviving
+> components gives 0.458 against the published 0.592.
+
+> **Correction.** An earlier version of this note said the incumbent reproduced
+> "only after fixing a sign error." It does not. Run from the committed code it
+> reproduces at 0.525 on every family, unmodified. The sign error was in a
+> reconstruction built from the written description, which we had mistaken for
+> the original.
 
 That sentence is the strongest argument in the report for the Round 2 strategy.
 It converts the missing-code problem from an embarrassment into the motivation

@@ -1,0 +1,178 @@
+{
+  "meta": {
+    "source": "experiment_lab.py from the Round 2 repository, commit 770c7ef",
+    "design": "14 configurations x 10 Round 1 screen seeds (101..1010) x 6 families = 840 episodes",
+    "valid_episodes": 840,
+    "errors": 0
+  },
+  "methods": {
+    "core_max_matching": {
+      "primary": 0.375,
+      "by_family": {
+        "development": 0.4,
+        "sparse": 0.0,
+        "cold_start": 0.6,
+        "delayed": 0.45,
+        "shift": 0.4,
+        "drift": 0.4
+      },
+      "episodes": 60
+    },
+    "gp_mean": {
+      "primary": 0.325,
+      "by_family": {
+        "development": 0.3,
+        "sparse": 0.0,
+        "cold_start": 0.55,
+        "delayed": 0.5,
+        "shift": 0.3,
+        "drift": 0.3
+      },
+      "episodes": 60
+    },
+    "gp_ucb": {
+      "primary": 0.42500000000000004,
+      "by_family": {
+        "development": 0.45,
+        "sparse": 0.0,
+        "cold_start": 0.55,
+        "delayed": 0.55,
+        "shift": 0.55,
+        "drift": 0.45
+      },
+      "episodes": 60
+    },
+    "greedy": {
+      "primary": 0.35000000000000003,
+      "by_family": {
+        "development": 0.35,
+        "sparse": 0.05,
+        "cold_start": 0.55,
+        "delayed": 0.4,
+        "shift": 0.4,
+        "drift": 0.35
+      },
+      "episodes": 60
+    },
+    "hard_plus_soft_greedy": {
+      "primary": 0.5,
+      "by_family": {
+        "development": 0.6,
+        "sparse": 0.1,
+        "cold_start": 0.4,
+        "delayed": 0.7,
+        "shift": 0.6,
+        "drift": 0.6
+      },
+      "episodes": 60
+    },
+    "hard_plus_soft_maxweight": {
+      "primary": 0.5666666666666667,
+      "by_family": {
+        "development": 0.75,
+        "sparse": 0.1,
+        "cold_start": 0.4,
+        "delayed": 0.6,
+        "shift": 0.75,
+        "drift": 0.8
+      },
+      "episodes": 60
+    },
+    "max_weight_similarity": {
+      "primary": 0.4083333333333333,
+      "by_family": {
+        "development": 0.45,
+        "sparse": 0.0,
+        "cold_start": 0.6,
+        "delayed": 0.6,
+        "shift": 0.4,
+        "drift": 0.4
+      },
+      "episodes": 60
+    },
+    "no_ask": {
+      "primary": 0.16666666666666666,
+      "by_family": {
+        "development": 0.3,
+        "sparse": 0.0,
+        "cold_start": 0.0,
+        "delayed": 0.15,
+        "shift": 0.25,
+        "drift": 0.3
+      },
+      "episodes": 60
+    },
+    "potential_ask": {
+      "primary": 0.525,
+      "by_family": {
+        "development": 0.8,
+        "sparse": 0.1,
+        "cold_start": 0.4,
+        "delayed": 0.55,
+        "shift": 0.55,
+        "drift": 0.75
+      },
+      "episodes": 60
+    },
+    "potential_ask_greedy": {
+      "primary": 0.4666666666666667,
+      "by_family": {
+        "development": 0.65,
+        "sparse": 0.1,
+        "cold_start": 0.4,
+        "delayed": 0.55,
+        "shift": 0.5,
+        "drift": 0.6
+      },
+      "episodes": 60
+    },
+    "random_feasible": {
+      "primary": 0.35833333333333334,
+      "by_family": {
+        "development": 0.5,
+        "sparse": 0.05,
+        "cold_start": 0.35,
+        "delayed": 0.4,
+        "shift": 0.35,
+        "drift": 0.5
+      },
+      "episodes": 60
+    },
+    "soft_core_greedy": {
+      "primary": 0.16666666666666666,
+      "by_family": {
+        "development": 0.3,
+        "sparse": 0.0,
+        "cold_start": 0.0,
+        "delayed": 0.15,
+        "shift": 0.25,
+        "drift": 0.3
+      },
+      "episodes": 60
+    },
+    "soft_core_maxweight": {
+      "primary": 0.175,
+      "by_family": {
+        "development": 0.3,
+        "sparse": 0.0,
+        "cold_start": 0.0,
+        "delayed": 0.2,
+        "shift": 0.25,
+        "drift": 0.3
+      },
+      "episodes": 60
+    },
+    "thompson_pattern": {
+      "primary": 0.44166666666666665,
+      "by_family": {
+        "development": 0.6,
+        "sparse": 0.1,
+        "cold_start": 0.55,
+        "delayed": 0.4,
+        "shift": 0.4,
+        "drift": 0.6
+      },
+      "episodes": 60
+    }
+  }
+}

@@ -174,49 +174,81 @@ policies including our own reimplementations of two baselines.
 
 ## 4 Reproducibility statement
 
-Round 1 reported **1,326 episodes across 17 configurations**. The code behind
-**11 of those configurations was never committed** and does not survive in any
-of the three locations we searched (the original VM bundle, a Drive snapshot
-timestamped 9 Oct 08:03 IST, and a 47-file re-upload that proved byte-identical
-to the repository in all 47 cases).
+Round 1 reported **1,326 episodes across 17 configurations**. We have now run
+the surviving Round 1 code against those results, and this section replaces an
+earlier draft that claimed the code was lost. It was not, and the correction
+matters.
 
-We therefore make **no claim** about any configuration we cannot run. This
-report cites only work whose code is included here.
+**The Round 1 code is in this repository and it runs.** `experiment_lab.py`
+(627 lines) is the authentic Round 1 implementation. We executed it on the
+original **10 Round 1 screen seeds (101…1010) × 6 scenario families** across all
+**14 configurations it defines: 840 episodes, zero errors**, including the
+Gaussian-process arms. Full per-family output is in
+`results/round1_replication.json`.
 
-We have verified the Round 1 numbers were genuinely computed rather than
-fabricated: the Appendix B.9 funnel table reconciles internally in all 13 rows
-across seven mutually constraining columns, its implied stage rates reproduce
-the separately-reported stage-rate table to three decimal places, and the five
-configurations overlapping our surviving per-episode data match exactly.
+**Six configurations reproduce exactly.** We verified them on the six
+per-family values, not merely on the primary score, so each match is a
+six-dimensional fingerprint rather than a single number that could agree by
+chance.
 
-**Lesson carried forward:** rebuilding a Round 1 configuration from the written
-description alone produced the *wrong* policy. A signed-vs-unsigned disagreement
-in the agreement score gave 0.367 where the incumbent scored 0.525. Configurations
-must be verified by scoring, not by name.
+| Round 1 note name | published primary | reproduced | `experiment_lab.py` method |
+|---|---:|---|---|
+| `lab_potential_maxw` | 0.525 | **0.525** | `potential_ask` |
+| `defaultask_soft7_maxw` | 0.408 | **0.408** | `max_weight_similarity` |
+| `random_feasible` | 0.358 | **0.358** | `random_feasible` |
+| `greedy` | 0.350 | **0.350** | `greedy` |
+| `no_ask` | 0.167 | **0.167** | `no_ask` |
+| `potential_ask_greedy` | 0.467 | **0.467** | `potential_ask_greedy` |
 
-Six of the seventeen are reproducible; **eleven are not**. Of those six, **five
-reproduce exactly** and one (`potential_ask`) reproduces only after correcting a
-sign error, so the stricter count is five exact plus one patched. All six are
-named below, alongside the best-known non-reproducible configuration. (An earlier
-draft of the README said thirteen were never committed; eleven is the figure
-consistent with the table below and is the one we stand behind.) The six are exactly the
-methods present in the surviving 360-episode artifact (6 methods x 6 families x
-10 seeds), which is why that number, and not a larger one, is what we can cite.
+**Two corrections to our own earlier account.**
 
-| configuration | Round 1 | reproducible today |
-|---|---:|---|
-| `greedy` | 0.350 | **yes, exact** |
-| `no_ask` | 0.167 | **yes, exact** |
-| `random_feasible` | 0.358 | **yes, exact** |
-| `max_weight_similarity` | 0.408 | **yes, exact** |
-| `potential_ask` (incumbent) | 0.525 | yes, after fixing the sign error |
-| `potential_ask_greedy` | 0.467 | **yes, exact** |
-| `lab_potential_core4_maxw` | 0.592 | **no code survives** |
-| remaining 10 of 17 | n/a | **no code survives** |
+1. We previously wrote that the code behind eleven configurations "was never
+   committed and does not survive." That was wrong. The code is committed and
+   it executes. What is genuinely absent is a `scripts/` assembly layer: the 17
+   configurations published in the Round 1 note are named in a different scheme
+   (`lab_potential_core4_maxw`, `unlock_*`, `*_prior_*`) and were composed from
+   components that `experiment_lab.py` does contain, by code that was never
+   committed. `experiment_lab.py` is an overlapping but different set.
+2. We previously wrote that `potential_ask` "reproduces only after correcting a
+   sign error." It does not. Run from the committed code it reproduces at 0.525
+   on every family with no modification. The sign error was in a reconstruction
+   built from the written description, and that reconstruction is what we had
+   mistaken for the original.
 
-An attempt to reconstruct `lab_potential_core4_maxw` (potential-ranked asking
-with max-weight matching on the four core soft fields) was made and **abandoned**;
-the reconstruction did not run successfully and no result from it is reported.
+**Eleven configurations still do not reproduce, and we can now say why more
+precisely than "the files are gone."** Eight of them have published per-family
+values we can test against, and none is produced by any method in
+`experiment_lab.py`:
+
+`lab_potential_core4_maxw` (0.592), `unlock_soft7_maxw` (0.525),
+`unlock_core4_maxw` (0.492), `defaultask_core4_maxw` (0.483), `unlock_greedy`
+(0.475), `unlocksoft_prior_maxw` (0.417), `unlock_prior_maxw` (0.400),
+`unlock_prior_online_day` (0.400).
+
+We attempted to rebuild two of them from the surviving components rather than
+assert they were unreachable, and we report the failures:
+`lab_potential_core4_maxw` (potential-ranked asking with CORE-4 weighted
+matching) rebuilt to **0.458 against the published 0.592**; `unlock_core4_maxw`
+rebuilt to **0.150 against 0.492**. Both are far enough away that we treat the
+reconstructions as wrong rather than as evidence about Round 1, and we cite
+neither. This is the same failure mode as the earlier sign error: a
+configuration rebuilt from its description is not the configuration.
+
+**Eight further configurations run and are measured here for the first time.**
+They exist in `experiment_lab.py` but have no counterpart in the Round 1 note's
+published tables, so we report them as measurements without claiming they
+correspond to any Round 1 result:
+`hard_plus_soft_maxweight` 0.567, `hard_plus_soft_greedy` 0.500,
+`thompson_pattern` 0.442, `gp_ucb` 0.425, `core_max_matching` 0.375,
+`gp_mean` 0.325, `soft_core_maxweight` 0.175, `soft_core_greedy` 0.167.
+
+**What we cite.** Six configurations, verified on six families each, run from
+code in this repository. Nothing else from Round 1 is cited.
+
+**Lesson carried forward, now with a second example.** Configurations must be
+verified by scoring against published per-family values, not by name, and not
+by rebuilding from a description. Both failure modes have now produced a wrong
+policy in this project.
 
 ---
 
@@ -1124,8 +1156,11 @@ more to the organisers than an unvalidated evolved policy.
 
 - All results describe the supplied synthetic simulator. They are not evidence
   about real matching, real people, or any product.
-- Six of the seventeen Round 1 configurations are reproducible; eleven are not,
-  and we make no claim about them.
+- Six of the seventeen Round 1 configurations are reproducible from code in
+  this repository, each verified on all six scenario families (§4). The other
+  eleven are not: the assembly layer that composed them was never committed,
+  and two attempts to rebuild them from surviving components gave 0.458 against
+  a published 0.592 and 0.150 against 0.492. We make no claim about them.
 - `oldest_first` is validated against our own instrumentation only; it has no
   external anchor against the organiser's evaluator, unlike the three baselines.
   Its waiting result rests on that instrumentation.
@@ -1153,6 +1188,8 @@ more to the organisers than an unvalidated evolved policy.
 | Reproducible evaluation command | `REPRODUCE.md` |
 | Contract tests | `tests/test_policy.py`: `python -m unittest -v`, 8 tests, all pass (empty-input coverage for all seven arms) |
 | Failure audit | `code/fallback_audit.py` + `results/fallback_audit.txt`: 0 fallbacks in 108 episodes, max call 0.17 s |
+| Round 1 code | `experiment_lab.py` (project root): the Round 1 implementation, re-run to produce §4 |
+| Round 1 replication | `results/round1_replication.json`: 14 configurations x 10 screen seeds x 6 families, 840 episodes, per-family |
 | Machine-readable results | `results/`: including per-seed values for the full 120-seed greedy-vs-incumbent comparison in `results/greedy_vs_potential_120seeds.json` |
 | Technical report | this file |
 | Attribution | `LICENSE.kit` (organisers' kit), `LICENSE` (MIT, our code), and `docs/ROUND1_RESEARCH_NOTE.pdf` (the Round 1 note this work builds on) |
