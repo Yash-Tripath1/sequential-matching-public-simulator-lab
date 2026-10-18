@@ -9,7 +9,7 @@ Correspondence: tripathiyash382@gmail.com
 
 **Repository:** `https://github.com/Yash-Tripath1/sequential-matching-public-simulator-lab`
 **Pinned commit:** `e9515580aac62e818113f5aa17c4de1780697eca`
-**Kit:** RomeoJulietLove/The-Sequential-Matching-Problem, participant specification 1.0.0 (kit commit `a8e26b3`)
+**Simulator:** public synthetic simulator, participant kit release 1.0.0, vendored in this repository as `kit.py` (kit commit `a8e26b3`)
 **Date:** 18 October 2026
 **Status:** Preprint. All data are synthetic and drawn from the public simulator; no real members are described.
 
@@ -21,7 +21,7 @@ Correspondence: tripathiyash382@gmail.com
 
 **Methods.** We re-tested that claim. We first recovered the Phase 1 configuration from surviving code and confirmed it reproduces the published headline exactly — 0.525 and 63 events, matching on 60 of 60 episodes against the stored per-episode record. We then ran it, together with the supplied greedy baseline and three alternatives, on **120 fresh seeds (720 episodes per arm, 1,440 in the head-to-head comparison)** that were never used in Phase 1. All contrasts are paired on identical worlds and resampled by seed block.
 
-**Results.** The Phase 1 advantage did not replicate. `potential_ask` scored **0.3694** against greedy's **0.4021**, a paired difference of **−0.0326 (95% CI [−0.0250, +0.0903] in favour of greedy, p = 0.356)**. The Phase 1 estimate and the Phase 2 estimate are **7.09 standard errors apart**. No arm beat the greedy baseline at this sample size. One arm of our own, `disagreement_aware`, came in at **+0.013 [−0.025, +0.051], p = 0.524**; we did not adopt it, because the minimum detectable effect of this design is **0.055** and the organisers' own assessment protocol resolves about **0.165**, making the observed effect roughly one twelfth of the resolution of the instrument that would rank it.
+**Results.** The Phase 1 advantage did not replicate. `potential_ask` scored **0.3694** against greedy's **0.4021**, a paired difference of **−0.0326 (95% CI [−0.0250, +0.0903] in favour of greedy, p = 0.356)**. The Phase 1 estimate and the Phase 2 estimate are **7.09 standard errors apart**. No arm beat the greedy baseline at this sample size. One arm of our own, `disagreement_aware`, came in at **+0.013 [−0.025, +0.051], p = 0.524**; we did not adopt it, because the minimum detectable effect of this design is **0.055** and the evaluation protocol used to rank policies resolves about **0.165**, making the observed effect roughly one twelfth of the resolution of the instrument that would rank it.
 
 **Conclusions.** The Phase 1 headline was a small-sample artefact, produced by a design that selected the maximum of seventeen configurations on ten seeds that included the pilot seeds on which the incumbent was first chosen. What did replicate is the structural finding: the outcome is supply-bound. Coverage sits at **97.8% of its structural ceiling**, and **64% of the variance in the acceptance outcome is unobservable by construction**. We recommend that future evaluations of matching policies report minimum detectable effects alongside point estimates, and we supply the power arithmetic needed to design such evaluations.
 
@@ -137,7 +137,7 @@ We reconstructed the incumbent from `experiment_lab.py` and validated the recons
 
 **A trap worth recording.** Our first reconstruction scored 0.367 on the same seeds. The cause was the signed-versus-unsigned weight coding described in §3.3(c). We kept the signed variant as a separate arm rather than silently renaming it. Anyone rebuilding a configuration from a written description rather than from code should expect this entire class of bug; it is the reason we treat the reproduction check above as the necessary precondition for the replication, not as a formality.
 
-We also extended Phase 1's harness-equivalence check — which verified the three official baselines decision-for-decision against the organisers' reference — to our own arms, through the real JSON protocol rather than in-process:
+We also extended Phase 1's harness-equivalence check — which verified the three supplied baselines decision-for-decision against the reference implementation — to our own arms, through the real JSON protocol rather than in-process:
 
 | World | Arm | Source | MSMI | Coverage | Ask cost |
 |---|---|---|---:|---:|---:|
@@ -157,7 +157,7 @@ We also extended Phase 1's harness-equivalence check — which verified the thre
 | Resampling unit | Seed (seed-block bootstrap, 50,000 resamples) |
 | Pre-specified MDE | Computed before the fresh-seed run |
 
-**Minimum detectable effect.** With per-seed SD 0.214 at n = 120, the smallest effect detectable at 80% power is **0.055**. For comparison, Phase 1's own arithmetic gives **0.234** for sixty episodes per arm and **0.165** for the official 120-episode assessment. Our design is roughly three times more sensitive than the assessment that would rank submissions, and still cannot see an effect of 0.013.
+**Minimum detectable effect.** With per-seed SD 0.214 at n = 120, the smallest effect detectable at 80% power is **0.055**. For comparison, Phase 1's own arithmetic gives **0.234** for sixty episodes per arm and **0.165** for the standard 120-episode assessment. Our design is roughly three times more sensitive than the assessment that would rank policies, and still cannot see an effect of 0.013.
 
 **Execution note.** The 120-seed comparison ran as six chunks of fifteen seeds (180 episodes each, 14m31s–15m13s per chunk, two workers, roughly ninety minutes wall clock), chunked because the execution environment reaped processes running longer than about fifty minutes. Zero episodes failed.
 
@@ -282,7 +282,7 @@ Note the competing direction in the coverage column: `random_feasible` has the *
 
 `greedy` − `waitfloor` = +0.117 [+0.008, +0.236], p = 0.061. `waitfloor` − `oldest_first` = −0.100 [−0.189, −0.017], p = 0.039.
 
-**Round 1 configuration rerun.** We re-ran fourteen Phase 1 configurations on 840 episodes. The top three were `hard_plus_soft_maxw` **0.567**, `potential_ask` **0.525**, and `hard_plus_soft_greedy` **0.500**. That a configuration other than the published incumbent scores highest even within Phase 1's own menu is consistent with §3.3(a): the incumbent was a maximum over a noisy screen, and re-drawing moves the maximum.
+**Phase 1 configuration rerun.** We re-ran fourteen Phase 1 configurations on 840 episodes. The top three were `hard_plus_soft_maxw` **0.567**, `potential_ask` **0.525**, and `hard_plus_soft_greedy` **0.500**. That a configuration other than the published incumbent scores highest even within Phase 1's own menu is consistent with §3.3(a): the incumbent was a maximum over a noisy screen, and re-drawing moves the maximum.
 
 ### 5.3 The one positive arm, and why it was not adopted
 
@@ -447,9 +447,9 @@ Environment: Python standard library plus NumPy; no network access at inference;
 
 **Use of AI tools.** AI assistance was used for coding and for the preparation of this manuscript. All results reported here were produced by committed code and are reproducible from the artefacts in §8. Every figure quoted in this paper was checked against its source file; two figures in an earlier draft of the accompanying presentation were found to be fabricated during that check and were removed before publication. Verification, not generation, is the step that matters, and it is described here so that readers can weigh it.
 
-**Competing interests.** None. This work was carried out as a solo entry to a public hackathon; no funding was received.
+**Competing interests.** None. This work was carried out independently; no funding was received.
 
-**Data availability.** All data are synthetic and generated by the public simulator at `RomeoJulietLove/The-Sequential-Matching-Problem`, release 1.0.0. Result files are in the repository listed on the title page.
+**Data availability.** All data are synthetic, generated by the public simulator vendored in this repository as `kit.py` (participant kit release 1.0.0, kit commit `a8e26b3`). No external download is required. Result files are in the repository listed on the title page.
 
 ---
 
@@ -474,7 +474,7 @@ Environment: Python standard library plus NumPy; no network access at inference;
 | 0.15 | 146 | 24.3 |
 | 0.10 | 329 | 54.8 |
 
-### A.3 Round 1 configuration rerun (14 configurations, 840 episodes)
+### A.3 Phase 1 configuration rerun (14 configurations, 840 episodes)
 
 | Configuration | MSMI/100 |
 |---|---:|
