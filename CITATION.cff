@@ -1,0 +1,62 @@
+cff-version: 1.2.0
+message: "If you use this software or its data, please cite it using these metadata."
+
+title: "Sequential Reciprocal Matching Under Uncertainty: code and data"
+type: software
+
+abstract: >-
+  Code and data for a two-phase study of policy evaluation in sequential
+  reciprocal matching under a rare outcome. Phase 1 screened seventeen policy
+  configurations on ten seeds and reported that one beat the supplied greedy
+  baseline by +0.175 MSMI per 100 arrived members (95% seed-block CI
+  [+0.092, +0.258], p = 0.016). Phase 2 recovered that configuration from
+  surviving code, confirmed it reproduces the published headline exactly
+  (0.525 and 63 events, matching on 60 of 60 episodes), and re-tested it on
+  120 fresh seeds. The advantage did not replicate: the configuration scored
+  0.3694 against the baseline's 0.4021, a paired difference of 0.0326 in the
+  baseline's favour (95% CI [-0.0250, +0.0903], p = 0.356), with the two
+  estimates 7.09 standard errors apart. The repository contains the simulator
+  interface, all policy arms, the experiment harness, the statistics module,
+  and the raw per-episode records from which every reported number can be
+  recomputed.
+
+authors:
+  - family-names: "Tripathi"
+    given-names: "Anadi"
+    orcid: "https://orcid.org/0009-0002-9827-698X"
+    affiliation: "Indian Institute of Technology Madras"
+    email: "tripathiyash382@gmail.com"
+
+version: 1.0.0
+date-released: "2026-10-18"
+license: MIT
+
+repository-code: "https://github.com/Yash-Tripath1/sequential-matching-public-simulator-lab"
+url: "https://github.com/Yash-Tripath1/sequential-matching-public-simulator-lab"
+
+keywords:
+  - sequential matching
+  - reciprocal matching
+  - non-replication
+  - statistical power
+  - minimum detectable effect
+  - reproducibility
+  - simulation
+  - calibration
+  - allocation disparity
+
+identifiers:
+  - type: url
+    value: "https://github.com/Yash-Tripath1/sequential-matching-public-simulator-lab"
+    description: "Source repository."
+
+preferred-citation:
+  type: manual
+  title: "A Reported +0.175 Advantage Does Not Survive Twelve Times the Data: a two-phase non-replication study in sequential reciprocal matching"
+  authors:
+    - family-names: "Tripathi"
+      given-names: "Anadi"
+      orcid: "https://orcid.org/0009-0002-9827-698X"
+  year: 2026
+  month: 10
+  url: "https://github.com/Yash-Tripath1/sequential-matching-public-simulator-lab/blob/main/PAPER.md"
