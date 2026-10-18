@@ -1,9 +1,23 @@
 # The Sequential Matching Problem, Round 2
 
-**Team Bipartite Bard**, a solo entry by **Anadi Tripathi**, IIT Madras
+**Anadi Tripathi**, Indian Institute of Technology Madras
+ORCID [0009-0002-9827-698X](https://orcid.org/0009-0002-9827-698X) · tripathiyash382@gmail.com
+
 Vouchsafe / RomeoJulietLove hackathon · final build, October 2026
 
-**The findings are in [`REPORT.md`](REPORT.md).** This file is the map.
+---
+
+> **Start here.** [`PAPER.md`](PAPER.md) is the research write-up of this work:
+> a two-phase study in which a previously reported **+0.175** policy advantage
+> fails to replicate, with the two estimates **7.09 standard errors** apart. It
+> merges the Round 1 and Round 2 results into one continuous account and is
+> meant to be read on its own.
+>
+> [`REPORT.md`](REPORT.md) is the technical report **as submitted**, preserved
+> unchanged for the record. Where the two differ, `PAPER.md` is the later and
+> corrected version.
+>
+> This file is the map to both, and to the code and data behind them.
 
 ---
 
