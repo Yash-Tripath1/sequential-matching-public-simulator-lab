@@ -8,6 +8,38 @@ ORCID [0009-0002-9827-698X](https://orcid.org/0009-0002-9827-698X) · tripathiya
 
 ---
 
+## Read the paper
+
+### [A Reported +0.175 Advantage Does Not Survive Twelve Times the Data](https://github.com/Yash-Tripath1/sequential-matching-public-simulator-lab/blob/main/PAPER.pdf)
+
+**The full paper — 20 pages, six figures, all result tables.** Also in the
+repository as [`PAPER.pdf`](PAPER.pdf).
+
+> A clarification policy was reported to beat the supplied baseline by **+0.175
+> MSMI per 100 arrived members** on ten seeds. Re-tested on 120 fresh seeds, the
+> same contrast comes back at **−0.0326**. The two estimates are **7.09 standard
+> errors apart** and their confidence intervals do not overlap. The reported
+> advantage was a small-sample artefact.
+
+**Archived version:** [10.5281/zenodo.23457651](https://doi.org/10.5281/zenodo.23457651)
+(concept DOI, resolves to the latest release)
+
+**Abstract.** Sequential reciprocal matching is a daily allocation problem under
+uncertainty. The outcome of interest is rare — roughly one qualifying event per
+episode — which makes it too noisy to separate competent policies at any sample
+size a single research team can afford. Phase 1 of this work screened seventeen
+policy configurations on ten seeds and reported a +0.175 advantage. Phase 2
+recovered that configuration from surviving code, confirmed it reproduces the
+published headline exactly (0.525 and 63 events, matching on 60 of 60 episodes),
+and re-tested it on 120 fresh seeds. The advantage did not replicate. What did
+replicate is the structural finding: the outcome is supply-bound, with coverage
+at 97.8% of its ceiling and 64% of the variance in the acceptance outcome
+unobservable by construction. We recommend that evaluations of matching policies
+report minimum detectable effects alongside point estimates, and supply the
+power arithmetic needed to design them.
+
+---
+
 ## What this is
 
 A study of whether a reported policy advantage in sequential matching survives
@@ -80,10 +112,10 @@ roughly **2,055 seeds**.
 
 | | |
 |---|---|
-| [`PAPER.md`](PAPER.md) | The research write-up. Merges both phases into one continuous account. Start here. |
-| `REPORT.md` | The original technical report, preserved as written. Where the two differ, `PAPER.md` is the later and corrected version. |
+| [`PAPER.pdf`](PAPER.pdf) | **The paper, typeset.** 20 pages, six figures, all result tables. |
+| [`PAPER.md`](PAPER.md) | The same paper in markdown. Merges both phases into one continuous account. |
 | `REPRODUCE.md` | Exact commands, versions, seed lists, expected values and checksums. |
-| `docs/` | Problem statement, Phase 1 research note (PDF), and the Phase 2 working log and plan. |
+| `docs/` | `DATA_CONTRACT.md` and `POLICY_INTERFACE.md`, the input and output contracts of the harness. |
 
 ## Running it
 
@@ -150,11 +182,17 @@ the surviving components produced the wrong policy: 0.458 against a published
 description alone, and nothing is cited that cannot be run.
 
 Two independent executions of the 120-seed baseline agree to three decimals on
-primary score, events, coverage and unserved count. `code/restat.py` has been
-validated against `scipy.stats.wilcoxon` over 200 randomised cases with a
-maximum absolute difference in p of 0.0.
+primary score, events, coverage and unserved count.
 
-Full accounting in `REPORT.md` §4 and `docs/`.
+`code/restat.py` is the single source of truth for every p-value, confidence
+interval and W/T/L count in this repository: it recomputes all of them from the
+committed result files and reproduces every stored statistic exactly. Note that
+it does **not** agree with `scipy.stats.wilcoxon` on the headline contrast —
+scipy returns 0.2784 where `restat.py` returns 0.3564 — because the tie
+correction carries real weight here (29 of 102 non-zero seeds share the same
+absolute difference). Use `restat.py`.
+
+Full accounting in `REPRODUCE.md` and `docs/`.
 
 ## Limitations
 
